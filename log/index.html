@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Azimuth · Field Log — how a "which photo is better?" toy became a darkroom</title>
-<meta name="description" content="A Factorio-style development log of Azimuth Photo: 2,304 commits from a 2023 weekend Elo toy, to a darkroom with a physically-modeled film engine, to the month 42% of the codebase was deleted.">
+<title>Azimuth · Field Log — what building a photo app with AI taught me</title>
+<meta name="description" content="What I learned building a photo app mostly by directing AI: 2,304 commits, a codebase that grew to 182,688 lines, and the month I deleted 42% of it and it got faster. The pitfalls, the practices that worked, and the principles of writing code that stays small.">
 <meta property="og:title" content="Azimuth Photo — Field Log">
-<meta property="og:description" content="How a 2023 weekend 'which photo is better?' toy became a darkroom — then got gutted back to a core you can hold in your head. 2,304 commits, with live demos.">
+<meta property="og:description" content="I let AI write 182,688 lines, then deleted 42% of them and it got faster. Nine lessons from three years of AI-driven development, with the receipts.">
 <meta property="og:url" content="https://azimuthphoto.com/log/">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,16 +27,16 @@
 <!-- ============================================================ HERO -->
 <header class="hero" id="top">
   <div class="grid-bg"></div>
-  <div class="kicker">A development log · <b>2023 → 2026</b> · 2,304 commits</div>
-  <h1>A weekend toy that asked <span class="accent">"which one is&nbsp;better?"</span> — and grew a <span class="film">darkroom</span>.</h1>
-  <p class="lede">The honest build history of <b>Azimuth Photo</b>: a self-hosted photo library that began as 228 lines of Python, became an AI-native Lightroom with a <b>physically-modeled film engine</b> — and then, at 182,688 lines, was <b>gutted to a core you can hold in your head</b>. Both halves are the same story.</p>
+  <div class="kicker">A field log · <b>2023 → 2026</b> · 2,304 commits · one photo app</div>
+  <h1>I let AI write <span class="accent">182,688 lines</span>. Then I deleted <span class="film">42% of them</span> — and it got faster.</h1>
+  <p class="lede">I built <b>Azimuth Photo</b> mostly by directing AI: a self-hosted photo library with a physically-modeled film engine. This is what that taught me, written down honestly, including the parts I got wrong and had to undo. The app is the evidence. The <b>lessons are what I actually want you to take away</b>.</p>
 
   <div class="statgrid">
-    <div class="cell"><div class="v">2,304</div><div class="k">commits</div></div>
-    <div class="cell"><div class="v">3<small>y</small></div><div class="k">first → latest</div></div>
-    <div class="cell"><div class="v">1,133</div><div class="k">in July 2026 alone</div></div>
-    <div class="cell"><div class="v">182<small>k</small>→105<small>k</small></div><div class="k">peak → after the gutting</div></div>
-    <div class="cell"><div class="v">0.06<small>%</small></div><div class="k">of rows are irreplaceable</div></div>
+    <div class="cell"><div class="v">1,133</div><div class="k">commits in one month, by an AI fleet</div></div>
+    <div class="cell"><div class="v">24<small>%</small></div><div class="k">of commits were repair-shaped</div></div>
+    <div class="cell"><div class="v">41</div><div class="k">database tables built, never used</div></div>
+    <div class="cell"><div class="v">0.06<small>%</small></div><div class="k">of the catalog was irreplaceable</div></div>
+    <div class="cell"><div class="v">180<small>→</small>0.22<small>ms</small></div><div class="k">grid, after deleting 81 indexes</div></div>
   </div>
 
   <div class="scrolldown">SCROLL TO BEGIN <span class="arrow">↓</span></div>
@@ -47,6 +47,7 @@
   <nav class="rail" aria-label="Chapters">
     <h4>FIELD LOG</h4>
     <ol>
+      <li><a href="#doctrine"><span class="n">◆</span><span>The Lessons</span></a></li>
       <li><a href="#ch-genesis"><span class="n">00</span><span>The Toy</span></a></li>
       <li><a href="#ch-web"><span class="n">01</span><span>The Web Rebirth</span></a></li>
       <li><a href="#ch-mind"><span class="n">02</span><span>The Mind Awakens</span></a></li>
@@ -76,6 +77,76 @@
 
   <!-- ============================================================ CONTENT -->
   <main class="content">
+
+  <!-- ─────────────────────────────────────────────── THE DOCTRINE -->
+  <section class="chapter" id="doctrine">
+    <div class="head rv">
+      <div class="eyebrow">Read this first <span class="sep">/</span> <span class="muted">the whole log in 60 seconds</span></div>
+      <h2>Nine things this project taught me</h2>
+      <p class="dek">All of them cost something: a bug, an outage, a bad deletion, or a month of work I had to undo. The chapter behind each one is the receipt.</p>
+    </div>
+
+    <div class="doctrine rv">
+      <div class="dgrid">
+        <a class="d" href="#ch-fleet">
+          <span class="k">On building with AI</span>
+          <h4>Writing code got cheap. Deciding what should exist didn't.</h4>
+          <p>My bottleneck used to be how fast I could type. Now it's whether I can tell what shouldn't be built at all. Nobody working a lane ever stops to ask if the ticket should exist.</p>
+          <span class="paid">cost: <b>1,133 commits in one month</b>, and 41 database tables nothing ever wrote to</span>
+        </a>
+        <a class="d" href="#ch-fleet">
+          <span class="k">On review</span>
+          <h4>Whoever wrote it can't be the one to bless it.</h4>
+          <p>Point a different model at the change and tell it to prove the thing is broken. Asking for a review gets you praise. Asking for a refutation gets you bugs.</p>
+          <span class="paid">cost: <b>five real regressions</b> that shipped past a normal review</span>
+        </a>
+        <a class="d" href="#ch-rules">
+          <span class="k">On knowing things</span>
+          <h4>Run it. Reading the code will lie to you.</h4>
+          <p>Every real bug in the rewrite turned up by running the app. None came from reading. An empty grid sitting behind a <code>200</code>. A livelock. A missing table that would have broken every first install.</p>
+          <span class="paid">cost: half a day chasing a broken drawer that turned out to be my own probe</span>
+        </a>
+        <a class="d" href="#ch-rules">
+          <span class="k">On elegance</span>
+          <h4>Delete the question, not the answer.</h4>
+          <p>Nearly every big cut started the same way. I'd notice that nothing was asking the question a subsystem existed to answer. It had usually been dead for months and nobody had buried it.</p>
+          <span class="paid">cost: 9,160 lines of thumbnail machinery that became one loop</span>
+        </a>
+        <a class="d" href="#ch-core">
+          <span class="k">On big files</span>
+          <h4>Find the coupling, not the file.</h4>
+          <p>Huge files are usually propped up by two or three small connections to the rest of the app. Cut those and the file falls over by itself. Go after the file first and you break things.</p>
+          <span class="paid">cost: 1,661 lines kept alive by a single 8-line function</span>
+        </a>
+        <a class="d" href="#ch-core">
+          <span class="k">On data</span>
+          <h4>Anything you store is something that can disagree with the truth.</h4>
+          <p>Work out which part of your data you genuinely cannot recompute. It's usually far smaller than you think. Derive the rest, and you stop paying to keep it all in agreement.</p>
+          <span class="paid">cost: years of reconciliation bugs guarding <b>0.06%</b> worth of real data</span>
+        </a>
+        <a class="d" href="#ch-rules">
+          <span class="k">On safety checks</span>
+          <h4>A guard usually means the operation is shaped wrong.</h4>
+          <p>When a fix needs a new check bolted on, there's often a version of the operation that needs no check at all. Write that one instead. Rules in comments rot; a <code>ValueError</code> doesn't.</p>
+          <span class="paid">cost: an <code>rm -rf</code> whose only safety was a marker file</span>
+        </a>
+        <a class="d" href="#ch-gutting">
+          <span class="k">On being wrong</span>
+          <h4>Log your mistakes where other people can read them.</h4>
+          <p>AI is confidently wrong a lot. So am I. If the record only contains wins it stops being useful, so the reverts and the retracted claims go in beside everything else.</p>
+          <span class="paid">cost: three deletions I had to undo, and 285 tests I nearly threw away</span>
+        </a>
+        <a class="d" href="#ch-final">
+          <span class="k">On metrics</span>
+          <h4>Don't optimise a number you can game.</h4>
+          <p>Line count shows whether the design is working. Chase it directly and you just get denser, worse code. I never set a target for it, and that turned out to be the right call.</p>
+          <span class="paid">cost: nothing, which is the point</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="note rv">What follows is the long version. Three years, an archive of 150,000 photographs, and software that grew, overgrew, and got cut back down. The screenshots are the real app at each point in its history, and the numbers come from the commits that shipped them.</div>
+  </section>
 
   <!-- ─────────────────────────────────────────────── CH0 GENESIS -->
   <section class="chapter" id="ch-genesis">
@@ -515,6 +586,33 @@ amount = hal[<span class="tok-str">"amount"</span>] * halation_scale
 
     <p class="prose rv" style="margin-top:30px">The lane that names this era is <strong>error-honesty</strong>: the app must never lie about its own state. Toasts only after the write commits. Loading, empty, and "preparing" states that tell the truth. Worker waits that read as active work. "Photos exist on screen immediately, and it is never a void." An entire quality program — dozens of <code>qfix</code> merges in a loop-until-dry rhythm — enforcing the idea that a confident-looking lie is worse than an honest "working on it."</p>
 
+    <div class="verdict rv">
+      <div class="v good">
+        <div class="h">✓ What the fleet was genuinely good at</div>
+        <ul>
+          <li><b>Breadth, fast.</b> A film emulation engine, DNG colour science, masking, HDR merge, panorama stitching and a Windows test runner all landed inside a few weeks.</li>
+          <li><b>Not getting bored.</b> 95 Windows platform failures taken to zero. 285 tests restored one at a time. Work I would have abandoned around hour three.</li>
+          <li><b>Parallel attention.</b> Four lanes auditing different dimensions of the same change at once, which is not something one person does.</li>
+          <li><b>Adversarial review.</b> Pointing a second model at a change and asking it to prove the thing was broken caught five real regressions in one night.</li>
+        </ul>
+      </div>
+      <div class="v bad">
+        <div class="h">✕ What it could not do for me</div>
+        <ul>
+          <li><b>Decide what shouldn't exist.</b> Every lane closed its tickets. Not one asked whether its ticket should have been written. That question only ever came from me, and for months I didn't ask it either.</li>
+          <li><b>Notice a dead question.</b> 41 tables got built, wired, tested and never written to. Each was reasonable on its own; nothing was tracking the whole.</li>
+          <li><b>Feel the weight.</b> Nothing in a lane registers that the app is getting harder to work in. That shows up as 24% of commits being repairs, and nobody inside the loop is measuring that.</li>
+          <li><b>Be trusted about its own work.</b> Delegate summaries were confident regardless of outcome. Re-running the acceptance commands myself was the only thing that reliably worked.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="lesson rv">
+      <div class="t">The lesson I'd hand to someone else</div>
+      <p>A fleet of models will build you almost anything you can specify. It will not tell you that you shouldn't have specified it.</p>
+      <p>So the job changed. Less writing, much more deciding: what to build, what to refuse, what to throw away, and when the honest answer is that a month of good work needs to come out. That judgement is now the scarce thing, and it's the part I'd want to be hired for.</p>
+    </div>
+
     <figure class="plate wide rv">
       <div class="bar"><span class="lights"><i></i><i></i><i></i></span><span class="t">Azimuth Photo · at its largest</span><span class="hash">b9a701bac · 2026-07-20</span></div>
       <div class="img"><img src="assets/screens/11-current-grid.jpg" alt="Azimuth Photo at the end of the July sprint: the desktop grid with live ranking and metadata panels" loading="lazy"></div>
@@ -522,8 +620,8 @@ amount = hal[<span class="tok-str">"amount"</span>] * halation_scale
     </figure>
 
     <div class="prose rv">
-      <p class="lead">Because here is the part a development log written <em>forward</em> would never tell you. The fleet was extraordinary at producing software. It was not, on its own, good at producing <strong>the right</strong> software.</p>
-      <p>Every lane closed its tickets. Every merge was reviewed. The tests were green. And the app still had two problems that no amount of velocity was fixing: <strong>24% of its 2,203 commit subjects were repair-shaped</strong> — fixes, hotfixes, regressions, seams — and simple changes were taking days. Those aren't two facts. They're one fact, seen from two sides.</p>
+      <p class="lead">This is the part I would have left out if I were writing as I went. The fleet was very good at producing software. Left to itself, it was not good at producing the <strong>right</strong> software.</p>
+      <p>Every lane closed its tickets. Every merge got reviewed. The tests were green. Underneath all that, two things were quietly true: <strong>24% of the 2,203 commit subjects were repair-shaped</strong> (fixes, hotfixes, regressions, seams), and simple changes had started taking days. It took me a while to see that those were the same problem.</p>
       <p>Then, in August, the owner wrote down the sentence that turns this whole story around.</p>
     </div>
   </section>
@@ -580,8 +678,8 @@ amount = hal[<span class="tok-str">"amount"</span>] * halation_scale
     </div>
 
     <div class="prose rv">
-      <p>That single number reframes everything in Act I. All that machinery wasn't protecting anything precious; it was <em>reconciling</em> — backlogs tracking what still needed computing, cursors remembering where they got to, presence tables recording what a disk had, ledgers reconciling those against each other. Storage you don't need is not free. <strong>It's a liability you pay for in reconciliation, forever.</strong></p>
-      <p>And it makes "smaller" and "safer" point the same direction, which is the rarest thing in this kind of work. Usually they fight.</p>
+      <p>That number changed how I read the previous two years. The machinery wasn't protecting anything precious. It was bookkeeping: backlogs tracking what still needed computing, cursors remembering where they'd got to, presence tables recording what each disk held, and more tables reconciling those against each other. Storage you don't need isn't free. You pay for it in reconciliation, every day, forever.</p>
+      <p>It also meant smaller and safer pointed the same way for once. Usually those two fight each other.</p>
     </div>
   </section>
 
@@ -590,7 +688,7 @@ amount = hal[<span class="tok-str">"amount"</span>] * halation_scale
     <div class="head rv">
       <div class="eyebrow">Chapter 11 <span class="sep">/</span> Aug 14, 2026 <span class="sep">/</span> <span class="muted">G0 → G5 · one night</span></div>
       <h2>The gutting</h2>
-      <p class="dek">Not a cleanup. A deliberate program to make the codebase <b>stupid simple</b>, with a kill order and a score.</p>
+      <p class="dek">This wasn't tidying. It was a deliberate program with a kill order and a running score, aimed at making the codebase <b>stupid simple</b>.</p>
     </div>
 
     <div class="pull rv">
@@ -599,7 +697,7 @@ amount = hal[<span class="tok-str">"amount"</span>] * halation_scale
     </div>
 
     <div class="prose rv">
-      <p>The reasoning is unsentimental and worth sitting with: a codebase isn't just something you run, it's something you and your tools have to <em>navigate</em>. Every dead subsystem is a tax on every future change and every attempt to understand what's really going on. Past a certain size, the code stops being an asset and starts being terrain.</p>
+      <p>The reasoning is blunt, and I think correct. A codebase isn't only something you run. It's something you and your tools have to move around in. Every dead subsystem taxes every future change and every attempt to work out what is actually going on. Past a certain size the code stops being an asset and starts being terrain.</p>
       <p>So the waves went in, each one committing green — boot, film import, grid, develop — with git history as the archive:</p>
     </div>
 
@@ -619,7 +717,7 @@ amount = hal[<span class="tok-str">"amount"</span>] * halation_scale
 
     <h3 class="prose rv" style="max-width:var(--measure)">The part that makes it trustworthy</h3>
     <div class="prose rv">
-      <p>A deletion program that only reports its wins is marketing. This one kept a running ledger of its own errors, and the commit subjects are the log:</p>
+      <p>A deletion program that only reports its wins isn't worth much. I kept the errors in the history too, and the commit subjects say it plainly:</p>
     </div>
 
     <div class="ledger rv">
@@ -629,7 +727,7 @@ amount = hal[<span class="tok-str">"amount"</span>] * halation_scale
       <div class="row"><div class="no">✕</div><div><div class="h">“A preview stuck for half an hour, and it was my rm -rf” <span class="hash">126b38b7</span></div><p>The investigation found the investigator.</p></div></div>
       <div class="row"><div class="no">✕</div><div><div class="h">“Withdraw the three-second route claim; it was not the route” <span class="hash">b668d7ad</span></div><p>Then: <em>“There was no anomaly: the test runs 5.5s on a quiet machine.”</em> A retracted claim, kept in the record.</p></div></div>
     </div>
-    <p class="note rv">Read as a set, these are the most valuable commits in the entire history — a project keeping an honest score against itself, in public, in the permanent record.</p>
+    <p class="note rv">I'd point at these before any of the feature work. Keeping an honest score against yourself, in public, is the part that makes the rest of the record worth trusting.</p>
   </section>
 
   <!-- ─────────────────────────────────────────────── CH12 THE CORE -->
@@ -637,11 +735,11 @@ amount = hal[<span class="tok-str">"amount"</span>] * halation_scale
     <div class="head rv">
       <div class="eyebrow">Chapter 12 <span class="sep">/</span> Aug 15–16, 2026 <span class="sep">/</span> <span class="muted">Azimuth 2.0 · ~3,500 lines</span></div>
       <h2>The core, derived from first principles</h2>
-      <p class="dek">Not a refactor. Surfaces are <b>rewritten on a new core and their old machinery deleted in the same commit</b> — what carries forward is the lessons, never the shapes.</p>
+      <p class="dek">This wasn't a refactor. Each surface got <b>rewritten on a new core, with its old machinery deleted in the same commit</b>. The lessons carried forward. The shapes didn't.</p>
     </div>
 
     <div class="prose rv">
-      <p class="lead">Once you accept that 99.94% of the catalog is recomputable, a much smaller design falls out. Azimuth knows exactly <strong>four things</strong> about a photograph: what it is (its bytes), where copies of it are, what you decided about it, and what we computed from it. Only the third is irreplaceable.</p>
+      <p class="lead">Once I accepted that 99.94% of the catalog could be recomputed, a much smaller design fell out on its own. Azimuth needs to know <strong>four things</strong> about a photograph: what it is (its bytes), where the copies are, what you decided about it, and what the machine worked out from it. Only the third of those can't be rebuilt.</p>
       <p>Four facts became five tables and seven functions:</p>
     </div>
 
@@ -680,9 +778,9 @@ sweep(drive)       check what's on a drive</pre>
     </div>
 
     <div class="prose rv">
-      <p>That fusion is the root cause of the drive-probing, the <code>hub_remote</code> column, <code>missing_at</code>, the mass-missing circuit breaker, and <code>rebind_moved_source</code> — <strong>five separate subsystems, each one trying to recover a drive letter from a string that had swallowed it.</strong> None of them were bad code. They were all careful, tested answers to a question that only existed because of one storage decision.</p>
-      <p><strong>Store the tail; compute the path.</strong> A renamed root becomes one row. A new drive letter becomes one row. The same photo on two disks stops being a reconciliation problem and simply <em>is</em> the two-tier model. Five subsystems don't get fixed — they stop having a reason to exist.</p>
-      <p>The same move happens again with work. Every backlog table, every progress ledger, every resume cursor existed to answer “what still needs doing?” Ask it as a question instead of maintaining an answer, and it's <strong>one anti-join</strong>: photos that have no cache row of this kind. A worker that dies leaves nothing to expire, because the queue was never a queue.</p>
+      <p>That one decision is behind the drive-probing, the <code>hub_remote</code> column, <code>missing_at</code>, the mass-missing circuit breaker and <code>rebind_moved_source</code>. <strong>Five separate subsystems, all trying to recover a drive letter from a string that had swallowed it.</strong> None of them were bad code. They were careful, tested answers to a question that only existed because of how I'd stored a path.</p>
+      <p>Store the tail and compute the path instead. Now a renamed root is one row. A new drive letter is one row. The same photo sitting on two disks stops being a reconciliation problem and just becomes the two-tier setup working as intended. I didn't fix those five subsystems. They stopped having a reason to exist.</p>
+      <p>The same trick worked on background work. Every backlog table, progress ledger and resume cursor existed to answer one question: what still needs doing? Ask that as a query instead of maintaining the answer, and it collapses to <strong>a single anti-join</strong> for photos with no cache row of that kind. Nothing to resume, nothing to expire when a worker dies, because there was never really a queue.</p>
     </div>
 
     <div class="code rv">
@@ -699,7 +797,7 @@ sweep(drive)       check what's on a drive</pre>
     </div>
 
     <div class="prose rv">
-      <p>The results were not subtle. These are measured on the live 157k-photo catalog — and note <em>why</em> the grid got fast: not a new cache, but <strong>86 indexes on one table becoming 5</strong>. Most of them were maintaining answers to questions nobody asked any more.</p>
+      <p>The results weren't subtle. All measured on the live 157k-photo catalog. Worth noticing why the grid got fast: no new cache, just <strong>86 indexes on one table dropping to 5</strong>. Most of them had been maintaining answers to questions nobody asked any more.</p>
     </div>
 
     <div class="bench rv">
@@ -793,15 +891,16 @@ sweep(drive)       check what's on a drive</pre>
     <div class="head rv">
       <div class="eyebrow">Chapter 14 <span class="sep">/</span> the ledger</div>
       <h2>What it cost, what it taught</h2>
-      <p class="dek">A log written <em>forward</em> is a list of things that got added. Written <em>backward</em>, this one is a much shorter story.</p>
+      <p class="dek">Written as I went, this would have been a list of things I added. Looking back, it's a shorter and more useful story than that.</p>
     </div>
     <div class="prose rv">
-      <p class="lead">One good idea — <em>you can't rate a photo, but you can always pick between two</em> — buried under two years of machinery, then dug back out. Everything else is detail. But the detail paid for four lessons that were expensive enough to be worth writing down.</p>
-      <p><strong>Speed is a feature you defend, not a number you report.</strong> Profile first; never widen a budget to hide slowness. It's why boot went 65s→5s, and why the grid later went 180ms→0.22ms by <em>removing</em> 81 indexes rather than adding a cache.</p>
-      <p><strong>Honesty is an architecture, not a manner.</strong> A UI that won't fake a success toast. A backup that demands byte proof. A GL preview that must match its export to 0.4/255. And a deletion program that logs the three deletions it got wrong. The recurring move is refusing to let the system — or the log — claim something it can't back up.</p>
-      <p><strong>Your originals are sacred.</strong> Every war story is one fear wearing different clothes: losing a photograph you can't get back. It's also, in the end, what made the rewrite safe. Once you know exactly which 0.06% is irreplaceable, you can be fearless about the other 99.94%.</p>
-      <p><strong>The best code is the code that stops being necessary.</strong> Five subsystems didn't get fixed — they stopped having a reason to exist, because a path became a drive plus a tail. Every backlog and cursor in the app collapsed into one anti-join. <em>Delete the question, not the answer</em> is worth more than any refactoring pattern, because it's the only move that makes a codebase smaller <b>and</b> more capable at the same time.</p>
-      <p>Azimuth 2.0 is still being written. The UI — 39k lines of grid, loupe and keyboard work, the one part that was always good — is not being rewritten at all. It's the backend underneath it that's learning to be small.</p>
+      <p class="lead">One decent idea, which is that you can't honestly rate a photograph but you can always pick between two. Then two years of machinery piling up on top of it. Then a month spent digging it back out. That's the whole shape.</p>
+      <p><strong>What I'd tell someone starting a project like this.</strong> The hard part was never getting code written. Once I had a fleet of models working lanes, code was the cheapest thing in the building. The hard part was deciding what deserved to exist, and I was slow to understand that the answer to "should we build this?" almost never comes back from the thing building it.</p>
+      <p><strong>Speed is something you defend, not something you report.</strong> Profile first, and don't widen a budget to hide slowness. That's why boot went from 65s to about 5s, and why the grid later went from 180ms to 0.22ms by taking 81 indexes out rather than putting a cache in.</p>
+      <p><strong>Honesty turned out to be structural.</strong> A UI that won't fake a success toast. A backup that insists on byte proof before it calls a photo safe. A live preview that has to match its export to within 0.4 of 255. A deletion program that writes down the three deletions it got wrong. Same move every time: don't let the system, or the write-up, claim something it can't back.</p>
+      <p><strong>Knowing what's irreplaceable is what makes you brave.</strong> Every scary moment in three years was the same fear in different clothes, which is losing a photograph I can't get back. Working out that 0.06% of the catalog was the part I couldn't rebuild is what made it safe to delete the rest without flinching.</p>
+      <p><strong>The best code I wrote this year was code that stopped being necessary.</strong> Five subsystems didn't get fixed. They stopped having a reason to exist once a path was stored as a drive plus a tail. Every backlog and cursor collapsed into one anti-join. I don't know a refactoring pattern that beats noticing a question nobody asks any more, because it's the only move that makes a codebase smaller and more capable at once.</p>
+      <p>Azimuth 2.0 isn't finished. The UI is staying: 39k lines of grid, loupe and keyboard work that were always the good part. It's the backend underneath that's learning to be small.</p>
     </div>
 
     <div class="endcta rv">
