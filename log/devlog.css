@@ -342,3 +342,52 @@ input[type=range]::-moz-range-thumb { width: 16px; height: 16px; border: none; b
 .rv { opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.8,.2,1); }
 .rv.in { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) { .rv { opacity: 1; transform: none; transition: none; } }
+
+/* ============================================================================
+   ACT II — the gutting. A visual language of subtraction: mass that shrinks,
+   questions that stop being asked, a spec small enough to hold in your head.
+   ============================================================================ */
+
+/* act divider */
+.actbreak { margin: clamp(80px,11vw,150px) 0 0; padding: clamp(30px,4vw,48px) 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); text-align: center; }
+.actbreak .n { font-family: var(--mono); font-size: 11px; letter-spacing: .32em; color: var(--ink-4); text-transform: uppercase; }
+.actbreak h2 { font-size: clamp(26px,4.6vw,46px); margin: 14px auto 0; max-width: 20ch; }
+.actbreak p { font-family: var(--serif); font-style: italic; font-size: clamp(17px,2.2vw,21px); color: var(--ink-2); max-width: 46ch; margin: 18px auto 0; line-height: 1.5; }
+
+/* the 0.06% — what is actually irreplaceable */
+.mass { margin: 38px 0 0; border: 1px solid var(--line); border-radius: var(--radius-lg); overflow: hidden; background: var(--panel); }
+.mass .mh { padding: 14px 18px; border-bottom: 1px solid var(--line); background: var(--ground-2); font-family: var(--mono); font-size: 11.5px; color: var(--ink-3); letter-spacing: .06em; }
+.mass .mb { padding: clamp(18px,3vw,26px); }
+.mass .stack { display: flex; height: 34px; border-radius: 6px; overflow: hidden; border: 1px solid var(--line-2); }
+.mass .stack .derived { flex: 1; background: repeating-linear-gradient(45deg, var(--panel-3), var(--panel-3) 6px, var(--panel-2) 6px, var(--panel-2) 12px); display: flex; align-items: center; padding-left: 14px; font-family: var(--mono); font-size: 11.5px; color: var(--ink-3); }
+.mass .stack .kept { width: 3px; min-width: 3px; background: var(--amber); box-shadow: 0 0 16px var(--amber); }
+.mass .legend { display: flex; flex-wrap: wrap; gap: 10px 26px; margin-top: 16px; font-family: var(--mono); font-size: 12px; }
+.mass .legend .l { display: flex; align-items: center; gap: 9px; color: var(--ink-3); }
+.mass .legend .l i { width: 10px; height: 10px; border-radius: 2px; }
+.mass .legend .l b { color: var(--ink); font-variant-numeric: tabular-nums; }
+.mass table { width: 100%; border-collapse: collapse; margin-top: 22px; font-family: var(--mono); font-size: 13px; }
+.mass table td { padding: 5px 0; color: var(--ink-2); border-bottom: 1px solid var(--line); }
+.mass table td:last-child { text-align: right; color: var(--ink); font-variant-numeric: tabular-nums; }
+.mass table tr:last-child td { border-bottom: none; color: var(--amber); font-weight: 600; padding-top: 10px; }
+
+/* spec block — five tables / seven functions */
+.spec { margin: 34px 0 0; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 760px) { .spec { grid-template-columns: 1fr; } }
+.spec .s { border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: #0b0e13; }
+.spec .s .t { padding: 9px 14px; background: var(--ground-2); border-bottom: 1px solid var(--line); font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--amber); }
+.spec .s pre { margin: 0; padding: 15px; font-family: var(--mono); font-size: 12.2px; line-height: 1.66; color: #c9d4e3; overflow-x: auto; }
+
+/* seven rules, ordered by how much they removed */
+.rules { margin: 34px 0 0; counter-reset: r; display: flex; flex-direction: column; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+.rules .r { background: var(--panel); padding: 18px 20px; display: grid; grid-template-columns: 34px 1fr; gap: 14px; }
+.rules .r .n { counter-increment: r; font-family: var(--mono); font-size: 12px; color: var(--amber); font-weight: 600; }
+.rules .r .n::before { content: counter(r); }
+.rules .r h4 { margin: 0; font-size: 16.5px; color: var(--ink); font-weight: 600; letter-spacing: -.01em; }
+.rules .r p { margin: 7px 0 0; font-size: 14.5px; color: var(--ink-2); line-height: 1.58; }
+.rules .r p b { color: var(--ink); }
+.rules .r code { font-family: var(--mono); font-size: .87em; background: var(--panel-2); border: 1px solid var(--line); padding: 1px 5px; border-radius: 4px; color: #d8e3f2; }
+
+/* act divider inside the chapter rail */
+.rail .railact { margin: 10px 0 4px; padding-top: 10px; border-top: 1px solid var(--line); }
+.rail .railact a .n { color: var(--film); }
+.rail .railact a span:last-child { color: var(--ink-2); letter-spacing: .06em; }

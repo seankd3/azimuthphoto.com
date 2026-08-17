@@ -27,16 +27,16 @@
 <!-- ============================================================ HERO -->
 <header class="hero" id="top">
   <div class="grid-bg"></div>
-  <div class="kicker">A development log · <b>2023 → 2026</b> · 1,562 commits</div>
+  <div class="kicker">A development log · <b>2023 → 2026</b> · 2,304 commits</div>
   <h1>A weekend toy that asked <span class="accent">"which one is&nbsp;better?"</span> — and grew a <span class="film">darkroom</span>.</h1>
-  <p class="lede">This is the honest build history of <b>Azimuth Photo</b>: a self-hosted photo library that started as 228 lines of Python and became an AI-native Lightroom — with semantic search, an Elo-ranked culling engine, and a <b>physically-modeled film emulation engine</b> built out by a fleet of AI agents.</p>
+  <p class="lede">The honest build history of <b>Azimuth Photo</b>: a self-hosted photo library that began as 228 lines of Python, became an AI-native Lightroom with a <b>physically-modeled film engine</b> — and then, at 182,688 lines, was <b>gutted to a core you can hold in your head</b>. Both halves are the same story.</p>
 
   <div class="statgrid">
-    <div class="cell"><div class="v">1,562</div><div class="k">commits</div></div>
-    <div class="cell"><div class="v">2<small>y</small> 11<small>mo</small></div><div class="k">first → latest</div></div>
+    <div class="cell"><div class="v">2,304</div><div class="k">commits</div></div>
+    <div class="cell"><div class="v">3<small>y</small></div><div class="k">first → latest</div></div>
     <div class="cell"><div class="v">1,133</div><div class="k">in July 2026 alone</div></div>
-    <div class="cell"><div class="v">150k</div><div class="k">photo library</div></div>
-    <div class="cell"><div class="v">&lt;0.4<small>/255</small></div><div class="k">GL↔numpy parity</div></div>
+    <div class="cell"><div class="v">182<small>k</small>→105<small>k</small></div><div class="k">peak → after the gutting</div></div>
+    <div class="cell"><div class="v">0.06<small>%</small></div><div class="k">of rows are irreplaceable</div></div>
   </div>
 
   <div class="scrolldown">SCROLL TO BEGIN <span class="arrow">↓</span></div>
@@ -59,13 +59,18 @@
       <li><a href="#ch-azimuth"><span class="n">08</span><span>Becoming Azimuth</span></a></li>
       <li><a href="#stories"><span class="n">◆</span><span>War Stories</span></a></li>
       <li><a href="#ch-fleet"><span class="n">09</span><span>The Fleet</span></a></li>
+      <li class="railact"><a href="#act2"><span class="n">II</span><span>The Turn</span></a></li>
+      <li><a href="#ch-reckoning"><span class="n">10</span><span>What Was In There</span></a></li>
+      <li><a href="#ch-gutting"><span class="n">11</span><span>The Gutting</span></a></li>
+      <li><a href="#ch-core"><span class="n">12</span><span>The Core</span></a></li>
+      <li><a href="#ch-rules"><span class="n">13</span><span>Seven Rules</span></a></li>
       <li><a href="#method"><span class="n">◆</span><span>How It Was Made</span></a></li>
-      <li><a href="#ch-final"><span class="n">10</span><span>What It Cost</span></a></li>
+      <li><a href="#ch-final"><span class="n">14</span><span>What It Cost</span></a></li>
     </ol>
     <div class="spark">
       <h4 style="margin-bottom:8px">COMMIT DENSITY</h4>
       <canvas style="width:100%;height:54px"></canvas>
-      <div style="font-size:10px;color:var(--ink-4);margin-top:6px;letter-spacing:.08em">'23 ·········· '26·07</div>
+      <div style="font-size:10px;color:var(--ink-4);margin-top:6px;letter-spacing:.08em">'23 ·········· '26·08</div>
     </div>
   </nav>
 
@@ -511,10 +516,252 @@ amount = hal[<span class="tok-str">"amount"</span>] * halation_scale
     <p class="prose rv" style="margin-top:30px">The lane that names this era is <strong>error-honesty</strong>: the app must never lie about its own state. Toasts only after the write commits. Loading, empty, and "preparing" states that tell the truth. Worker waits that read as active work. "Photos exist on screen immediately, and it is never a void." An entire quality program — dozens of <code>qfix</code> merges in a loop-until-dry rhythm — enforcing the idea that a confident-looking lie is worse than an honest "working on it."</p>
 
     <figure class="plate wide rv">
-      <div class="bar"><span class="lights"><i></i><i></i><i></i></span><span class="t">Azimuth Photo · today</span><span class="hash">HEAD · b9a701bac</span></div>
-      <div class="img"><img src="assets/screens/11-current-grid.jpg" alt="Azimuth Photo today: the current desktop grid with live ranking and metadata panels" loading="lazy"></div>
-      <figcaption>The current build, booted from the latest commit for this log. Three years from a black Tkinter window — the same 64 sample photos, now understood, ranked, geolocated, and one keystroke from a physically-modeled darkroom.</figcaption>
+      <div class="bar"><span class="lights"><i></i><i></i><i></i></span><span class="t">Azimuth Photo · at its largest</span><span class="hash">b9a701bac · 2026-07-20</span></div>
+      <div class="img"><img src="assets/screens/11-current-grid.jpg" alt="Azimuth Photo at the end of the July sprint: the desktop grid with live ranking and metadata panels" loading="lazy"></div>
+      <figcaption>The app at the end of the sprint, booted from that exact commit. Three years from a black Tkinter window — understood, ranked, geolocated, one keystroke from a physically-modeled darkroom. It is also, at this moment, <b>182,688 lines</b> — and about to lose more than a third of them in a single night.</figcaption>
     </figure>
+
+    <div class="prose rv">
+      <p class="lead">Because here is the part a development log written <em>forward</em> would never tell you. The fleet was extraordinary at producing software. It was not, on its own, good at producing <strong>the right</strong> software.</p>
+      <p>Every lane closed its tickets. Every merge was reviewed. The tests were green. And the app still had two problems that no amount of velocity was fixing: <strong>24% of its 2,203 commit subjects were repair-shaped</strong> — fixes, hotfixes, regressions, seams — and simple changes were taking days. Those aren't two facts. They're one fact, seen from two sides.</p>
+      <p>Then, in August, the owner wrote down the sentence that turns this whole story around.</p>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════ ACT II ═══════════ -->
+  <section class="actbreak rv" id="act2">
+    <div class="n">Act II · August 2026</div>
+    <h2>The turn</h2>
+    <p>“Azimuth does not work well and nobody uses it daily.”</p>
+    <div class="eyebrow" style="justify-content:center;margin-top:16px"><span class="muted">— the owner's own correction to the document that was arguing for the rewrite</span></div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────── CH10 RECKONING -->
+  <section class="chapter" id="ch-reckoning">
+    <div class="head rv">
+      <div class="eyebrow">Chapter 10 <span class="sep">/</span> August 2026 <span class="sep">/</span> <span class="muted">the measurement that settles it</span></div>
+      <h2>What was actually in there</h2>
+      <p class="dek">Before deleting anything, one question got asked properly for the first time: <b>of everything this app stores, how much of it could we never get back?</b></p>
+    </div>
+
+    <div class="prose rv">
+      <p>The catalog was measured on the live library. <strong>2.4 GB across 84 tables — and 41 of those tables were empty.</strong> Not sparse. Empty. Machinery that had been built, wired, tested, and never had a single row put in it.</p>
+      <p>Then the real question. Of everything in the 43 tables that <em>did</em> hold data, how much of it was a decision a human being actually made — a keep, a star, an edit, a name? Everything else is a machine's opinion about bytes it can read again.</p>
+    </div>
+
+    <div class="mass rv">
+      <div class="mh">EVERY ROW IN THE CATALOG · measured on the live library, 2026-08-16</div>
+      <div class="mb">
+        <div class="stack">
+          <div class="derived">derived — indexes, backlogs, ledgers, cursors, scan state, FTS shadows, presence tables</div>
+          <div class="kept" title="decisions"></div>
+        </div>
+        <div class="legend">
+          <span class="l"><i style="background:var(--panel-3)"></i>recomputable from the photos themselves <b>99.94%</b></span>
+          <span class="l"><i style="background:var(--amber)"></i>irreplaceable decisions <b>0.06%</b></span>
+        </div>
+        <table>
+          <tr><td>develop settings</td><td>79,487</td></tr>
+          <tr><td>stars</td><td>6,165</td></tr>
+          <tr><td>comparison pairs</td><td>2,532</td></tr>
+          <tr><td>develop presets</td><td>994</td></tr>
+          <tr><td>quality marks</td><td>89</td></tr>
+          <tr><td>keywords</td><td>77</td></tr>
+          <tr><td>flags</td><td>32</td></tr>
+          <tr><td>trashings</td><td>2</td></tr>
+          <tr><td>everything you ever decided</td><td>≈ 89,378</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="pull rv">
+      <p>The irreplaceable part of Azimuth fits in one append-only table — and it is 0.06% of the rows in the catalog holding it.</p>
+      <div class="who">— docs/CORE.md, “the measurement that settles the argument”</div>
+    </div>
+
+    <div class="prose rv">
+      <p>That single number reframes everything in Act I. All that machinery wasn't protecting anything precious; it was <em>reconciling</em> — backlogs tracking what still needed computing, cursors remembering where they got to, presence tables recording what a disk had, ledgers reconciling those against each other. Storage you don't need is not free. <strong>It's a liability you pay for in reconciliation, forever.</strong></p>
+      <p>And it makes "smaller" and "safer" point the same direction, which is the rarest thing in this kind of work. Usually they fight.</p>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────── CH11 THE GUTTING -->
+  <section class="chapter" id="ch-gutting">
+    <div class="head rv">
+      <div class="eyebrow">Chapter 11 <span class="sep">/</span> Aug 14, 2026 <span class="sep">/</span> <span class="muted">G0 → G5 · one night</span></div>
+      <h2>The gutting</h2>
+      <p class="dek">Not a cleanup. A deliberate program to make the codebase <b>stupid simple</b>, with a kill order and a score.</p>
+    </div>
+
+    <div class="pull rv">
+      <p>I want the codebase to be 5% the size it currently is. Smaller if we can get away with it. Gut and slim it down to make it stupid simple — otherwise we will burn tokens like mad just trying to navigate it.</p>
+      <div class="who">— the order, logged verbatim, 2026-08-14</div>
+    </div>
+
+    <div class="prose rv">
+      <p>The reasoning is unsentimental and worth sitting with: a codebase isn't just something you run, it's something you and your tools have to <em>navigate</em>. Every dead subsystem is a tax on every future change and every attempt to understand what's really going on. Past a certain size, the code stops being an asset and starts being terrain.</p>
+      <p>So the waves went in, each one committing green — boot, film import, grid, develop — with git history as the archive:</p>
+    </div>
+
+    <div class="ledger rv">
+      <div class="row"><div class="no">G0</div><div><div class="h">The offline service worker <span class="hash">d8aa7b8f</span></div><p>Killed outright. It precached versioned URLs; every engine swap changed every stamp; its cache-miss path answered a synthetic <code>504 Offline</code> — including for the app's own bootstrap. A perfectly healthy build would show “0 photos.”</p></div></div>
+      <div class="row"><div class="no">G1</div><div><div class="h">The sharing quartet <span class="hash">412414d9 · −9,376</span></div><p>Publish, share, shared, publishing — four overlapping systems for handing someone a photo.</p></div></div>
+      <div class="row"><div class="no">G2</div><div><div class="h">The hub-sync machinery <span class="hash">e8c982a1 · −17,052</span></div><p>The single biggest cut. The laptop and its drive <em>are</em> the system; the hub was an architecture built for a problem that had stopped existing.</p></div></div>
+      <div class="row"><div class="no">G3</div><div><div class="h">The AI derivation fleet <span class="hash">10e29ebd · −4,308</span></div><p>All the encoder plumbing goes; cached query vectors still rank semantically, and lexical fusion carries fresh queries.</p></div></div>
+      <div class="row"><div class="no">G4</div><div><div class="h">The tests — a verdict, not a cut <span class="hash">9670f11f</span></div><p>The surviving tests <em>are</em> the load-bearing behaviour net. Machinery tests had already died with their machinery; only orphaned scaffolding went.</p></div></div>
+      <div class="row"><div class="no">G5</div><div><div class="h">One assembly, then the orphans <span class="hash">18c04e7c · 05ba3aef</span></div><p><code>app_factory</code> merged into <code>app.py</code> — one file you read top to bottom: create, mount, arm.</p></div></div>
+    </div>
+
+    <div class="bench rv">
+      <div class="chip"><span class="lab">One night's work</span><span class="ba"><span class="before">182,688</span><span class="arw">→</span><span class="after">148,348</span></span><span class="cm">−34,340 lines · G0 through G5</span></div>
+      <div class="chip"><span class="lab">Two days later</span><span class="ba"><span class="before">148,348</span><span class="arw">→</span><span class="after">105,632</span></span><span class="cm">the core rewrite · 42% of peak</span></div>
+    </div>
+
+    <h3 class="prose rv" style="max-width:var(--measure)">The part that makes it trustworthy</h3>
+    <div class="prose rv">
+      <p>A deletion program that only reports its wins is marketing. This one kept a running ledger of its own errors, and the commit subjects are the log:</p>
+    </div>
+
+    <div class="ledger rv">
+      <div class="row"><div class="no">✕</div><div><div class="h">“Log the three deletions that were wrong and why” <span class="hash">d554627b</span></div><p>Client galleries and per-face correction came back — each with the bound they'd never had in the first place.</p></div></div>
+      <div class="row"><div class="no">✕</div><div><div class="h">“Restore 285 behavioural tests the carve took with the dead code” <span class="hash">6951d52a</span></div><p>The sweep had been keyed on callers, and behaviour tests have no callers.</p></div></div>
+      <div class="row"><div class="no">✕</div><div><div class="h">“The drawer was never broken; my probe was” <span class="hash">c942f450</span></div><p>Followed immediately by <em>“Name the real cause: the drawer repaints every couple of seconds.”</em></p></div></div>
+      <div class="row"><div class="no">✕</div><div><div class="h">“A preview stuck for half an hour, and it was my rm -rf” <span class="hash">126b38b7</span></div><p>The investigation found the investigator.</p></div></div>
+      <div class="row"><div class="no">✕</div><div><div class="h">“Withdraw the three-second route claim; it was not the route” <span class="hash">b668d7ad</span></div><p>Then: <em>“There was no anomaly: the test runs 5.5s on a quiet machine.”</em> A retracted claim, kept in the record.</p></div></div>
+    </div>
+    <p class="note rv">Read as a set, these are the most valuable commits in the entire history — a project keeping an honest score against itself, in public, in the permanent record.</p>
+  </section>
+
+  <!-- ─────────────────────────────────────────────── CH12 THE CORE -->
+  <section class="chapter" id="ch-core">
+    <div class="head rv">
+      <div class="eyebrow">Chapter 12 <span class="sep">/</span> Aug 15–16, 2026 <span class="sep">/</span> <span class="muted">Azimuth 2.0 · ~3,500 lines</span></div>
+      <h2>The core, derived from first principles</h2>
+      <p class="dek">Not a refactor. Surfaces are <b>rewritten on a new core and their old machinery deleted in the same commit</b> — what carries forward is the lessons, never the shapes.</p>
+    </div>
+
+    <div class="prose rv">
+      <p class="lead">Once you accept that 99.94% of the catalog is recomputable, a much smaller design falls out. Azimuth knows exactly <strong>four things</strong> about a photograph: what it is (its bytes), where copies of it are, what you decided about it, and what we computed from it. Only the third is irreplaceable.</p>
+      <p>Four facts became five tables and seven functions:</p>
+    </div>
+
+    <div class="spec rv">
+      <div class="s">
+        <div class="t">Five tables</div>
+<pre>drives    (id, uuid, root, is_record)
+photos    (id, hash, version_of, tail,
+           taste, &lt;your decisions&gt;,
+           &lt;computed memo&gt;)
+copies    (photo_id, drive_id, tail, seen_at)
+decisions (subject, family, value, at)
+cache     (hash, kind, recipe, state,
+           path, value, bytes)</pre>
+      </div>
+      <div class="s">
+        <div class="t">Seven functions</div>
+<pre>identify(file)     what photo is this
+open(photo)        give me the file
+put(file, drive)   write it, then identify
+saw(photo, drive)  record a copy (a hint)
+make(photo, kind)  thumbnail / embedding
+decide(subject)    append to the log
+sweep(drive)       check what's on a drive</pre>
+      </div>
+    </div>
+
+    <h3 class="prose rv" style="max-width:var(--measure)">The bug that was hiding in a filepath</h3>
+    <div class="prose rv">
+      <p>The best single insight in the rewrite is small enough to fit in one line, and it explains years of bugs:</p>
+    </div>
+
+    <div class="pull rv">
+      <p>An absolute path is a drive plus a tail — and we stored them fused.</p>
+      <div class="who">— docs/CORE.md, § Five tables</div>
+    </div>
+
+    <div class="prose rv">
+      <p>That fusion is the root cause of the drive-probing, the <code>hub_remote</code> column, <code>missing_at</code>, the mass-missing circuit breaker, and <code>rebind_moved_source</code> — <strong>five separate subsystems, each one trying to recover a drive letter from a string that had swallowed it.</strong> None of them were bad code. They were all careful, tested answers to a question that only existed because of one storage decision.</p>
+      <p><strong>Store the tail; compute the path.</strong> A renamed root becomes one row. A new drive letter becomes one row. The same photo on two disks stops being a reconciliation problem and simply <em>is</em> the two-tier model. Five subsystems don't get fixed — they stop having a reason to exist.</p>
+      <p>The same move happens again with work. Every backlog table, every progress ledger, every resume cursor existed to answer “what still needs doing?” Ask it as a question instead of maintaining an answer, and it's <strong>one anti-join</strong>: photos that have no cache row of this kind. A worker that dies leaves nothing to expire, because the queue was never a queue.</p>
+    </div>
+
+    <div class="code rv">
+      <div class="h"><span class="lang">python</span><span class="path">web/work.py</span><span class="why">owed is a query · 1bfa9ad1</span></div>
+<pre><span class="tok-com"># One anti-join replaces every backlog, ledger and cursor in the app.</span>
+<span class="tok-com"># Nothing to maintain, nothing to resume, nothing to reconcile.</span>
+<span class="tok-kw">def</span> <span class="tok-fn">owed</span>(kind, recipe):
+    <span class="tok-kw">return</span> <span class="tok-str">"""
+        SELECT p.id FROM photos p
+        LEFT JOIN cache c
+          ON c.hash = p.hash AND c.kind = ? AND c.recipe = ?
+        WHERE c.hash IS NULL
+    """</span></pre>
+    </div>
+
+    <div class="prose rv">
+      <p>The results were not subtle. These are measured on the live 157k-photo catalog — and note <em>why</em> the grid got fast: not a new cache, but <strong>86 indexes on one table becoming 5</strong>. Most of them were maintaining answers to questions nobody asked any more.</p>
+    </div>
+
+    <div class="bench rv">
+      <div class="chip"><span class="lab">Grid page</span><span class="ba"><span class="before">180 ms</span><span class="arw">→</span><span class="after">0.22 ms</span></span><span class="cm">ee9dc375 · 86 indexes → 5</span></div>
+      <div class="chip"><span class="lab">Status counts</span><span class="ba"><span class="before">188 ms</span><span class="arw">→</span><span class="after">8.3 ms</span></span><span class="cm">computed, not stored</span></div>
+      <div class="chip"><span class="lab">Semantic search</span><span class="ba"><span class="before">19,538 ms</span><span class="arw">→</span><span class="after">50 ms</span></span><span class="cm">832b4195 · vectors keyed on bytes</span></div>
+      <div class="chip"><span class="lab">Tile generation</span><span class="ba"><span class="after">~20× faster</span></span><span class="cm">5a6ce0f6 · six lanes over one query</span></div>
+      <div class="chip"><span class="lab">thumbnails/</span><span class="ba"><span class="before">9,160 lines</span><span class="arw">→</span><span class="after">one loop</span></span><span class="cm">6fc7e31c · three workers become one</span></div>
+      <div class="chip"><span class="lab">The working core</span><span class="ba"><span class="after">~3,500 lines</span></span><span class="cm">proven on the live catalog</span></div>
+    </div>
+
+    <div class="callout rv">
+      <div class="t">◈ a table created once by hand is a table that does not exist</div>
+      <p>The scariest bug of the rewrite shipped silently. <code>model/schema.sql</code> was read by the test suite and by <b>nothing in the running app</b> — the core tables had been created once, by hand, in a live database. Measured on a catalog built from nothing through the real boot path: <code>drives</code>, <code>copies</code>, <code>decisions</code>, <code>cache</code> all <b>missing</b>. Every flag, star, rotation, tile and sweep would have failed on <b>a first run</b> — the one path the developer never takes.</p>
+      <p>The fix is one function. The lesson is a rule: <b>verify by building a fresh catalog, never by reading the file.</b></p>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────── CH13 SEVEN RULES -->
+  <section class="chapter" id="ch-rules">
+    <div class="head rv">
+      <div class="eyebrow">Chapter 13 <span class="sep">/</span> the payload <span class="sep">/</span> <span class="muted">7da64850 · “How it stays small”</span></div>
+      <h2>Seven rules, each earned by a deletion</h2>
+      <p class="dek">Not borrowed from a book. Every one of these was paid for by something in this repository, and they're ordered by <b>how much they removed</b>.</p>
+    </div>
+
+    <div class="rules rv">
+      <div class="r"><span class="n"></span><div>
+        <h4>Delete the question, not the answer.</h4>
+        <p>Almost every large cut followed noticing that something had stopped being <em>asked</em>. <code>thumbnails/</code> was 9,160 lines answering <em>when should a tile be made</em> and <em>where should it go</em>. Owed became a query and “where” became a filename — both questions vanished, and took the module with them. <b>Ask what a subsystem is deciding. If nothing is deciding it any more, it's already dead.</b></p>
+      </div></div>
+      <div class="r"><span class="n"></span><div>
+        <h4>A four-figure file is held up by two or three small couplings.</h4>
+        <p><code>features/library/service.py</code> was 1,661 lines kept alive by <b>one 8-line function</b> that belonged in collections. The people stack came out because a search resolver took two injected callables. <b>Find the coupling, not the file</b> — the file falls over on its own.</p>
+      </div></div>
+      <div class="r"><span class="n"></span><div>
+        <h4>If a fix needs a guard, find the version that needs no guard.</h4>
+        <p>“Clear cache” was <code>shutil.rmtree(root)</code> behind a marker check — the only thing standing between a settings typo and someone's Documents folder. Deleting exactly the files we recorded writing made the guard <em>unnecessary</em> rather than better. <b>A guard is a sign the operation is shaped wrong.</b></p>
+      </div></div>
+      <div class="r"><span class="n"></span><div>
+        <h4>Make the invariant mechanical, not advisory.</h4>
+        <p>“A recipe is never a timestamp” was a comment for years, and broke anyway. Now a kind declares its parameters and <code>canonical()</code> refuses anything else. <b>Doctrine decays; a <code>ValueError</code> does not.</b></p>
+      </div></div>
+      <div class="r"><span class="n"></span><div>
+        <h4>One table per idea, and derive the rest.</h4>
+        <p><code>decisions</code> and <code>cache</code> absorbed roughly ten tables between them. Elo, the folder tree, edit history, snapshots, status counts and tag lists are all <em>computed</em> — and each one stopped being a thing that could disagree with the truth. <b>Storage is a liability you pay for in reconciliation.</b></p>
+      </div></div>
+      <div class="r"><span class="n"></span><div>
+        <h4>One job in one place, then let concurrency be a number.</h4>
+        <p>Three preview workers arbitrating through a governor became one loop plus a lane index. Lanes need no claims, leases or visibility timeouts, <b>because a worker that dies leaves nothing to expire</b> — the queue is a query.</p>
+      </div></div>
+      <div class="r"><span class="n"></span><div>
+        <h4>Verify by running it.</h4>
+        <p>Every real bug in the rewrite was found this way and <em>none</em> by reading: an empty grid behind a <code>200</code>, a livelock that had stopped tiles at 95, a middleware import that 500'd everything, a table whose absence would break every fresh install, 75 sidecars offered as photographs. <b><code>app OK</code> proves imports resolve and nothing else.</b></p>
+      </div></div>
+    </div>
+
+    <div class="callout rv">
+      <div class="t">◈ the trap this log had to avoid too</div>
+      <p>It would be easy to end on “182,688 lines became 105,632.” But <b>line count is not the measure</b> — it's gameable, and optimising it produces denser, worse code. Asked to choose a target, the owner refused to: <em>“idk the final number — lets just try to write the most elegant code as possible.”</em></p>
+      <p>So elegance is the objective and the line count is only its evidence. Which turns the one gate into something more useful than a target: <b>a budget is a ratchet.</b> Measure the tree today, let the number only descend, and make raising it cost an explicit one-line commit. That needs no forecast to be correct — and it prices a second way of doing something at the exact moment someone writes it.</p>
+    </div>
   </section>
 
   <!-- ─────────────────────────────────────────────── INTERLUDE: METHOD -->
@@ -544,14 +791,17 @@ amount = hal[<span class="tok-str">"amount"</span>] * halation_scale
   <!-- ─────────────────────────────────────────────── CH10 FINAL -->
   <section class="chapter" id="ch-final">
     <div class="head rv">
-      <div class="eyebrow">Chapter 10 <span class="sep">/</span> the ledger</div>
+      <div class="eyebrow">Chapter 14 <span class="sep">/</span> the ledger</div>
       <h2>What it cost, what it taught</h2>
-      <p class="dek">Three lessons run through all 1,562 commits like grain through film.</p>
+      <p class="dek">A log written <em>forward</em> is a list of things that got added. Written <em>backward</em>, this one is a much shorter story.</p>
     </div>
     <div class="prose rv">
-      <p><strong>Speed is a feature you defend, not a number you report.</strong> The doctrine from Chapter 03 — profile first, never widen a budget to hide slowness — is why boot went 65s→5s and search 2.1s→0.7s instead of the reverse.</p>
-      <p><strong>Honesty is an architecture, not a manner.</strong> Whether it's a UI that won't fake a success toast, a backup that requires byte proof, or a twin that must match to 0.4/255 — the recurring move is refusing to let the system claim something it can't back up.</p>
-      <p><strong>Your originals are sacred.</strong> Every war story is a variation on one fear: losing a photo you can't get back. Collision-proof before deletion, hash-gate every purge, verify the final state — not the intermediate one.</p>
+      <p class="lead">One good idea — <em>you can't rate a photo, but you can always pick between two</em> — buried under two years of machinery, then dug back out. Everything else is detail. But the detail paid for four lessons that were expensive enough to be worth writing down.</p>
+      <p><strong>Speed is a feature you defend, not a number you report.</strong> Profile first; never widen a budget to hide slowness. It's why boot went 65s→5s, and why the grid later went 180ms→0.22ms by <em>removing</em> 81 indexes rather than adding a cache.</p>
+      <p><strong>Honesty is an architecture, not a manner.</strong> A UI that won't fake a success toast. A backup that demands byte proof. A GL preview that must match its export to 0.4/255. And a deletion program that logs the three deletions it got wrong. The recurring move is refusing to let the system — or the log — claim something it can't back up.</p>
+      <p><strong>Your originals are sacred.</strong> Every war story is one fear wearing different clothes: losing a photograph you can't get back. It's also, in the end, what made the rewrite safe. Once you know exactly which 0.06% is irreplaceable, you can be fearless about the other 99.94%.</p>
+      <p><strong>The best code is the code that stops being necessary.</strong> Five subsystems didn't get fixed — they stopped having a reason to exist, because a path became a drive plus a tail. Every backlog and cursor in the app collapsed into one anti-join. <em>Delete the question, not the answer</em> is worth more than any refactoring pattern, because it's the only move that makes a codebase smaller <b>and</b> more capable at the same time.</p>
+      <p>Azimuth 2.0 is still being written. The UI — 39k lines of grid, loupe and keyboard work, the one part that was always good — is not being rewritten at all. It's the backend underneath it that's learning to be small.</p>
     </div>
 
     <div class="endcta rv">
@@ -565,10 +815,10 @@ amount = hal[<span class="tok-str">"amount"</span>] * halation_scale
     </div>
 
     <div class="foot rv">
-      <div class="big">From "which one is better?" to a darkroom that models the chemistry of film — 1,562 commits, and still going.</div>
+      <div class="big">From "which one is better?" to a darkroom that models the chemistry of film — then back down to a core you can hold in your head.</div>
       <p>AZIMUTH · FIELD LOG — a development log built from the real git history of Azimuth Photo.<br>
-      Every screenshot on this page was captured by <b>checking out the exact commit and running that era's software</b> against a fixed set of 64 of Sean's real photographs — the 2023 Tkinter app included. Every benchmark and code excerpt is quoted from the commit that shipped it.<br><br>
-      <b>Span</b> 2023-08-11 → 2026-07-20 · <b>Commits</b> 1,562 · <b>Peak</b> 1,133 in one month · <b>Twin parity</b> &lt;0.4/255 · <b>Film stocks</b> 8, tuned on 53 real lab scans.</p>
+      Every screenshot on this page was captured by <b>checking out the exact commit and running that era's software</b> against a fixed set of Sean's real photographs — the 2023 Tkinter app included. Every benchmark, line count and code excerpt is quoted or measured from the commit that shipped it.<br><br>
+      <b>Span</b> 2023-08-11 → 2026-08-16 · <b>Commits</b> 2,304 · <b>Peak month</b> 1,133 · <b>Peak size</b> 182,688 lines → <b>105,632</b> · <b>The working core</b> ~3,500 · <b>Irreplaceable</b> 0.06% of rows · <b>Twin parity</b> &lt;0.4/255.</p>
     </div>
   </section>
 
