@@ -65,8 +65,10 @@
       <li><a href="#ch-gutting"><span class="n">11</span><span>The Gutting</span></a></li>
       <li><a href="#ch-core"><span class="n">12</span><span>The Core</span></a></li>
       <li><a href="#ch-rules"><span class="n">13</span><span>Seven Rules</span></a></li>
+      <li><a href="#ch-elegance"><span class="n">14</span><span>What Elegance Is</span></a></li>
+      <li><a href="#ch-steering"><span class="n">15</span><span>Steering the Model</span></a></li>
       <li><a href="#method"><span class="n">◆</span><span>How It Was Made</span></a></li>
-      <li><a href="#ch-final"><span class="n">14</span><span>What It Cost</span></a></li>
+      <li><a href="#ch-final"><span class="n">16</span><span>What It Cost</span></a></li>
     </ol>
     <div class="spark">
       <h4 style="margin-bottom:8px">COMMIT DENSITY</h4>
@@ -862,6 +864,191 @@ sweep(drive)       check what's on a drive</pre>
     </div>
   </section>
 
+
+  <!-- ─────────────────────────────────────────────── CH14 WHAT ELEGANCE IS -->
+  <section class="chapter" id="ch-elegance">
+    <div class="head rv">
+      <div class="eyebrow">Chapter 14 <span class="sep">/</span> the study <span class="sep">/</span> <span class="muted">what elegance actually means</span></div>
+      <h2>Elegance is fit, not polish</h2>
+      <p class="dek">I spent two years assuming those were the same thing. The literature is fairly clear that they aren't, and my own repo agrees.</p>
+    </div>
+
+    <div class="prose rv">
+      <p class="lead">The cleanest evidence is forty years old. In 1986 Jon Bentley set a word-frequency problem in his <em>Programming Pearls</em> column. Donald Knuth answered with a literate program in WEB/Pascal: ten-plus pages, a purpose-built data structure, beautifully documented. Doug McIlroy answered with six shell commands.</p>
+    </div>
+
+    <div class="swap rv">
+      <div class="s no"><div class="h">✕ more refined</div><p>Knuth — 10+ pages of literate WEB/Pascal, custom data structure, fully documented and admired</p></div>
+      <div class="s yes"><div class="h">✓ more elegant</div><p>McIlroy — <span style="color:var(--green)">tr -cs A-Za-z '\n' | sort | uniq -c | sort -rn | sed 10q</span></p></div>
+      <p class="swap-note">McIlroy's verdict on Knuth's program was that it was <b>an over-refined museum piece</b>. The detail usually lost in the retelling: his objection was <b>architectural, not about length</b>. He faulted Knuth for programming “monolithically and from scratch” instead of composing parts that already existed. And he defended the pipeline on engineering grounds — separation of concerns, piecewise debugging, reuse — rather than on taste.</p>
+    </div>
+
+    <div class="prose rv">
+      <p>So the more crafted artifact was the less elegant one. That reframed the whole thing for me. Elegance didn't live in the workmanship. It lived in noticing the problem was already expressible in what existed.</p>
+      <p>Dijkstra supplies the other half of the definition, and he takes it straight from a dictionary: elegance is <strong>“ingeniously simple and effective.”</strong> The conjunction does real work. It rules out minimalism and code golf on the spot, because a shorter thing that does less has not won anything.</p>
+    </div>
+
+    <div class="pull rv">
+      <p>Elegant code is code whose structure matches the structure of the problem. Small is what happens next, not what you aim at.</p>
+    </div>
+
+    <div class="prose rv">
+      <p>The corollary is where the working advice comes from. If elegance is structural agreement, then <strong>bloat is the residue left wherever your model of the problem and the real problem disagree.</strong> Every wrapper, flag, guard and status column is a patch over one of those gaps. Which means refactoring isn't tidying. It's correcting the model, and the machinery falls away on its own because it only existed to hold the mismatch together.</p>
+      <p>Three people arrive at the same place from different directions. Ousterhout defines complexity as <strong>dependencies plus obscurity</strong> — and notably treats obscurity as part of the definition, which makes readability a technical property rather than a style preference. Hickey names the unit: <strong>complecting</strong>, the braiding together of two things. His line is that multiple instances of a thing don't make a system complex; interleaving does. Brooks splits difficulty into essential and accidental, and points out the arithmetic: since tools only attack the accidental, a tenfold gain requires the accidental to have been more than 90% of the work.</p>
+      <p>Hickey's other distinction is the one I use most. <strong>Simple is objective</strong> — one fold, one braid, a property you can inspect in the artifact. <strong>Easy is relative to you</strong>, from a root meaning “to lie near.” Familiar code feels simple and often isn't.</p>
+    </div>
+
+    <h3 class="prose rv" style="max-width:var(--measure)">I tested this on my own repo, against a hard bar</h3>
+    <div class="prose rv">
+      <p>Everyone's heuristic is that big files are bad. But the metrics literature has a warning that should stop anyone from trusting that. In a study of a large industrial C++ system with faults traced to real field failures, the standard object-oriented metrics predicted fault-proneness <em>only until class size was controlled for</em>. Afterwards, none of them survived. The authors concluded the existing body of validation work was cast into doubt, and set the bar every metric has to clear:</p>
+      <p><strong>Does this metric predict defects beyond size?</strong></p>
+      <p>So I ran that test here. 312 surviving source files, 2,304 commits, tests excluded. The outcome is how many repair commits touch a file. The coupling measure is how many <em>non-repair</em> commits touch it, which keeps the predictor disjoint from the thing being predicted.</p>
+    </div>
+
+    <div class="evid rv">
+      <table>
+        <tr><th>predictor</th><th>correlation with repairs</th><th>controlling for the other</th></tr>
+        <tr><td class="k">coupling — how often unrelated work drags the file in</td><td>0.71</td><td class="win">0.56 · survives</td></tr>
+        <tr><td class="k">size — how many lines it has</td><td>0.55</td><td class="lose">0.19 · mostly evaporates</td></tr>
+      </table>
+      <div class="cap">Coupling clears the bar. Size nearly fails it, because most of the size signal was coupling wearing a disguise. <b>Limits:</b> one codebase, repairs inferred from commit subjects, surviving files only, change-coupling rather than static dependency. A replication in a new setting, not a proof.</div>
+    </div>
+
+    <div class="prose rv">
+      <p>The file that makes it concrete is <code>web/app.py</code>. It is <strong>120 lines</strong> and it has the worst repairs-per-line in the entire repository. It's the assembly point, so everything eventually needs it. By size it looks like the safest file in the tree. By coupling it's the most dangerous, and coupling turned out to be right.</p>
+      <p>Which gives the most useful thing I took from any of this: <strong>stop asking how big a file is. Ask how often unrelated work has to touch it.</strong> That's computable from git history on any repository, with no instrumentation at all.</p>
+    </div>
+
+    <h3 class="prose rv" style="max-width:var(--measure)">The strongest argument against all of this</h3>
+    <div class="prose rv">
+      <p>Richard Gabriel's <em>Worse Is Better</em> is usually cited as proof that elegance loses to pragmatism. When I actually read it, the picture was stranger and more useful. It's a thesis about <strong>piecemeal evolutionary growth</strong>, much closer to Gall's law — a complex system that works is invariably found to have evolved from a simple system that worked — than to an argument that low quality is desirable. Gabriel then argued the <em>opposite</em> side himself, publishing an attack on his own thesis under a pseudonym. A decade later at an OOPSLA panel he submitted both a pro and an anti position paper and said he still couldn't decide.</p>
+      <p>The genuinely useful part is how he frames the two camps. Both of them rank simplicity highly. The decisive difference is <strong>where the simplicity is placed</strong>: one camp holds that <em>interface</em> simplicity outranks implementation simplicity, the other holds the reverse. That isn't elegance versus pragmatism at all. It's a question about whose life you're making simpler, the caller's or the implementer's. Ousterhout's deep module is just the first position stated as a rule.</p>
+    </div>
+
+    <div class="callout rv">
+      <div class="t">◈ the honest negative</div>
+      <p>I went looking for evidence that elegant code is more dependable and did not find it. Dijkstra ties reliability to simplicity, but <b>concedes there is no method for achieving simplicity</b> — the field knows it's required and has managed it in individual cases. Parnas, in the founding paper of modular design, grounds changeability in argument but explicitly labels the comprehensibility claim a personal subjective judgement with no evidence offered. Gall's version is an aphorism. And Gabriel supplies a counterexample where the elegant answer needed about a hundred pages of assembly, making correctness practically unreachable.</p>
+      <p>So the link is plausible, widely believed, argued by serious people, and <b>not established</b>. The part most likely to be true is the mechanism my own numbers touch: entanglement predicts breakage.</p>
+    </div>
+
+    <h3 class="prose rv" style="max-width:var(--measure)">Two arguments worth reconciling</h3>
+    <div class="prose rv">
+      <p>Carmack is cited constantly against small functions, usually for the wrong reason. His argument isn't performance and isn't readability. It's <strong>state</strong>: pulling code into a named subfunction creates a callable shortcut that someone later uses to do a partial update, and most bugs come from execution state differing from the programmer's mental model. His 2014 retrospective reframes it further — the load-bearing idea is controlling unexpected dependency and mutation, and inlining is just one fairly poor tactic for that. He also ranks duplication as <em>worse</em> than the problems shared functions cause.</p>
+      <p>Sandi Metz points the other way: duplication is cheaper than the wrong abstraction. Her mechanism is precise. A near-fitting requirement arrives, someone adds a parameter and a conditional rather than revisiting the abstraction, and enough loops of that turn it into a procedure made of special cases. It survives because of sunk cost, since existing code reads as evidence of its own necessity. Her remedy runs against instinct: re-inline it into every caller, delete what each caller doesn't need, then derive the abstraction again.</p>
+    </div>
+
+    <div class="lesson rv">
+      <div class="t">How both can be right</div>
+      <p>They're answering different questions. Metz is talking about abstracting <em>before</em> you know the shape. Carmack is talking about copy-pasting logic whose shape you already know.</p>
+      <p>The rule that satisfies both: <strong>duplicate until the shape is obvious, then unify once — and never patch an abstraction to fit a case it wasn't shaped for.</strong></p>
+    </div>
+  </section>
+
+  <section class="chapter" id="ch-steering">
+    <div class="head rv">
+      <div class="eyebrow">Chapter 15 <span class="sep">/</span> the practical one <span class="sep">/</span> <span class="muted">what I'd hand a colleague</span></div>
+      <h2>Steering a model away from slop</h2>
+      <p class="dek">Models don't write slop because they're bad at code. They write it because of what we ask for, and what we accept back.</p>
+    </div>
+
+    <div class="prose rv">
+      <p class="lead">Every model I used could write good code. Most of the bad code I got was my doing: I asked for a task instead of a shape, took the first thing that worked, and let it tell me it was finished instead of checking. Before the patterns, though, it's worth knowing what the measured effect of all this actually is, because it surprised me.</p>
+    </div>
+
+    <div class="evid rv">
+      <table>
+        <tr><th>measured effect of AI-assisted development</th><th>change</th></tr>
+        <tr><td class="k">Duplicated code blocks <span style="color:var(--ink-4)">(GitClear, 623M changes)</span></td><td class="lose">+81%</td></tr>
+        <tr><td class="k">Copy/pasted lines</td><td class="lose">9.4% → 15.7%</td></tr>
+        <tr><td class="k">“Moved” lines — their proxy for refactoring</td><td class="lose">~21% → 3.8%</td></tr>
+        <tr><td class="k">Defensive / error-masking constructs</td><td class="lose">+47%</td></tr>
+        <tr><td class="k">Maintenance of older code</td><td class="lose">−74%</td></tr>
+        <tr><td class="k">Experienced devs on their own mature repos <span style="color:var(--ink-4)">(METR RCT)</span></td><td class="lose">19% slower</td></tr>
+      </table>
+      <div class="cap">In 2024, copy/pasted lines <b>exceeded moved lines for the first time</b> in GitClear's measured history — the moment codebases stopped being reorganised and started being duplicated. <b>Caveat the research states itself:</b> vendor data, not peer-reviewed, correlational. The METR trial is a randomised controlled trial of 16 experienced developers across 246 real issues, and the participants <b>believed they were faster</b>.</div>
+    </div>
+
+    <div class="prose rv">
+      <p>Two things in there changed how I work. The first is GitClear's reading of the mechanism, which I think is correct: this is an <strong>incentive mismatch, not a model defect</strong>. Assistants get pointed at maximising the volume of code written, and volume-oriented use is what produces the clone-and-churn signature. My own July is that signature exactly — 1,491 commits and nearly a third of them repairs.</p>
+      <p>The second is the METR finding that assistance degrades most in codebases with <strong>high standards and a lot of implicit, unwritten requirements</strong>. Which is to say: <strong>AI helps least exactly where the code is already good.</strong> The better your codebase gets, the more the value moves from writing to deciding, and the more the deciding has to come from you.</p>
+    </div>
+
+    <div class="slop rv">
+      <div class="sr hd"><div>The pattern</div><div>Why it happens</div><div>What stops it</div></div>
+      <div class="sr">
+        <div class="what">The bolt-on</div>
+        <div class="why">Asked to handle a new case, a model adds a flag, a branch or a parameter. It's the smallest change that closes the ticket, and closing the ticket is what it's optimising for.</div>
+        <div class="fix">Ask for the shape, not the fix: <b>“this should be expressible in what already exists. If it isn't, tell me which primitive is missing.”</b> That question sometimes comes back with a better design than I had.</div>
+      </div>
+      <div class="sr">
+        <div class="what">Pattern-matching the mess</div>
+        <div class="why">Models read your codebase for style. If there are nine facades, the tenth is nearly certain. Slop compounds, and the more you have the faster it accumulates.</div>
+        <div class="fix">Make it <b>search for the thing before writing it</b>, by concept rather than by name. Most-skipped step, most expensive to skip, because a duplicate primitive is worse than either copy alone.</div>
+      </div>
+      <div class="sr">
+        <div class="what">Defensive padding</div>
+        <div class="why">Try/except around everything, null checks on values that can't be null, branches "just in case". Each one is locally reasonable and none can be removed later without fear. Industry-wide this is the +47% above.</div>
+        <div class="fix">Treat a guard as a <b>design smell rather than a safety feature</b>. Ask for the version of the operation that needs no check. It usually exists and is shorter.</div>
+      </div>
+      <div class="sr">
+        <div class="what">Ceremony tests</div>
+        <div class="why">Ask for tests and you get tests. A lot of them assert that the mock was called, which proves the harness works and nothing else.</div>
+        <div class="fix">A test earns its place by holding <b>a property that already broke</b>. I deleted 4,000 lines that asserted their own mocks and the suite got more useful.</div>
+      </div>
+      <div class="sr">
+        <div class="what">Confident narration</div>
+        <div class="why">"Verified, all tests pass." Sometimes true. The report reads identically either way, which is the actual problem.</div>
+        <div class="fix"><b>Re-run the acceptance command yourself.</b> Treat the summary as a claim to check, never a result to accept.</div>
+      </div>
+      <div class="sr">
+        <div class="what">Silent accumulation</div>
+        <div class="why">Nothing inside a single lane can feel the codebase getting heavier. Every change is locally justified. There is no local signal for global weight.</div>
+        <div class="fix">Keep a number that <b>only moves one way</b>, and make raising it an explicit decision. Weight has to be measured from outside the loop, because inside it everything looks fine.</div>
+      </div>
+    </div>
+
+    <h3 class="prose rv" style="max-width:var(--measure)">The prompts that changed my results most</h3>
+    <div class="prose rv">
+      <p>None of these are clever. They're mostly just refusing to accept the first working answer.</p>
+    </div>
+
+    <div class="swap rv">
+      <div class="s no"><div class="h">✕ gets you a bolt-on</div><p>“Add support for photos that live on a second drive.”</p></div>
+      <div class="s yes"><div class="h">✓ gets you a design</div><p>“Photos can live on a second drive. Before writing anything: what does the current model get wrong about where a photo lives? If a field is doing two jobs, say so.”</p></div>
+      <p class="swap-note"><b>Why it works:</b> the first prompt accepts my model of the problem and adds to it. The second puts the model up for review. This exact exchange is how “a path is a drive plus a tail” surfaced, and that one sentence removed five subsystems.</p>
+    </div>
+
+    <div class="swap rv">
+      <div class="s no"><div class="h">✕ grows the codebase</div><p>“Fix the bug where thumbnails don't regenerate after an edit.”</p></div>
+      <div class="s yes"><div class="h">✓ shrinks it</div><p>“Thumbnails don't regenerate after an edit. Find the cause and tell me what it is before proposing a fix. Then: what does the fix make unnecessary?”</p></div>
+      <p class="swap-note"><b>Why it works:</b> the second half is the important half. Asking what a change makes redundant, in the same breath as the change, is what turns a growing codebase into one that can shrink while gaining features.</p>
+    </div>
+
+    <div class="swap rv">
+      <div class="s no"><div class="h">✕ gets you praise</div><p>“Review this diff.”</p></div>
+      <div class="s yes"><div class="h">✓ gets you bugs</div><p>“Here is a diff. Find the case where it is wrong. Assume it is broken and show me how. Don't tell me what it does well.”</p></div>
+      <p class="swap-note"><b>Why it works:</b> a review request gets answered agreeably by default. A refutation request has a different success condition. Run it with a <b>different model than the one that wrote the code</b> and it can't defend its own reasoning. Five real regressions came out of one night of this.</p>
+    </div>
+
+    <div class="swap rv">
+      <div class="s no"><div class="h">✕ produces volume</div><p>“Implement the import pipeline.”</p></div>
+      <div class="s yes"><div class="h">✓ produces a design</div><p>“Before any code: give me one sentence that states the shape of this, and a list of what that shape makes unnecessary.”</p></div>
+      <p class="swap-note"><b>Why it works:</b> the two best modules in this codebase both open with exactly that artifact — a sentence stating the shape, and the machinery it kills. <span style="color:var(--ink-2)">“Owed is what should exist, minus what is cached”</span> deleted a 93,220-row backlog, six triggers, three ledgers, five cursor tables and seven schedulers. That's a specifiable deliverable, and asking for it first is what converts a model from volume-producer into design partner.</p>
+    </div>
+
+    <h3 class="prose rv" style="max-width:var(--measure)">Two rules I'd keep above the rest</h3>
+    <div class="prose rv">
+      <p><strong>Make the invariant mechanical.</strong> “A recipe is never a timestamp” sat in a comment for a year and got violated anyway, by me and by every model that touched it. It stopped being violated the day it became a function that raises. Written rules decay under pressure. A <code>ValueError</code> doesn't care how late it is.</p>
+      <p><strong>Don't iterate on bad output. Take it back.</strong> When something came back mediocre my instinct was to explain more and try again, and that almost always cost more than doing it myself. The second attempt usually inherits the shape of the first. Now a weak result means I stop delegating that piece.</p>
+    </div>
+
+    <div class="lesson rv">
+      <div class="t">What it all comes down to</div>
+      <p>A model optimises the question you asked. It has no opinion about whether it was the right question.</p>
+      <p>So the whole job is asking better ones and then actually checking the answer by running it. Everything above is a variation on those two things.</p>
+    </div>
+  </section>
+
   <!-- ─────────────────────────────────────────────── INTERLUDE: METHOD -->
   <section class="interlude" id="method">
     <div class="rv">
@@ -889,7 +1076,7 @@ sweep(drive)       check what's on a drive</pre>
   <!-- ─────────────────────────────────────────────── CH10 FINAL -->
   <section class="chapter" id="ch-final">
     <div class="head rv">
-      <div class="eyebrow">Chapter 14 <span class="sep">/</span> the ledger</div>
+      <div class="eyebrow">Chapter 16 <span class="sep">/</span> the ledger</div>
       <h2>What it cost, what it taught</h2>
       <p class="dek">Written as I went, this would have been a list of things I added. Looking back, it's a shorter and more useful story than that.</p>
     </div>
