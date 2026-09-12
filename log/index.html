@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Azimuth · Field Log — what building a photo app with AI taught me</title>
-<meta name="description" content="What I learned building a photo app mostly by directing AI: 2,304 commits, a codebase that grew to 182,688 lines, and the month I deleted 42% of it and it got faster. The pitfalls, the practices that worked, and the principles of writing code that stays small.">
+<meta name="description" content="What I learned building a photo app mostly by directing AI: 2,587 commits, a codebase that grew to 182,688 lines, and the month I deleted 42% of it and it got faster. The pitfalls, the practices that worked, and the principles of writing code that stays small.">
 <meta property="og:title" content="Azimuth Photo — Field Log">
-<meta property="og:description" content="I let AI write 182,688 lines, then deleted 42% of them and it got faster. Nine lessons from three years of AI-driven development, with the receipts.">
+<meta property="og:description" content="I let AI write 182,688 lines, then deleted 42% of them and it got faster. Ten lessons from three years of AI-driven development, with the receipts.">
 <meta property="og:url" content="https://azimuthphoto.com/log/">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,7 +27,7 @@
 <!-- ============================================================ HERO -->
 <header class="hero" id="top">
   <div class="grid-bg"></div>
-  <div class="kicker">A field log · <b>2023 → 2026</b> · 2,304 commits · one photo app</div>
+  <div class="kicker">A field log · <b>2023 → 2026</b> · 2,587 commits · one photo app · by <a href="https://seankennethdoherty.com" style="color:inherit">Sean Kenneth Doherty</a></div>
   <h1>I let AI write <span class="accent">182,688 lines</span>. Then I deleted <span class="film">42% of them</span> — and it got faster.</h1>
   <p class="lede">I built <b>Azimuth Photo</b> mostly by directing AI: a self-hosted photo library with a physically-modeled film engine. This is what that taught me, written down honestly, including the parts I got wrong and had to undo. The app is the evidence. The <b>lessons are what I actually want you to take away</b>.</p>
 
@@ -67,13 +67,21 @@
       <li><a href="#ch-rules"><span class="n">13</span><span>Seven Rules</span></a></li>
       <li><a href="#ch-elegance"><span class="n">14</span><span>What Elegance Is</span></a></li>
       <li><a href="#ch-steering"><span class="n">15</span><span>Steering the Model</span></a></li>
+      <li class="railact"><a href="#act3"><span class="n">III</span><span>The Product</span></a></li>
+      <li><a href="#ch-process"><span class="n">16</span><span>One Process</span></a></li>
+      <li><a href="#ch-face"><span class="n">17</span><span>The Ranking's Face</span></a></li>
+      <li><a href="#ch-earned"><span class="n">18</span><span>Predicted, Then Earned</span></a></li>
+      <li><a href="#ch-dialect"><span class="n">19</span><span>Lightroom's Dialect</span></a></li>
+      <li><a href="#ch-leaves"><span class="n">20</span><span>V1 Leaves</span></a></li>
+      <li><a href="#ch-ledger"><span class="n">21</span><span>The Findings Ledger</span></a></li>
+      <li><a href="#loop"><span class="n">◆</span><span>How I Work Now</span></a></li>
       <li><a href="#method"><span class="n">◆</span><span>How It Was Made</span></a></li>
-      <li><a href="#ch-final"><span class="n">16</span><span>What It Cost</span></a></li>
+      <li><a href="#ch-final"><span class="n">22</span><span>What It Cost</span></a></li>
     </ol>
     <div class="spark">
       <h4 style="margin-bottom:8px">COMMIT DENSITY</h4>
       <canvas style="width:100%;height:54px"></canvas>
-      <div style="font-size:10px;color:var(--ink-4);margin-top:6px;letter-spacing:.08em">'23 ·········· '26·08</div>
+      <div style="font-size:10px;color:var(--ink-4);margin-top:6px;letter-spacing:.08em">'23 ·········· '26·09</div>
     </div>
   </nav>
 
@@ -84,7 +92,7 @@
   <section class="chapter" id="doctrine">
     <div class="head rv">
       <div class="eyebrow">Read this first <span class="sep">/</span> <span class="muted">the whole log in 60 seconds</span></div>
-      <h2>Nine things this project taught me</h2>
+      <h2>Ten things this project taught me</h2>
       <p class="dek">All of them cost something: a bug, an outage, a bad deletion, or a month of work I had to undo. The chapter behind each one is the receipt.</p>
     </div>
 
@@ -143,6 +151,12 @@
           <h4>Don't optimise a number you can game.</h4>
           <p>Line count shows whether the design is working. Chase it directly and you just get denser, worse code. I never set a target for it, and that turned out to be the right call.</p>
           <span class="paid">cost: nothing, which is the point</span>
+        </a>
+        <a class="d" href="#ch-ledger">
+          <span class="k">On polish</span>
+          <h4>A row closes only in the commit that does the work.</h4>
+          <p>Deleting is loud. Polish is quiet, and quiet is where a model's report and its result drift apart. A ledger that refuses to close a finding without the commit, the number or the screenshot is the only thing that kept 509 small fixes honest.</p>
+          <span class="paid">cost: <b>92 refutation rows</b> — regressions a second model found in three days of "done"</span>
         </a>
       </div>
     </div>
@@ -1049,6 +1063,373 @@ sweep(drive)       check what's on a drive</pre>
     </div>
   </section>
 
+  <!-- ═════════════════════════════════════════════ ACT III ═══════════ -->
+  <section class="actbreak rv" id="act3">
+    <div class="n">Act III · August–September 2026</div>
+    <h2>The product</h2>
+    <p>“No bandaids, no stop gaps, no adapters … v1 was the rough draft, v2 is the product.”</p>
+    <div class="eyebrow" style="justify-content:center;margin-top:16px"><span class="muted">— the standing rule for every surface, 19 August</span></div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────── CH16 ONE PROCESS -->
+  <section class="chapter" id="ch-process">
+    <div class="head rv">
+      <div class="eyebrow">Chapter 16 <span class="sep">/</span> Aug 18–19, 2026 <span class="sep">/</span> <span class="muted">80 commits in two days</span></div>
+      <h2>One process, not a server</h2>
+      <p class="dek">Act II ended with a core and no product on it. Two days later there was a window, and the thing that had always been a web server underneath was <b>one Python process opening one native window on one bundled document</b>.</p>
+    </div>
+
+    <div class="prose rv">
+      <p class="lead">The core was small enough to hold in my head. The surfaces on top of it were still 2024's shape: routes, a port, an auth layer nobody outside the laptop could reach, session machinery for a session that was always me. So on August 18 the surfaces went the way the tables had. Thirty-four commits in one day, and every one of them deleted the machinery it replaced in the same commit — that was the rule, and it held.</p>
+      <p>What came out the other end is a desktop application. <code>pywebview</code> puts a WebView2 window around a single HTML file, the window talks to Python through one bridge object, and the UI is plain ES modules in five layers — <code>kit ← net ← store ← lens ← shell</code> — bundled once by esbuild. No HTTP. No port. No attack surface to harden, because nothing outward can reach it.</p>
+      <p>The discipline that made it possible to delete this much this fast was a second ledger. <code>REWRITE_LEDGER.md</code> lists every code file in the tree, and <strong>every file starts as Legacy</strong>. It leaves that state only through an exact entry: Designing, Rebuilt, Proven, or Removed. There is no “adopted” and no “mostly migrated”. New code that calls old machinery is still Legacy as a product area. A gate script fails while any file is unregistered, so a file cannot quietly survive by being forgotten.</p>
+    </div>
+
+    <figure class="plate wide rv">
+      <div class="bar"><span class="lights"><i></i><i></i><i></i></span><span class="t">Azimuth Photo 2.0 · the library</span><span class="hash">the real app, off-screen, 12 Sep 2026</span></div>
+      <div class="img"><img src="assets/screens/14-library-grid.jpg" alt="The V2 library: justified rows of photographs grouped into day chapters, a folder tree and album shelf on the left, a timeline rail on the right" loading="lazy"></div>
+      <figcaption>Justified rows, day chapters, one folder tree over every drive, a timeline rail. Every pixel from a real catalog on an isolated home — the rig is in <a href="#method">How It Was Made</a>.</figcaption>
+    </figure>
+
+    <div class="prose rv">
+      <p>With the process collapsed, the shapes underneath it got simpler in a way that read like a list of things I'd been wrong about:</p>
+    </div>
+
+    <div class="rules rv">
+      <div class="r"><span class="n"></span><div>
+        <h4>A tile is a file the window reads.</h4>
+        <p>Two renditions per photograph — a grid tile kept forever and a screen-sized loupe tile — made once from one decode, written as files, and read by the window as files. The old tile store had routes, a cache table, an eviction worker and a versioned URL. Now it has a filename. <span class="hash">220ad680</span></p>
+      </div></div>
+      <div class="r"><span class="n"></span><div>
+        <h4>The worker runs in lanes and wakes when something is owed.</h4>
+        <p>Owed was already a query. So the worker stopped polling: it sleeps until a sweep, an import or a decision says something new is owed, and each kind of work gets its own lane so a rank pass never queues behind a minute's walk of the archive. <span class="hash">591b4138</span></p>
+      </div></div>
+      <div class="r"><span class="n"></span><div>
+        <h4>The library has one home, chosen once.</h4>
+        <p>Catalog and previews live in a folder you pick on first run, like a Lightroom catalog. The archive drives are just drives — plug one in, the folder tree shows it; unplug it, the photographs stay and say they're away. <span class="hash">dfd75ad4</span></p>
+      </div></div>
+      <div class="r"><span class="n"></span><div>
+        <h4>Follow the folders.</h4>
+        <p>A rename on disk is not a reconciliation problem. The sweep sees the new tail, the copy row moves, and nothing else in the app knew the old name. <span class="hash">d977daa8</span></p>
+      </div></div>
+      <div class="r"><span class="n"></span><div>
+        <h4>Bring photographs in by one rule, verified.</h4>
+        <p>Import from a card or a folder is seen before it enters, filed by one taxonomy, hashed on the way through and verified in one read. Film scans land by the roll. The V1 import and synchronize machinery — 6,798 lines across 21 files — left in the same wave. <span class="hash">f86ab56e · 2a30a712</span></p>
+      </div></div>
+    </div>
+
+    <div class="callout rv">
+      <div class="t">◈ the rule that kept it honest</div>
+      <p>Three days before this act opened, watching a fix go in that versioned a tile URL to make the grid right, the owner asked one question: <b>“now make sure this fix is elegant and not just a bandaid.”</b> The URL fix worked everywhere I had edited and nowhere else — the same fact spelled in three places. It came out, and the address became the photograph's own hash. That question became the standing rule at the top of this act, and it was asked of every surface after.</p>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────── CH17 THE RANKING'S FACE -->
+  <section class="chapter" id="ch-face">
+    <div class="head rv">
+      <div class="eyebrow">Chapter 17 <span class="sep">/</span> Aug 19–21, 2026 <span class="sep">/</span> <span class="muted">the oldest idea, on the new core</span></div>
+      <h2>Stars are the ranking's face</h2>
+      <p class="dek">The 2023 idea — you can't rate a photograph, but you can always pick between two — came back first, because everything else stands on it. Then search, then the sets you name. Then the 88,000 judgements from three years came home.</p>
+    </div>
+
+    <div class="prose rv">
+      <p class="lead">Refine on the core is two pure functions and a round. A round is dealt whole, every set in it drawn at equal area so nothing wins for being bigger, and <em>Best</em> is simply the order those rounds produce. There is no Elo table any more. A comparison is a decision in the log, and the ranking is derived from the log plus the embedding space, which is what lets 310 judged photographs reach 8,617 of their neighbours.</p>
+      <p>Stars stopped being a thing you set. <strong>Stars are the ranking's face:</strong> each additional star halves the set, so five stars is the top 3% of what you've judged, and one is the top half. A star is earned in the world — against everything — or in the shoot, against the frames beside it, and the info panel says which. The stars, turns and comparison pairs from V1 carried over verbatim under their new identities — the full-byte hash instead of a 32-hex partial — and the keywords became sets the named door already reads. The V1 catalog was opened read-only and never written.</p>
+    </div>
+
+    <div class="plate-duo">
+      <figure class="plate rv">
+        <div class="bar"><span class="lights"><i></i><i></i><i></i></span><span class="t">Rank</span><span class="hash">this one, or that one</span></div>
+        <div class="img"><img src="assets/screens/17-rank.jpg" alt="The Rank stage: a round of photographs to pick the best from, with the cursor on one" loading="lazy"></div>
+        <figcaption>A round. The cursor outranks the mouse; the click never waits.</figcaption>
+      </figure>
+      <figure class="plate rv">
+        <div class="bar"><span class="lights"><i></i><i></i><i></i></span><span class="t">Search</span><span class="hash">the box answers before it is asked</span></div>
+        <div class="img"><img src="assets/screens/19-search-drop.jpg" alt="The search drop: typed letters narrowing cards for years, cameras, folders and people" loading="lazy"></div>
+        <figcaption>Focus the box and it offers the library's own shape as cards; type and they narrow while the meaning search runs underneath.</figcaption>
+      </figure>
+    </div>
+
+    <div class="prose rv">
+      <p>Search became <strong>one ranked fusion over three doors</strong>: the words (filenames, folders, cameras, dates), the sets you named (an album and a label are one door), and the embedding space. The space is just a cache kind the worker grows from the tiles it already made, so vectors reach Best and search within seconds of a tile existing, and the typing path never waits on a model — cold but capable means words now and semantic on the next keystroke. A search with no hits says so. One photograph is one result.</p>
+    </div>
+
+    <div class="code rv">
+      <div class="h"><span class="lang">python</span><span class="path">web/search.py</span><span class="why">three doors, fused by rank · e3943728</span></div>
+<pre><span class="tok-kw">def</span> <span class="tok-fn">fuse</span>(*lists, limit):
+    <span class="tok-str">"""Reciprocal rank fusion. Ranks have no units, so nothing needs
+    calibrating."""</span>
+    score = {}
+    <span class="tok-kw">for</span> ranked <span class="tok-kw">in</span> lists:
+        <span class="tok-kw">for</span> position, image_id <span class="tok-kw">in</span> enumerate(ranked):
+            score[image_id] = score.get(image_id, <span class="tok-num">0.0</span>) + <span class="tok-num">1.0</span> / (RRF_K + position + <span class="tok-num">1</span>)
+    ordered = sorted(score.items(), key=<span class="tok-kw">lambda</span> pair: -pair[<span class="tok-num">1</span>])
+    <span class="tok-kw">return</span> [image_id <span class="tok-kw">for</span> image_id, _ <span class="tok-kw">in</span> ordered[:int(limit)]]
+
+<span class="tok-kw">def</span> <span class="tok-fn">search</span>(conn, query, *, space=<span class="tok-kw">None</span>, query_vector=<span class="tok-kw">None</span>, scope=EVERYTHING, limit=<span class="tok-num">500</span>, omit=frozenset()):
+    <span class="tok-com"># `scope` is the view being searched -- a folder, a collection, the chips --</span>
+    <span class="tok-com"># so searching inside a collection is this same function and not a second one.</span>
+    ranked = fuse(
+        _lexical(conn, query, limit, scope) <span class="tok-kw">if</span> query <span class="tok-kw">else</span> [],
+        _named(conn, query, limit, scope) <span class="tok-kw">if</span> query <span class="tok-kw">else</span> [],
+        _semantic(conn, space, query_vector, limit, scope),
+        limit=limit)</pre>
+    </div>
+
+    <div class="prose rv">
+      <p>Collections stopped being a feature. <strong>The view is one scope, and collections are verbs on it.</strong> An album is a set of hashes; a smart album is a saved query; a label is a set with a learned edge. They share one chip language with the filters, so “2024 · Canon R5 · starred · in <em>Iceland</em>” is one scope whether you typed it, saved it, or clicked into it from the shelf.</p>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────── CH18 PREDICTED, THEN EARNED -->
+  <section class="chapter" id="ch-earned">
+    <div class="head rv">
+      <div class="eyebrow">Chapter 18 <span class="sep">/</span> Aug 22, 2026 <span class="sep">/</span> <span class="muted">organizing · one law</span></div>
+      <h2>Predicted, then earned</h2>
+      <p class="dek">One day, one design, and the owner's rulings that cut it in half before it shipped. The whole of organizing is a sentence: <b>photographs wear facts; you correct the facts and they learn; albums keep what you gather.</b></p>
+    </div>
+
+    <div class="prose rv">
+      <p class="lead">The morning began with a research brief across eleven photo apps — what Google Photos, Apple Photos, Lightroom, Capture One, Photo Mechanic, Excire, Peakto, PhotoPrism, Immich, Mylio and ACDSee each got right and wrong about keeping a library organized. Within the day there was a draft with clusters proposing themselves from the embedding space, a proposals shelf, a seventy-term auto-tagging palette and a Keep verb. It worked. Then the owner used it against the real library and simplified it in four sentences.</p>
+    </div>
+
+    <div class="pull rv">
+      <p>Search cat, ninety cats and one dog — hit no on the dog and the keyword is smarter everywhere.</p>
+      <div class="who">— the ruling that made labels a primitive, and deleted the proposals shelf</div>
+    </div>
+
+    <div class="prose rv">
+      <p>Everything that <em>pushed</em> came out: the clustering suggestions, the palette, the shelf, the verb. What stayed is one formula, and it is the same formula for a label and a smart album: <code>(derived answer ∪ pinned-in) ∖ said-no</code>. A label's derived answer is a learned concept — a seed word vector and a small head fit on your teachings. An album's is its saved query. The pins and the denials are the same membership rows the sets primitive had always stored. <strong>Vocabulary is born by teaching:</strong> a searched word is transient until the first ✓ or ✗ lands on its results; that correction creates the label, and the Labels list is exactly the words you have taught.</p>
+      <p>The law underneath is the one the ranking already ran on. <strong>Every machine-made fact is a prediction and wears the tilde</strong> — <code>Nightscapes ~74</code>, a person's membership, a session boundary. <strong>Every answer of yours is a decision</strong> — append-only, with provenance — and turns the prediction into an earned fact. Removing a photograph from a smart album <em>is</em> a denial. Naming a person is what a person is.</p>
+    </div>
+
+    <figure class="plate wide rv">
+      <div class="bar"><span class="lights"><i></i><i></i><i></i></span><span class="t">People · the wall</span><span class="hash">a person is a name you give a group of faces</span></div>
+      <div class="img"><img src="assets/screens/18-people-wall.jpg" alt="The face wall: groups of face crops laid out to be named, with the cursor on one group" loading="lazy"></div>
+      <figcaption>The wall is a stage to meet everyone. A person's faces are their most typical large ones; a name that joins two groups says so; a split person heals by two introductions.</figcaption>
+    </figure>
+
+    <div class="prose rv">
+      <p>People got the same treatment. Faces are a cache kind made on the laptop's own card. <strong>A person is a name the owner gives a group of faces</strong> — nothing more is stored. The crop is the mark: no second picture, no avatar table. Time got its two surfaces the same day, day chapters in the grid and session cards in the search drop, because identity and time are facts, not suggestions, and facts get to stay.</p>
+      <p>Also that day, for the record: the app started wearing the website's palette and compass, so this page and the software it describes finally look like one thing. The loupe moved inside the workspace and the chrome learned to fold. Neither was on the plan. Both came from using it.</p>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────── CH19 LIGHTROOM'S DIALECT -->
+  <section class="chapter" id="ch-dialect">
+    <div class="head rv">
+      <div class="eyebrow">Chapter 19 <span class="sep">/</span> Aug 23–29, 2026 <span class="sep">/</span> <span class="muted">the other half of the app</span></div>
+      <h2>Lightroom's dialect as the native one</h2>
+      <p class="dek">Develop was rebuilt by counting first. Then it was measured against the bar, and the number said not yet. Then the owner parked it — with receipts — and a week of smaller, harder truths shipped around it.</p>
+    </div>
+
+    <div class="prose rv">
+      <p class="lead">The directive was “nearly 1:1 to Lightroom Classic, ideally loading and editing its non-destructive edits too.” Before designing anything, I counted what 1:1 would actually mean by reading every <code>.xmp</code> sidecar Lightroom had ever written into the real library:</p>
+    </div>
+
+    <div class="spec rv">
+      <div class="s">
+        <div class="t">The census · D:\Pictures · 2026-08-23</div>
+<pre>580   sidecars Lightroom has written
+569   carry only a crop
+ 11   carry full develop settings
+       every one PV 15.4, HDR edit mode,
+       "Camera Landscape" profile,
+       the whole slider surface
+  0   masks. none. no local adjustments,
+       no heal, no clone, in any file</pre>
+      </div>
+      <div class="s">
+        <div class="t">What that decided</div>
+<pre>crop ships first — it is the most-used
+  edit in this library by 50x
+an edit is a decision naming crs.* keys,
+  so import/export is transcription
+a render is a cached answer to
+  (bytes, settings), never a table
+masks park, with the receipt above —
+  the market's scariest surface is
+  absent from this editing life</pre>
+      </div>
+    </div>
+
+    <div class="prose rv">
+      <p>So the crop became a decision and the rendition its recipe. The editing workspace landed: sliders are decisions, looks are proxies, and the sidecar carries every answer element for element, the LRTimelapse discipline. Then the acceptance harness ran the tone phase against Adobe's own renders and reported <strong>0.0445 ΔL against a 0.035 bar</strong>. Not a pass. The number went in the doc with the commit that measured it, and a week later the owner parked Develop until it could be done “with elegancy, grace and beautiful simplicity” — his words, and his seven Lightroom screenshots as the spec to build against. It stays parked here too. A darkroom you can't trust is worse than none.</p>
+      <p>What shipped instead that week was the kind of thing that only surfaces from a photographer using the software on a real archive:</p>
+    </div>
+
+    <div class="rules rv">
+      <div class="r"><span class="n"></span><div>
+        <h4>A TIFF is a pointer graph, and a DNG is its own sidecar.</h4>
+        <p>Reading the file, not Lightroom's catalog, is the only way to be right about a scan; the DNG carries its edits inside itself and an empty receipt is a rule, not a bug. <span class="hash">321d01d7</span></p>
+      </div></div>
+      <div class="r"><span class="n"></span><div>
+        <h4>A stack is a run of frames at one cadence.</h4>
+        <p>Not a similarity threshold. A burst is a burst because the camera fired at one rhythm; the stack keeps its beat through a change of focus or exposure. <span class="hash">f6340ef6 · 86fdd0be</span></p>
+      </div></div>
+      <div class="r"><span class="n"></span><div>
+        <h4>The camera knows when, the phone knows where.</h4>
+        <p>Give it the phone's GPX track and every frame inside its span gets a place — a decision with provenance, never a rewrite of the file. The one honest wrinkle is clocks: GPX speaks UTC and a camera speaks local. <span class="hash">758ca1b8</span></p>
+      </div></div>
+      <div class="r"><span class="n"></span><div>
+        <h4>The photographic facts the embedding throws away.</h4>
+        <p>Palette, tonality, grain, where the sharpness sits — milliseconds of arithmetic over the tile the library already keeps, stored as separate numbers so every consumer weights them itself, plus one derived word, <em>Look</em>: colour, B&amp;W or sepia. The word exists because “black and white” is vocabulary, not a blend. <span class="hash">8855c2f7</span></p>
+      </div></div>
+      <div class="r"><span class="n"></span><div>
+        <h4>The sidecar carries the verdicts Lightroom reads.</h4>
+        <p>Rating, the green label, <code>dc:subject</code>: a keep here is a keep there, written back so the two apps stop disagreeing. <span class="hash">bbc9d99b</span></p>
+      </div></div>
+      <div class="r"><span class="n"></span><div>
+        <h4>An export is the photograph, rendered.</h4>
+        <p>Same pipeline as the tile and the loupe, at the size you asked; the dialog has the Lightroom essentials and nothing else. <span class="hash">470412bb · ae57b1d2</span></p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────── CH20 V1 LEAVES -->
+  <section class="chapter" id="ch-leaves">
+    <div class="head rv">
+      <div class="eyebrow">Chapter 20 <span class="sep">/</span> Sep 8, 2026 <span class="sep">/</span> <span class="muted">8254ba03</span></div>
+      <h2>V1 leaves the tree</h2>
+      <p class="dek">The commit is one line: <b>“The V1 application leaves the tree.”</b> Act II ended promising the old UI would stay because it was the good part. It didn't, and it wasn't.</p>
+    </div>
+
+    <div class="prose rv">
+      <p class="lead">What's left is small enough to describe completely. <strong>Five tables.</strong> 16,286 lines of Python: the tables in <code>model/</code>, the pure <code>photo/</code> and <code>pixels/</code> underneath, and twenty-one surface files at the top of <code>web/</code>, one each. A UI of 7,835 lines of plain modules and 1,246 of CSS, bundled into the one document the window opens. 5,316 lines of tests, every one under ten seconds. The Android client left the next day. The sandbox worktree the rewrite had lived in for three weeks was removed, and the app now runs from the checkout it's developed in.</p>
+      <p>Act II said the 39,000-line UI was staying. I believed it. What actually happened is that every surface, when it was rebuilt on the core, turned out to need a fifth of the code it had — because the old UI was mostly translating between representations the core no longer has. The lesson from Chapter 13 applied to the front end too, and I hadn't expected it to.</p>
+    </div>
+
+    <div class="bench rv">
+      <div class="chip"><span class="lab">Product Python</span><span class="ba"><span class="after">16,286 lines</span></span><span class="cm">21 surfaces · one file each</span></div>
+      <div class="chip"><span class="lab">The UI</span><span class="ba"><span class="before">~39,000</span><span class="arw">→</span><span class="after">7,835</span></span><span class="cm">kit · net · store · lens · shell</span></div>
+      <div class="chip"><span class="lab">Tables</span><span class="ba"><span class="before">84</span><span class="arw">→</span><span class="after">5</span></span><span class="cm">images · drives · copies · decisions · cache</span></div>
+      <div class="chip"><span class="lab">Repair-shaped commits</span><span class="ba"><span class="before">≈ ⅓</span><span class="arw">→</span><span class="after">4%</span></span><span class="cm">July → August, 558 commits</span></div>
+    </div>
+
+    <div class="prose rv">
+      <p>Deleting V1 was only safe because of what shipped the same day: <strong>proofs that never touch the screen.</strong> The desktop document is one file talking to Python through one bridge, so a page that supplies a fake bridge runs the whole UI in any browser tab — 124 photographs over 27 days with one four-frame stack, enough for every grid, chapter, timeline and selection behaviour, with tiles deliberately absent so it proves shape and never pixels. Pixels come from the other rig: the real app, opened on an isolated home <em>off the left edge of the screen</em> and photographed through <code>PrintWindow</code>.</p>
+    </div>
+
+    <div class="code rv">
+      <div class="h"><span class="lang">python</span><span class="path">scripts/native_proof.py</span><span class="why">the real app, off-screen · 382a2061</span></div>
+<pre>window = webview.create_window(
+    <span class="tok-str">"Azimuth Photo proof"</span>,
+    url=edge.bundled_document().as_uri(),
+    js_api=product,
+    width=<span class="tok-num">1900</span>, height=<span class="tok-num">1150</span>, x=<span class="tok-num">-2400</span>, y=<span class="tok-num">60</span>,   <span class="tok-com"># beyond any screen, still rendered</span>
+)
+<span class="tok-com"># each --probe is JavaScript evaluated in the page, in order, with a gap</span>
+<span class="tok-com"># so one may act (press S on a burst) and the next may read what happened;</span>
+<span class="tok-com"># the capture follows the last.</span>
+user32.PrintWindow(hwnd, hdc, <span class="tok-num">2</span>)   <span class="tok-com"># PW_RENDERFULLCONTENT: WebView2 included</span></pre>
+    </div>
+
+    <div class="prose rv">
+      <p>On top of that sit <em>journeys</em>: one small script per thing a photographer actually does — cull by keyboard, look closer, introduce someone, find one frame from memory, judge a burst, make an album — each run through the rig to a screenshot. The gallery is read side by side with the last round's by a reviewer. Nothing diffs pixels. A journey is added when a real task isn't covered, never in advance. Every Act III screenshot on this page came out of that rig this week.</p>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────── CH21 THE FINDINGS LEDGER -->
+  <section class="chapter" id="ch-ledger">
+    <div class="head rv">
+      <div class="eyebrow">Chapter 21 <span class="sep">/</span> Sep 9–11, 2026 <span class="sep">/</span> <span class="muted">532 rows in three days</span></div>
+      <h2>The findings ledger</h2>
+      <p class="dek">With nothing left to delete, the work changed shape. The owner asked for a second ledger — the twin of the one that holds his asks — and a process where <b>a row closes only in the commit that does the work</b>. Then: “keep going, run another audit and fix everything it finds.”</p>
+    </div>
+
+    <div class="prose rv">
+      <p class="lead">A finding enters <code>docs/FINDINGS.md</code> with four things: the user impact in product words, the evidence — file and line, verified at HEAD — the concrete fix, and its rank within its surface. It leaves in one of two ways, and only in the same commit that does the work: <em>shipped</em>, or <em>rejected</em> with the reason in the row. The commit that shipped a row is the one whose subject starts with its number, so the ledger never carries a hash it can't know yet. Rows are never deleted and never renumbered. When it runs dry, a new audit against HEAD refills it. There is only ever one round in flight.</p>
+      <p>Three days later: <strong>532 rows. 509 shipped, 6 rejected with a reason, 7 “measured” — checked, and the numbers said no — and 9 open.</strong> Ninety-two of those rows are refutations: a second model reading the day's diff with instructions to prove it broken, which is the Chapter 09 lesson made into a schedule. It found the fold tabs living outside the shell they styled, a ring on the mark that had been invisible for a day, a queued pick that outlived its round, a search memo keyed on the wrong clock. None of those came from a normal review.</p>
+    </div>
+
+    <div class="ledger rv">
+      <div class="row"><div class="no">P3</div><div><div class="h">The window opened after 11–20 seconds of reindexing <span class="hash">c3b5db54</span></div><p>Metadata 16 s, stacks 4 s at 150,000 rows, all before first paint. Now the repairs run behind the paint on the sweep lane through one changed-rows writer, and a rebuild that changes nothing writes nothing.</p></div></div>
+      <div class="row"><div class="no">F44</div><div><div class="h">The mark's ring had been invisible since the appearance pass <span class="hash">8446f74b</span></div><p>Rings were drawn on the cell and painted <em>under</em> its image. One day of every marked frame looking unmarked, caught by the refutation, fixed by an inset shadow on <code>::after</code>.</p></div></div>
+      <div class="row"><div class="no">K1</div><div><div class="h">A stack is a decision <span class="hash">6e0a5f8c</span></div><p>The owner's own ask, mid-round: nothing is stacked unasked. <b>S</b> on marked frames makes one, <b>S</b> on a lone frame stacks the cadence run around it, <b>Shift+S</b> unstacks, all with Undo. The cadence law is what S proposes, not what the library does to you.</p></div></div>
+      <div class="row"><div class="no">N5</div><div><div class="h">Nothing shows for a wait under 200 ms <span class="hash">edb11139</span></div><p>From the craft study of Notion, Linear, Superhuman, Raycast and Lightroom: a spinner inside a loop is a confession. The loupe has no open animation. A toast waits under the hand. A single flag's way back waits silently on Ctrl+Z.</p></div></div>
+      <div class="row"><div class="no">HK3</div><div><div class="h">An edited photograph's loupe is a preview, and says so <span class="hash">a57d2192</span></div><p>Found by the sixth-round persona audit: with Develop parked, showing an edit at loupe size without the pipeline behind it is a lie. Now it is labelled as the preview it is.</p></div></div>
+      <div class="row"><div class="no">RK1</div><div><div class="h">Learn dealt the floor <span class="hash">193c7466</span></div><p>From the owner's own sitting: ties broke toward the lowest rated, so the learning mode kept showing him the worst of the library. Ties now go to the highest rated, and the finding rounds halve the sitting once twice the seats are judged.</p></div></div>
+    </div>
+
+    <div class="plate-duo">
+      <figure class="plate rv">
+        <div class="bar"><span class="lights"><i></i><i></i><i></i></span><span class="t">Cull by keyboard alone</span><span class="hash">P · X · R · S · Ctrl+Z</span></div>
+        <div class="img"><img src="assets/screens/15-cull.jpg" alt="The grid after a keyboard cull: a picked frame, a rejected frame, a turned frame, a burst stacked with a band and a toast offering Undo" loading="lazy"></div>
+        <figcaption>The <code>cull</code> journey: mark, pick, reject, turn, stack a burst, and the one toast that offers the way back.</figcaption>
+      </figure>
+      <figure class="plate rv">
+        <div class="bar"><span class="lights"><i></i><i></i><i></i></span><span class="t">Look closer</span><span class="hash">E · Z · L · G</span></div>
+        <div class="img"><img src="assets/screens/21-lights-out.jpg" alt="The loupe under Lights Out: the chrome dimmed to nothing, a full-frame landscape, the key hints along the bottom" loading="lazy"></div>
+        <figcaption>The <code>loupe</code> journey, then <b>L</b>: Lights Out dims every piece of chrome and leaves the photograph. No open animation, because a wait under 200 ms shows nothing.</figcaption>
+      </figure>
+    </div>
+
+    <div class="prose rv">
+      <p>The performance rows were measured on a fresh 150,000-row catalog with <code>scripts/bench.py</code>, so each one ships with its number and the next round compares instead of rediscovering:</p>
+    </div>
+
+    <div class="bench rv">
+      <div class="chip"><span class="lab">Owed scan, per worker step</span><span class="ba"><span class="before">1.7 s</span><span class="arw">→</span><span class="after">0.6 ms</span></span><span class="cm">P4 · the predicate the index already carried</span></div>
+      <div class="chip"><span class="lab">Deep page, Best sort</span><span class="ba"><span class="before">889 ms</span><span class="arw">→</span><span class="after">20 ms</span></span><span class="cm">P6 · stack_of on the browse indexes</span></div>
+      <div class="chip"><span class="lab">A Rank round's count</span><span class="ba"><span class="before">1.7 s</span><span class="arw">→</span><span class="after">62 ms</span></span><span class="cm">P7 · COUNT(*) on the index</span></div>
+      <div class="chip"><span class="lab">Folder scope, one page</span><span class="ba"><span class="before">1,094 ms</span><span class="arw">→</span><span class="after">9 ms</span></span><span class="cm">P12 · a folder is a range on the tail index</span></div>
+      <div class="chip"><span class="lab">A rerank's write lock</span><span class="ba"><span class="before">24 s</span><span class="arw">→</span><span class="after">slices</span></span><span class="cm">P2 · only rows whose value changed</span></div>
+      <div class="chip"><span class="lab">The space, 20k vectors</span><span class="ba"><span class="before">194 MB</span><span class="arw">→</span><span class="after">93 MB</span></span><span class="cm">BC11 · allocated once, filled from the cursor</span></div>
+    </div>
+
+    <div class="prose rv">
+      <p>The last thing the ledger opened was the one I'd deleted in August for being hand-weighted: a culling signal. It came back as <strong>facts, never a verdict</strong>. A frame carries a sharpness map (p50, p75, p90), a subject-to-frame ratio, and per face a Zhu–Milanfar sharpness and per eye its own — plus eyes open, closed or <em>cannot tell</em>, read from the 106 face landmarks the faces pass already computes. The wire carries two numbers. Nothing blends them. The research brief that decided this is in the repo, and its first line is the whole argument: <em>the head is linear and stays linear</em>; every measured gain came from fitting the rounds directly and appending facts a fit can weight, not from a smarter encoder. Blinks show as a small mark. A verdict would have been machinery.</p>
+    </div>
+
+    <figure class="plate wide rv">
+      <div class="bar"><span class="lights"><i></i><i></i><i></i></span><span class="t">The command line</span><span class="hash">a leading &gt; in the search box</span></div>
+      <div class="img"><img src="assets/screens/20-command-line.jpg" alt="The search box with a leading greater-than sign, listing every verb on the screen by its tooltip" loading="lazy"></div>
+      <figcaption>Every <code>data-action</code> on the screen has a tooltip entry, so the same table that draws the tooltips is the command line. One key table; K9.</figcaption>
+    </figure>
+
+    <div class="lesson rv">
+      <div class="t">What the ledger taught, that the rewrite hadn't</div>
+      <p>Deleting is loud. Polish is quiet, and quiet work is where an assistant's reports and its results drift apart, because nobody can feel the difference between “fixed” and “fixed on the one screen I looked at.”</p>
+      <p>Tying every row to the commit that closes it, and every claim to a number from the bench or a screenshot from the rig, was the only thing that kept 509 small changes honest. The process is not clever. It is a ledger that refuses to let a row close without a receipt.</p>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────── INTERLUDE: THE LOOP -->
+  <section class="interlude" id="loop">
+    <div class="rv">
+      <div class="lab">◆ How I work now</div>
+      <h2>The loop, as it runs today</h2>
+      <p class="dek" style="color:var(--ink-2);max-width:44ch;margin-top:14px">Three years in, the workflow is six artifacts and one rule. Every one of them is in the repository, so you can run the same loop on your own archive.</p>
+    </div>
+    <div class="rules rv">
+      <div class="r"><span class="n"></span><div>
+        <h4>1 · The ask goes in the ledger, verbatim, before any work.</h4>
+        <p><code>MASTER_PLAN.md</code> §1 holds what I asked for in my own words, dated, one row per ask, never paraphrased into a ticket and never deleted when done. When two asks contradict, the work stops until I say which wins. A model cannot tell you the question was wrong; a ledger of questions at least lets you see it yourself.</p>
+      </div></div>
+      <div class="r"><span class="n"></span><div>
+        <h4>2 · Ask for the shape, not the code.</h4>
+        <p>“This should be expressible in what already exists — if it isn't, tell me which primitive is missing.” The answer to that question is a design; the answer to a task is a bolt-on. <em>A path is a drive plus a tail</em> and <em>a stack is a decision</em> both came back from it.</p>
+      </div></div>
+      <div class="r"><span class="n"></span><div>
+        <h4>3 · One hand lands the shared shape, then the surfaces.</h4>
+        <p>Audits fan out to read-only agents. Fixes do not: parallel hands cannot converge on a shape none of them owns, so the primitive lands first, by one lane, and the surfaces follow. Every commit deletes the machinery it replaces.</p>
+      </div></div>
+      <div class="r"><span class="n"></span><div>
+        <h4>4 · A second model refutes the diff.</h4>
+        <p>Not a review — a refutation: “assume this is broken and show me how.” Ninety-two of the ledger's rows came from that pass in three days. Whoever wrote it never blesses it.</p>
+      </div></div>
+      <div class="r"><span class="n"></span><div>
+        <h4>5 · The gates count what only grows when you write more code.</h4>
+        <p><code>scripts/gates/check.py</code>: imports pointing up the stack, tables made outside the schema, guides naming paths that are not there, names called that do not exist, a suite that cannot collect. Each number falls by measurement and rises only by hand, in its own commit, with a reason. Doctrine decays; a failing gate does not.</p>
+      </div></div>
+      <div class="r"><span class="n"></span><div>
+        <h4>6 · Nothing is done until it ran.</h4>
+        <p>A finding closes only in the commit that does the work, with the bench number or the screenshot from the off-screen rig. “Verified, all tests pass” is a claim, and claims get re-run. Every screenshot in this act is that rule applied to the log itself.</p>
+      </div></div>
+    </div>
+    <p class="note rv">If you run Azimuth on your own library and something is wrong, the four-field finding — what it did to you, where, the fix, how much it matters — is the whole contribution. The ledger is the on-ramp. Nobody needs to read the architecture first.</p>
+  </section>
+
   <!-- ─────────────────────────────────────────────── INTERLUDE: METHOD -->
   <section class="interlude" id="method">
     <div class="rv">
@@ -1070,13 +1451,16 @@ sweep(drive)       check what's on a drive</pre>
     wait_ready(base)                              <span class="tok-com"># warm previews til the grid paints</span>
     capture_routes(base, shots)                   <span class="tok-com"># Playwright, per era</span></pre>
     </div>
-    <p class="note rv">The whole rig — <code>harness.py</code>, per-era config, three pinned Python environments, and the boot-and-hold server used for the interactive Develop/Film shots — lives beside this page. It is, fittingly, its own tiny piece of software written to tell the story of another one.</p>
+    <div class="prose rv">
+      <p><strong>Act III was shot differently, because the software is different.</strong> There is no server to boot and no browser to point at it. <code>scripts/native_proof.py</code> opens the real desktop app on an isolated home — a catalog built from 62 of the same photographs, on this machine, on 12 September 2026 — with its window placed at <code>x = −2400</code>, off the left edge of every screen, still rendered and captured through <code>PrintWindow</code>. Each shot runs one of the <em>journey</em> probes from the repository first, so what you see is the app after a real sequence of keys, not a posed state. Nothing was retouched, and the owner's own library was never opened.</p>
+    </div>
+    <p class="note rv">The Act I and II rig — <code>harness.py</code>, per-era config, three pinned Python environments, and the boot-and-hold server used for the interactive Develop/Film shots — lives beside this page. It is, fittingly, its own tiny piece of software written to tell the story of another one.</p>
   </section>
 
   <!-- ─────────────────────────────────────────────── CH10 FINAL -->
   <section class="chapter" id="ch-final">
     <div class="head rv">
-      <div class="eyebrow">Chapter 16 <span class="sep">/</span> the ledger</div>
+      <div class="eyebrow">Chapter 22 <span class="sep">/</span> the ledger</div>
       <h2>What it cost, what it taught</h2>
       <p class="dek">Written as I went, this would have been a list of things I added. Looking back, it's a shorter and more useful story than that.</p>
     </div>
@@ -1087,24 +1471,27 @@ sweep(drive)       check what's on a drive</pre>
       <p><strong>Honesty turned out to be structural.</strong> A UI that won't fake a success toast. A backup that insists on byte proof before it calls a photo safe. A live preview that has to match its export to within 0.4 of 255. A deletion program that writes down the three deletions it got wrong. Same move every time: don't let the system, or the write-up, claim something it can't back.</p>
       <p><strong>Knowing what's irreplaceable is what makes you brave.</strong> Every scary moment in three years was the same fear in different clothes, which is losing a photograph I can't get back. Working out that 0.06% of the catalog was the part I couldn't rebuild is what made it safe to delete the rest without flinching.</p>
       <p><strong>The best code I wrote this year was code that stopped being necessary.</strong> Five subsystems didn't get fixed. They stopped having a reason to exist once a path was stored as a drive plus a tail. Every backlog and cursor collapsed into one anti-join. I don't know a refactoring pattern that beats noticing a question nobody asks any more, because it's the only move that makes a codebase smaller and more capable at once.</p>
-      <p>Azimuth 2.0 isn't finished. The UI is staying: 39k lines of grid, loupe and keyboard work that were always the good part. It's the backend underneath that's learning to be small.</p>
+      <p><strong>A ledger is a better memory than a model.</strong> The last three days were 532 findings, and not one of them closed without the commit that did the work, the number from the bench, or the screenshot from the rig. That sounds bureaucratic. It's the opposite: it is the only process I found that lets a fleet fix hundreds of small things without any of them being quietly unfixed, because the receipt is the row.</p>
+      <p>When Act II was written, this paragraph said the old UI was staying because it was the good part. It wasn't, and on 8 September it left. What remains is five tables, twenty-two surface files, a UI a fifth the size of the one it replaced, and a findings ledger with nine rows still open. Develop is parked on the owner's own seven Lightroom screenshots until it can be built without a bandaid. There is no phone and no sharing. Saying that out loud here is the same move as everything above it: don't let the write-up claim what the software can't back.</p>
     </div>
 
     <div class="endcta rv">
       <div class="ec-k">◆ Find your bearing</div>
-      <h3>Everything in this log is real — and it's yours to run.</h3>
-      <p>Azimuth Photo is open source and self-hosted. It runs on your own computer, NAS, or server; your photos never leave your hardware. It ships empty and hungry.</p>
+      <h3>Everything in this log is real — and it's yours to run, and to shape.</h3>
+      <p>Azimuth Photo is open source (AGPL) and runs on your own machine; your photographs never leave your hardware. It ships empty and hungry. Point it at a folder, cull one shoot with the keyboard, and if something is wrong, write it down the way the ledger does — what it did to you, where, the fix, how much it matters. That row is the whole contribution, and it is how every one of the 509 above got fixed.</p>
+      <p>If you own your archive and want software that treats it that way, this is the project for you. Develop, a phone and sharing are still open. So is the question of what a photo library should be when the photographer, not the cloud, is the centre of it.</p>
       <div class="ec-actions">
         <a class="ec-btn primary" href="https://github.com/Sean-Kenneth-Doherty/azimuth-photo">Get Azimuth Photo on GitHub →</a>
+        <a class="ec-btn" href="https://github.com/Sean-Kenneth-Doherty/azimuth-photo/blob/main/docs/FINDINGS.md">Read the findings ledger</a>
         <a class="ec-btn" href="/">Try the live demo</a>
       </div>
     </div>
 
     <div class="foot rv">
       <div class="big">From "which one is better?" to a darkroom that models the chemistry of film — then back down to a core you can hold in your head.</div>
-      <p>AZIMUTH · FIELD LOG — a development log built from the real git history of Azimuth Photo.<br>
-      Every screenshot on this page was captured by <b>checking out the exact commit and running that era's software</b> against a fixed set of Sean's real photographs — the 2023 Tkinter app included. Every benchmark, line count and code excerpt is quoted or measured from the commit that shipped it.<br><br>
-      <b>Span</b> 2023-08-11 → 2026-08-16 · <b>Commits</b> 2,304 · <b>Peak month</b> 1,133 · <b>Peak size</b> 182,688 lines → <b>105,632</b> · <b>The working core</b> ~3,500 · <b>Irreplaceable</b> 0.06% of rows · <b>Twin parity</b> &lt;0.4/255.</p>
+      <p>AZIMUTH · FIELD LOG — a development log built from the real git history of Azimuth Photo, written by <a href="https://seankennethdoherty.com" style="color:inherit"><b>Sean Kenneth Doherty</b></a>, a photographer who wanted his archive on his own disk, and the person whose name is on every commit. More of the photographs, and the rest of the work, at <a href="https://seankennethdoherty.com" style="color:inherit">seankennethdoherty.com</a>; the code at <a href="https://github.com/Sean-Kenneth-Doherty" style="color:inherit">github.com/Sean-Kenneth-Doherty</a>.<br><br>
+      Every screenshot on this page was captured by <b>checking out the exact commit and running that era's software</b> against a fixed set of Sean's real photographs — the 2023 Tkinter app included, and the 2026 desktop app photographed off-screen on an isolated home. Every benchmark, line count and code excerpt is quoted or measured from the commit that shipped it.<br><br>
+      <b>Span</b> 2023-08-11 → 2026-09-11 · <b>Commits</b> 2,587 · <b>Peak month</b> 1,133 · <b>Peak size</b> 182,688 lines → <b>25,367</b> of product · <b>Tables</b> 84 → 5 · <b>Irreplaceable</b> 0.06% of rows · <b>Repair-shaped commits</b> under 5% since August · <b>Findings closed with a receipt</b> 509.</p>
     </div>
   </section>
 
