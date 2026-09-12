@@ -155,8 +155,8 @@
         <a class="d" href="#ch-ledger">
           <span class="k">On polish</span>
           <h4>A row closes only in the commit that does the work.</h4>
-          <p>Deleting is loud. Polish is quiet, and quiet is where a model's report and its result drift apart. A ledger that refuses to close a finding without the commit, the number or the screenshot is the only thing that kept 509 small fixes honest.</p>
-          <span class="paid">cost: <b>92 refutation rows</b> — regressions a second model found in three days of "done"</span>
+          <p>Deleting is loud. Polish is quiet, and quiet is where a model's report and its result drift apart. A ledger that refuses to close a finding without the commit, the number or the screenshot is the only thing that kept 531 small fixes honest.</p>
+          <span class="paid">cost: <b>102 refutation rows</b> — regressions a second model found in three days of "done"</span>
         </a>
       </div>
     </div>
@@ -1176,6 +1176,16 @@ sweep(drive)       check what's on a drive</pre>
         limit=limit)</pre>
     </div>
 
+    <div class="demo rrf-demo rv" id="rrf-demo">
+      <div class="dh"><span class="lab">reciprocal rank fusion · 1 / (60 + rank), summed across the doors a frame appears in</span><span class="tot" id="rrf-note">three doors</span></div>
+      <div class="doors">
+        <div class="door" data-door="words"><button class="dt on" data-door="words">words</button><ol></ol></div>
+        <div class="door" data-door="named"><button class="dt on" data-door="named">the sets you named</button><ol></ol></div>
+        <div class="door" data-door="space"><button class="dt on" data-door="space">the space</button><ol></ol></div>
+        <div class="door fused"><div class="dt static">fused</div><ol></ol></div>
+      </div>
+      <p class="dnote">Switch a door off and the answer degrades instead of refusing — that is the rule. Notice that a frame near the top of two doors beats a frame at the very top of one: ranks add, scores never had to be compared.</p>
+    </div>
     <div class="prose rv">
       <p>Collections stopped being a feature. <strong>The view is one scope, and collections are verbs on it.</strong> An album is a set of hashes; a smart album is a saved query; a label is a set with a learned edge. They share one chip language with the filters, so “2024 · Canon R5 · starred · in <em>Iceland</em>” is one scope whether you typed it, saved it, or clicked into it from the shelf.</p>
     </div>
@@ -1332,16 +1342,22 @@ user32.PrintWindow(hwnd, hdc, <span class="tok-num">2</span>)   <span class="tok
   <!-- ─────────────────────────────────────────────── CH21 THE FINDINGS LEDGER -->
   <section class="chapter" id="ch-ledger">
     <div class="head rv">
-      <div class="eyebrow">Chapter 21 <span class="sep">/</span> Sep 9–11, 2026 <span class="sep">/</span> <span class="muted">532 rows in three days</span></div>
+      <div class="eyebrow">Chapter 21 <span class="sep">/</span> Sep 9–12, 2026 <span class="sep">/</span> <span class="muted">555 rows in three days</span></div>
       <h2>The findings ledger</h2>
       <p class="dek">With nothing left to delete, the work changed shape. The owner asked for a second ledger — the twin of the one that holds his asks — and a process where <b>a row closes only in the commit that does the work</b>. Then: “keep going, run another audit and fix everything it finds.”</p>
     </div>
 
     <div class="prose rv">
       <p class="lead">A finding enters <code>docs/FINDINGS.md</code> with four things: the user impact in product words, the evidence — file and line, verified at HEAD — the concrete fix, and its rank within its surface. It leaves in one of two ways, and only in the same commit that does the work: <em>shipped</em>, or <em>rejected</em> with the reason in the row. The commit that shipped a row is the one whose subject starts with its number, so the ledger never carries a hash it can't know yet. Rows are never deleted and never renumbered. When it runs dry, a new audit against HEAD refills it. There is only ever one round in flight.</p>
-      <p>Three days later: <strong>532 rows. 509 shipped, 6 rejected with a reason, 7 “measured” — checked, and the numbers said no — and 9 open.</strong> Ninety-two of those rows are refutations: a second model reading the day's diff with instructions to prove it broken, which is the Chapter 09 lesson made into a schedule. It found the fold tabs living outside the shell they styled, a ring on the mark that had been invisible for a day, a queued pick that outlived its round, a search memo keyed on the wrong clock. None of those came from a normal review.</p>
+      <p>Three days later: <strong>555 rows. 531 shipped, 6 rejected with a reason, 7 “measured” — checked, and the numbers said no — and 11 open.</strong> 102 of those rows are refutations: a second model reading the day's diff with instructions to prove it broken, which is the Chapter 09 lesson made into a schedule. It found the fold tabs living outside the shell they styled, a ring on the mark that had been invisible for a day, a queued pick that outlived its round, a search memo keyed on the wrong clock. None of those came from a normal review.</p>
     </div>
 
+    <div class="demo ledger-demo rv" id="ledger-demo">
+      <div class="dh"><span class="lab">docs/FINDINGS.md · every row, counted from the file · 12 Sep 2026</span><span class="tot">555 rows</span></div>
+      <svg class="lbars" viewBox="0 0 720 280" role="img" aria-label="Findings by kind of round, stacked by status"></svg>
+      <div class="lkey"><span><i class="s"></i>shipped 531</span><span><i class="m"></i>measured — the numbers said no 7</span><span><i class="r"></i>rejected, with a reason 6</span><span><i class="o"></i>open 11</span></div>
+      <p class="dnote">Hover a bar for its rows. A refutation is a second model reading the day's diff with orders to prove it broken; those rows are the ones a normal review would have called done.</p>
+    </div>
     <div class="ledger rv">
       <div class="row"><div class="no">P3</div><div><div class="h">The window opened after 11–20 seconds of reindexing <span class="hash">c3b5db54</span></div><p>Metadata 16 s, stacks 4 s at 150,000 rows, all before first paint. Now the repairs run behind the paint on the sweep lane through one changed-rows writer, and a rebuild that changes nothing writes nothing.</p></div></div>
       <div class="row"><div class="no">F44</div><div><div class="h">The mark's ring had been invisible since the appearance pass <span class="hash">8446f74b</span></div><p>Rings were drawn on the cell and painted <em>under</em> its image. One day of every marked frame looking unmarked, caught by the refutation, fixed by an inset shadow on <code>::after</code>.</p></div></div>
@@ -1390,7 +1406,7 @@ user32.PrintWindow(hwnd, hdc, <span class="tok-num">2</span>)   <span class="tok
     <div class="lesson rv">
       <div class="t">What the ledger taught, that the rewrite hadn't</div>
       <p>Deleting is loud. Polish is quiet, and quiet work is where an assistant's reports and its results drift apart, because nobody can feel the difference between “fixed” and “fixed on the one screen I looked at.”</p>
-      <p>Tying every row to the commit that closes it, and every claim to a number from the bench or a screenshot from the rig, was the only thing that kept 509 small changes honest. The process is not clever. It is a ledger that refuses to let a row close without a receipt.</p>
+      <p>Tying every row to the commit that closes it, and every claim to a number from the bench or a screenshot from the rig, was the only thing that kept 531 small changes honest. The process is not clever. It is a ledger that refuses to let a row close without a receipt.</p>
     </div>
   </section>
 
@@ -1416,7 +1432,7 @@ user32.PrintWindow(hwnd, hdc, <span class="tok-num">2</span>)   <span class="tok
       </div></div>
       <div class="r"><span class="n"></span><div>
         <h4>4 · A second model refutes the diff.</h4>
-        <p>Not a review — a refutation: “assume this is broken and show me how.” Ninety-two of the ledger's rows came from that pass in three days. Whoever wrote it never blesses it.</p>
+        <p>Not a review — a refutation: “assume this is broken and show me how.” 102 of the ledger's rows came from that pass in three days. Whoever wrote it never blesses it.</p>
       </div></div>
       <div class="r"><span class="n"></span><div>
         <h4>5 · The gates count what only grows when you write more code.</h4>
@@ -1427,7 +1443,7 @@ user32.PrintWindow(hwnd, hdc, <span class="tok-num">2</span>)   <span class="tok
         <p>A finding closes only in the commit that does the work, with the bench number or the screenshot from the off-screen rig. “Verified, all tests pass” is a claim, and claims get re-run. Every screenshot in this act is that rule applied to the log itself.</p>
       </div></div>
     </div>
-    <p class="note rv">If you run Azimuth on your own library and something is wrong, the four-field finding — what it did to you, where, the fix, how much it matters — is the whole contribution. The ledger is the on-ramp. Nobody needs to read the architecture first.</p>
+    <p class="note rv">All six live in the repository as files a stranger can read: the plan, the findings, the gates, the journeys, the bench and the proof rig. The process is not clever. It is a set of receipts.</p>
   </section>
 
   <!-- ─────────────────────────────────────────────── INTERLUDE: METHOD -->
@@ -1471,19 +1487,18 @@ user32.PrintWindow(hwnd, hdc, <span class="tok-num">2</span>)   <span class="tok
       <p><strong>Honesty turned out to be structural.</strong> A UI that won't fake a success toast. A backup that insists on byte proof before it calls a photo safe. A live preview that has to match its export to within 0.4 of 255. A deletion program that writes down the three deletions it got wrong. Same move every time: don't let the system, or the write-up, claim something it can't back.</p>
       <p><strong>Knowing what's irreplaceable is what makes you brave.</strong> Every scary moment in three years was the same fear in different clothes, which is losing a photograph I can't get back. Working out that 0.06% of the catalog was the part I couldn't rebuild is what made it safe to delete the rest without flinching.</p>
       <p><strong>The best code I wrote this year was code that stopped being necessary.</strong> Five subsystems didn't get fixed. They stopped having a reason to exist once a path was stored as a drive plus a tail. Every backlog and cursor collapsed into one anti-join. I don't know a refactoring pattern that beats noticing a question nobody asks any more, because it's the only move that makes a codebase smaller and more capable at once.</p>
-      <p><strong>A ledger is a better memory than a model.</strong> The last three days were 532 findings, and not one of them closed without the commit that did the work, the number from the bench, or the screenshot from the rig. That sounds bureaucratic. It's the opposite: it is the only process I found that lets a fleet fix hundreds of small things without any of them being quietly unfixed, because the receipt is the row.</p>
-      <p>When Act II was written, this paragraph said the old UI was staying because it was the good part. It wasn't, and on 8 September it left. What remains is five tables, twenty-two surface files, a UI a fifth the size of the one it replaced, and a findings ledger with nine rows still open. Develop is parked on the owner's own seven Lightroom screenshots until it can be built without a bandaid. There is no phone and no sharing. Saying that out loud here is the same move as everything above it: don't let the write-up claim what the software can't back.</p>
+      <p><strong>A ledger is a better memory than a model.</strong> The last three days were 555 findings, and not one of them closed without the commit that did the work, the number from the bench, or the screenshot from the rig. That sounds bureaucratic. It's the opposite: it is the only process I found that lets a fleet fix hundreds of small things without any of them being quietly unfixed, because the receipt is the row.</p>
+      <p>When Act II was written, this paragraph said the old UI was staying because it was the good part. It wasn't, and on 8 September it left. What remains is five tables, twenty-two surface files, a UI a fifth the size of the one it replaced, and a findings ledger with 11 rows still open. Develop is parked on the owner's own seven Lightroom screenshots until it can be built without a bandaid. There is no phone and no sharing. Saying that out loud here is the same move as everything above it: don't let the write-up claim what the software can't back.</p>
     </div>
 
     <div class="endcta rv">
       <div class="ec-k">◆ Find your bearing</div>
-      <h3>Everything in this log is real — and it's yours to run, and to shape.</h3>
-      <p>Azimuth Photo is open source (AGPL) and runs on your own machine; your photographs never leave your hardware. It ships empty and hungry. Point it at a folder, cull one shoot with the keyboard, and if something is wrong, write it down the way the ledger does — what it did to you, where, the fix, how much it matters. That row is the whole contribution, and it is how every one of the 509 above got fixed.</p>
-      <p>If you own your archive and want software that treats it that way, this is the project for you. Develop, a phone and sharing are still open. So is the question of what a photo library should be when the photographer, not the cloud, is the centre of it.</p>
+      <h3>Everything in this log is real — and it's yours to run.</h3>
+      <p>Azimuth Photo is open source and runs on your own machine; your photographs never leave your hardware. It ships empty and hungry.</p>
       <div class="ec-actions">
         <a class="ec-btn primary" href="https://github.com/Sean-Kenneth-Doherty/azimuth-photo">Get Azimuth Photo on GitHub →</a>
-        <a class="ec-btn" href="https://github.com/Sean-Kenneth-Doherty/azimuth-photo/blob/main/docs/FINDINGS.md">Read the findings ledger</a>
-        <a class="ec-btn" href="/">Try the live demo</a>
+        <a class="ec-btn" href="/">See the app</a>
+        <a class="ec-btn" href="/contribute/">If you want to help</a>
       </div>
     </div>
 
@@ -1491,7 +1506,7 @@ user32.PrintWindow(hwnd, hdc, <span class="tok-num">2</span>)   <span class="tok
       <div class="big">From "which one is better?" to a darkroom that models the chemistry of film — then back down to a core you can hold in your head.</div>
       <p>AZIMUTH · FIELD LOG — a development log built from the real git history of Azimuth Photo, written by <a href="https://seankennethdoherty.com" style="color:inherit"><b>Sean Kenneth Doherty</b></a>, a photographer who wanted his archive on his own disk, and the person whose name is on every commit. More of the photographs, and the rest of the work, at <a href="https://seankennethdoherty.com" style="color:inherit">seankennethdoherty.com</a>; the code at <a href="https://github.com/Sean-Kenneth-Doherty" style="color:inherit">github.com/Sean-Kenneth-Doherty</a>.<br><br>
       Every screenshot on this page was captured by <b>checking out the exact commit and running that era's software</b> against a fixed set of Sean's real photographs — the 2023 Tkinter app included, and the 2026 desktop app photographed off-screen on an isolated home. Every benchmark, line count and code excerpt is quoted or measured from the commit that shipped it.<br><br>
-      <b>Span</b> 2023-08-11 → 2026-09-11 · <b>Commits</b> 2,587 · <b>Peak month</b> 1,133 · <b>Peak size</b> 182,688 lines → <b>25,367</b> of product · <b>Tables</b> 84 → 5 · <b>Irreplaceable</b> 0.06% of rows · <b>Repair-shaped commits</b> under 5% since August · <b>Findings closed with a receipt</b> 509.</p>
+      <b>Span</b> 2023-08-11 → 2026-09-11 · <b>Commits</b> 2,587 · <b>Peak month</b> 1,133 · <b>Peak size</b> 182,688 lines → <b>25,367</b> of product · <b>Tables</b> 84 → 5 · <b>Irreplaceable</b> 0.06% of rows · <b>Repair-shaped commits</b> under 5% since August · <b>Findings closed with a receipt</b> 531.</p>
     </div>
   </section>
 

@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Azimuth Photo · Contribute</title>
+<meta name="description" content="How to help build Azimuth Photo: bring your own library, file a finding the way the ledger does, add a journey, or take one of the open problems. Open source, AGPL, built in the open.">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../style.css">
+<style>
+  .doc{max-width:760px;margin:0 auto;padding:120px 24px 96px}
+  .doc h1{font-size:clamp(34px,5vw,52px);line-height:1.05;letter-spacing:-.02em;margin:0 0 18px}
+  .doc h2{font-size:22px;margin:52px 0 12px;letter-spacing:-.01em}
+  .doc p,.doc li{font-size:17px;line-height:1.6;color:var(--text-2,#c9c9c4)}
+  .doc .lede{font-size:20px;color:var(--text-1,#f0efec)}
+  .doc code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.88em;background:rgba(255,255,255,.06);padding:.1em .35em;border-radius:3px}
+  .doc pre{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:13.5px;line-height:1.6;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:16px;overflow-x:auto}
+  .doc .row{display:grid;grid-template-columns:150px 1fr;gap:12px 18px;margin:14px 0;border-top:1px solid rgba(255,255,255,.08);padding-top:12px}
+  .doc .row b{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#fc4d21;padding-top:4px}
+  .doc .open{list-style:none;padding:0}
+  .doc .open li{padding:12px 0;border-top:1px solid rgba(255,255,255,.08)}
+  .doc .open li b{color:var(--text-1,#f0efec)}
+  .doc .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:32px}
+  .doc .back{display:inline-block;margin-bottom:28px;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#9a9a95;text-decoration:none}
+  @media (max-width:640px){.doc .row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<main class="doc">
+  <a class="back" href="/">← azimuthphoto.com</a>
+  <h1>If you want to help</h1>
+  <p class="lede">Azimuth is built by one photographer, in the open, against his own archive. It is looking for photographers who own theirs. You do not need to read the architecture to contribute — the project runs on a small set of files a stranger can read, and each of them is a way in.</p>
+
+  <h2>Bring a library</h2>
+  <p>Point it at a folder of your own photographs and cull one shoot with the keyboard. Every surface is developed against one real 150,000-photo archive; a second real archive finds what one cannot — a camera it has not met, a folder layout it did not expect, a drive that goes away. Nothing you point it at is uploaded anywhere, and it never moves, renames or deletes an original.</p>
+  <pre>git clone https://github.com/Sean-Kenneth-Doherty/azimuth-photo.git
+cd azimuth-photo
+python -m venv web\.venv
+web\.venv\Scripts\python.exe -m pip install -r web\requirements-v2.txt
+npm ci
+.\scripts\start_azimuth_windows.ps1</pre>
+  <p>It asks where it should live, then for a folder of photographs, and the library fills while you watch. <a href="https://github.com/Sean-Kenneth-Doherty/azimuth-photo/blob/main/docs/INSTALL.md">INSTALL.md</a> covers the frozen build.</p>
+
+  <h2>File a finding, not a bug</h2>
+  <p><a href="https://github.com/Sean-Kenneth-Doherty/azimuth-photo/blob/main/docs/FINDINGS.md"><code>docs/FINDINGS.md</code></a> is the ledger every audit writes into, and a row closes only in the commit that does the work — 555 rows since 9 September, and this is how they got fixed. A finding has four fields:</p>
+  <div class="row"><b>User impact</b><span>What it did to you, in product words. “The window opened after twenty seconds of reindexing.” Not “P3 is slow.”</span></div>
+  <div class="row"><b>Evidence</b><span>Where: the file and line, checked at the current <code>main</code>. A screenshot is evidence too.</span></div>
+  <div class="row"><b>The fix</b><span>The concrete change, as specifically as you can say it. “Run the repairs behind the first paint” is a fix; “make it faster” is a wish.</span></div>
+  <div class="row"><b>How much it matters</b><span>Its rank within its surface. Be honest — a ledger where everything is urgent has no information in it.</span></div>
+  <p>Open an issue with those four things and it becomes a row. If you can, say what surface it belongs to (grid, loupe, rank, sidebar, search, people, import) so it lands in the right round.</p>
+
+  <h2>Add a journey</h2>
+  <p><a href="https://github.com/Sean-Kenneth-Doherty/azimuth-photo/tree/main/scripts/journeys"><code>scripts/journeys/</code></a> holds one small script per thing a photographer actually does — cull by keyboard, look closer, introduce someone, find a frame from memory, judge a burst, make an album. Each runs through the off-screen rig to a screenshot, and the gallery is read side by side with the last round's. If a real task you do is not covered, a ten-line journey for it is a contribution, and it will be run on every round after.</p>
+
+  <h2>What is open</h2>
+  <ul class="open">
+    <li><b>Develop.</b> The crop and the metadata round-trip ship. The slider workspace is parked on a measured tone-parity gap — 0.0445 ΔL against a 0.035 bar — with the owner's Lightroom screenshots as the spec. The colour mathematics lives in <code>web/pixels/</code> as pure functions over arrays; closing that gap is real, hard, and well-defined.</li>
+    <li><b>The taste program.</b> Experiments E1 and E3–E5 in <a href="https://github.com/Sean-Kenneth-Doherty/azimuth-photo/blob/main/docs/taste-and-culling-research.md"><code>docs/taste-and-culling-research.md</code></a> are written and not yet run. The head is linear and stays linear; the facets are stored facts. Someone who likes fitting small models on real judgements would enjoy this.</li>
+    <li><b>A phone.</b> Deleted with V1, to return as new work against the V2 vocabulary once the desktop is finished. The bridge is one object with typed verbs; a client is a second surface on it.</li>
+    <li><b>Sharing.</b> Four overlapping V1 systems for handing someone a photograph were deleted. There is no design yet, which is the interesting part.</li>
+    <li><b>Other platforms.</b> The app is one Python process and one bundled document; today the native shell is proven on Windows only.</li>
+  </ul>
+
+  <h2>How the work runs</h2>
+  <p>The loop is written down in the <a href="/log/#loop">Field Log</a>: the asks in <code>MASTER_PLAN.md</code> verbatim, the findings in the ledger, a second model refuting every diff, gates that count couplings, journeys that prove behaviour, and nothing done until it ran. Pull requests are read the same way — the diff is refuted before it is praised, and a change that deletes what it replaces is the shape that gets in. The code is AGPL-3.0.</p>
+
+  <div class="actions">
+    <a class="btn btn-primary" href="https://github.com/Sean-Kenneth-Doherty/azimuth-photo">THE REPOSITORY</a>
+    <a class="btn" href="https://github.com/Sean-Kenneth-Doherty/azimuth-photo/blob/main/docs/FINDINGS.md">THE FINDINGS LEDGER</a>
+    <a class="btn" href="/log/">THE FIELD LOG</a>
+  </div>
+</main>
+</body>
+</html>

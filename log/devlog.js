@@ -272,4 +272,77 @@
     ev.addEventListener("input", render); render();
   }
   $$(".twin-demo").forEach(initTwin);
+
+  /* ---- Act III · reciprocal rank fusion ------------------------------ */
+  // Three doors each return a ranked list of the same frames; fusion is by
+  // rank, never by score -- the real fuse() in web/search.py, RRF_K = 60.
+  function initRRF(root) {
+    if (!root || PHOTOS.length < 8) return;
+    const RRF_K = 60, N = 8;
+    const frames = PHOTOS.slice(0, N);
+    // fixed, deliberately different orders per door (indices into frames)
+    const DOORS = {
+      words: [0, 3, 5, 1, 7, 2],
+      named: [3, 4, 0, 6, 2],
+      space: [4, 3, 6, 5, 0, 1, 7],
+    };
+    const on = { words: true, named: true, space: true };
+    function fuse() {
+      const score = new Map();
+      Object.keys(DOORS).forEach((d) => { if (!on[d]) return;
+        DOORS[d].forEach((id, position) => score.set(id, (score.get(id) || 0) + 1 / (RRF_K + position + 1))); });
+      return [...score.entries()].sort((a, b) => b[1] - a[1]);
+    }
+    function li(id, extra) {
+      const el = document.createElement("li");
+      el.innerHTML = `<img src="${frames[id]}" alt=""><span>${extra || ""}</span>`;
+      el.dataset.id = id; return el;
+    }
+    function render() {
+      Object.keys(DOORS).forEach((d) => {
+        const ol = root.querySelector(`.door[data-door="${d}"] ol`); ol.innerHTML = "";
+        root.querySelector(`.door[data-door="${d}"]`).classList.toggle("off", !on[d]);
+        DOORS[d].forEach((id, i) => ol.appendChild(li(id, "#" + (i + 1))));
+      });
+      const ol = root.querySelector(".door.fused ol"); const prev = new Map();
+      ol.querySelectorAll("li").forEach((el) => prev.set(el.dataset.id, el.getBoundingClientRect().top));
+      ol.innerHTML = "";
+      const fused = fuse();
+      fused.forEach(([id, s]) => ol.appendChild(li(id, s.toFixed(4))));
+      ol.querySelectorAll("li").forEach((el) => {          // FLIP: rows slide to their new rank
+        const was = prev.get(el.dataset.id); if (was == null || reduced) return;
+        const dy = was - el.getBoundingClientRect().top; if (!dy) return;
+        el.style.transform = `translateY(${dy}px)`; el.style.transition = "none";
+        requestAnimationFrame(() => { el.style.transition = "transform 420ms cubic-bezier(.2,.7,.2,1)"; el.style.transform = ""; });
+      });
+      const live = Object.values(on).filter(Boolean).length;
+      $("#rrf-note", root).textContent = live === 3 ? "three doors" : live === 0 ? "no door — an empty answer, never a refusal" : `${live} door${live > 1 ? "s" : ""} · degraded, not refused`;
+    }
+    $$(".dt[data-door]", root).forEach((b) => b.addEventListener("click", () => { on[b.dataset.door] = !on[b.dataset.door]; b.classList.toggle("on", on[b.dataset.door]); render(); }));
+    render();
+  }
+  $$(".rrf-demo").forEach(initRRF);
+
+  /* ---- Act III · the findings ledger, by round ------------------------ */
+  const LEDGER = [{"round": "Surface audits", "shipped": 131, "rejected": 2}, {"round": "Feel", "shipped": 154, "rejected": 1}, {"round": "Refutation, by a second model", "shipped": 98, "rejected": 1, "open": 2, "closed": 1}, {"round": "Personas", "shipped": 59, "rejected": 1, "open": 4, "measured": 1}, {"round": "Craft", "shipped": 27, "measured": 1}, {"round": "Performance, measured", "shipped": 19, "measured": 4}, {"round": "The owner's own sitting", "shipped": 27, "measured": 1, "rejected": 1, "closed": 1, "open": 2}, {"round": "People, stacks, appearance, taste", "shipped": 14, "open": 3}];
+  function initLedger(root) {
+    const svg = $("svg", root); if (!svg) return;
+    const W = 720, ROW = 34, LEFT = 236, PAD = 8;
+    const max = Math.max(...LEDGER.map((r) => (r.shipped || 0) + (r.closed || 0) + (r.measured || 0) + (r.rejected || 0) + (r.open || 0)));
+    const scale = (W - LEFT - 40) / max;
+    const parts = [["shipped", "s"], ["closed", "s"], ["measured", "m"], ["rejected", "r"], ["open", "o"]];
+    let html = "";
+    LEDGER.forEach((r, i) => {
+      const y = PAD + i * ROW; let x = LEFT;
+      const total = parts.reduce((a, [k]) => a + (r[k] || 0), 0);
+      html += `<text class="lname" x="${LEFT - 10}" y="${y + 20}" text-anchor="end">${r.round}</text>`;
+      parts.forEach(([k, cls]) => { const v = r[k] || 0; if (!v) return;
+        html += `<rect class="lb ${cls}" x="${x}" y="${y + 6}" width="${Math.max(1, v * scale - 1)}" height="20" rx="2"><title>${r.round}: ${v} ${k}</title></rect>`; x += v * scale; });
+      html += `<text class="lval" x="${x + 6}" y="${y + 20}">${total}</text>`;
+    });
+    svg.innerHTML = html;
+    const io = new IntersectionObserver((es) => { es.forEach((e) => { if (e.isIntersecting) { root.classList.add("grown"); io.disconnect(); } }); }, { threshold: 0.3 });
+    io.observe(root);
+  }
+  $$(".ledger-demo").forEach(initLedger);
 })();

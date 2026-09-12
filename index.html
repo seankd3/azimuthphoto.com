@@ -14,6 +14,16 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<style>
+  .fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin-top:34px}
+  .fcard{display:flex;flex-direction:column;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:10px;overflow:hidden;color:inherit;text-decoration:none;transition:border-color .2s,transform .2s}
+  a.fcard:hover{border-color:rgba(252,77,33,.55);transform:translateY(-2px)}
+  .fcard img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;background:#000}
+  .fcard .ft{padding:16px 18px 18px}
+  .fcard .ft b{display:block;font-size:17px;letter-spacing:-.01em;margin-bottom:6px}
+  .fcard .ft span{font-size:14.5px;line-height:1.55;color:#b9b9b4}
+  .fcard.text{justify-content:center;border-style:dashed}
+</style>
 </head>
 <body>
 
@@ -28,7 +38,8 @@
       <a href="#loupe"><span class="idx">02</span>Loupe</a>
       <a href="#ranking"><span class="idx">03</span>Ranking</a>
       <a href="#search"><span class="idx">04</span>Search</a>
-      <a href="/log/"><span class="idx">05</span>Field&nbsp;Log</a>
+      <a href="#features"><span class="idx">05</span>The&nbsp;App</a>
+      <a href="/log/"><span class="idx">06</span>Field&nbsp;Log</a>
       <a class="nav-cta" href="https://github.com/Sean-Kenneth-Doherty/azimuth-photo" target="_blank" rel="noopener">
         <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
         GITHUB
@@ -47,7 +58,7 @@
       <a class="btn btn-primary" href="https://github.com/Sean-Kenneth-Doherty/azimuth-photo" target="_blank" rel="noopener">GET AZIMUTH PHOTO</a>
       <a class="btn btn-ghost" href="#library">TRY IT BELOW <span class="arrow">↓</span></a>
     </div>
-    <p class="live-note mono reveal d3"><span class="pulse"></span>EVERY PANEL BELOW IS LIVE — REAL PHOTOS, REAL CATALOG DATA, REAL MATH. NO PICTURES OF THE APP.</p>
+    <p class="live-note mono reveal d3"><span class="pulse"></span>PANELS 01–04 ARE LIVE — REAL PHOTOS, REAL CATALOG DATA, REAL MATH. 05 IS THE DESKTOP APP ITSELF, CAPTURED, NOT MOCKED.</p>
   </div>
 </header>
 
@@ -162,6 +173,27 @@
   </div>
 </section>
 
+<div class="ruler" aria-hidden="true"><span class="mono">AZ 300°</span></div>
+
+<!-- ——— 05 · WHAT IT DOES (real captures of the desktop app) ——— -->
+<section class="feature" id="features">
+  <div class="section-inner">
+    <p class="kicker mono reveal"><span class="tick"></span>05 — THE DESKTOP APP</p>
+    <h2 class="reveal d1">Every one of these is a real capture.<br><span class="dim">The 2.0 desktop app, on an isolated library, September 2026.</span></h2>
+    <p class="section-lede reveal d2">One Python process, one native window, no server. Here is what it does that other libraries don't.</p>
+  </div>
+  <div class="section-inner fgrid reveal d2">
+    <a class="fcard" href="/log/#ch-face"><img src="log/assets/screens/17-rank.jpg" alt="The Rank stage: a round of nine photographs, the cursor on one" loading="lazy" style="object-position:62% 40%"><div class="ft"><b>Rank, not rate</b><span>A round is dealt whole, at equal area. Pick the best one; the click never waits. Stars are the ranking's face — each one halves the set.</span></div></a>
+    <a class="fcard" href="/log/#ch-ledger"><img src="log/assets/screens/15-cull.jpg" alt="The grid after a keyboard cull: a pick, a reject, a turned frame, a stacked burst and an Undo toast" loading="lazy" style="object-position:20% 30%"><div class="ft"><b>Cull with the keyboard, take anything back</b><span>P, X, R, S. Stack a burst with one key; a stack is a decision, never something done to you. One toast, always with Undo.</span></div></a>
+    <a class="fcard" href="/log/#ch-ledger"><img src="log/assets/screens/21-lights-out.jpg" alt="The loupe under Lights Out: only the photograph" loading="lazy" style="object-position:50% 45%"><div class="ft"><b>Lights Out</b><span>Press L and every piece of chrome dims to nothing. The loupe has no open animation, because a wait under 200 ms shows nothing at all.</span></div></a>
+    <a class="fcard" href="/log/#ch-face"><img src="log/assets/screens/20-command-line.jpg" alt="The search box with a leading > listing every command" loading="lazy" style="object-position:55% 8%"><div class="ft"><b>Three doors, and a command line</b><span>Search fuses the words, the sets you named and the embedding space by rank. A leading &gt; turns the same box into every verb on the screen.</span></div></a>
+    <a class="fcard" href="/log/#ch-earned"><img src="log/assets/screens/14-library-grid.jpg" alt="The library: justified rows in day chapters with a timeline rail" loading="lazy" style="object-position:40% 12%"><div class="ft"><b>Day chapters, one folder tree, every drive</b><span>Justified rows grouped by the day they were taken. Folders from every attached disk in one tree; unplug a drive and the photographs stay and say so.</span></div></a>
+    <a class="fcard" href="/log/#ch-earned"><img src="log/assets/screens/18-people-wall.jpg" alt="The People wall: a group of faces to be named" loading="lazy" style="object-position:0% 30%"><div class="ft"><b>Predicted, then earned</b><span>Faces are found on your own card; a person is a name you give a group of them. Labels are born by teaching: search <i>cat</i>, say no to the one dog, and the word is smarter everywhere.</span></div></a>
+    <div class="fcard text"><div class="ft"><b>Lightroom's dialect</b><span>Edits are Lightroom's own crs keys; the sidecar carries your rating, label and keywords back, so the two apps stop disagreeing. A crop is a decision; a render is a cached answer.</span></div></div>
+    <div class="fcard text"><div class="ft"><b>Facts, never verdicts</b><span>Sharpness per frame, per face and per eye; eyes open, closed or can't tell, from 106 landmarks. Exposure, palette, grain. Stored as numbers you can filter by — nothing blends them into a score.</span></div></div>
+  </div>
+</section>
+
 <div class="ruler" aria-hidden="true"><span class="mono">AZ 315°</span></div>
 
 <!-- ——— WHY / positioning ——— -->
@@ -215,10 +247,10 @@
   <div class="section-inner">
     <p class="kicker mono reveal"><span class="tick"></span>FIND YOUR BEARING</p>
     <h2 class="reveal d1">Your photos are your own.<br><span class="dim">The app ships empty and hungry.</span></h2>
-    <p class="lede reveal d2">Runs on your own hardware. Everything you just used was real: real frames, real catalog data, real math. Open source under the AGPL, built in the open with a public findings ledger, and looking for photographers who own their archives and want a say in what a library should be.</p>
+    <p class="lede reveal d2">Runs on your own hardware. Everything you just used was real: real frames, real catalog data, real math. Open source, AGPL, built in the open.</p>
     <div class="hero-actions reveal d3">
       <a class="btn btn-primary" href="https://github.com/Sean-Kenneth-Doherty/azimuth-photo" target="_blank" rel="noopener">GET STARTED ON GITHUB</a>
-      <a class="btn" href="/log/#loop">HOW IT IS BUILT <span class="arrow">→</span></a>
+      <a class="btn" href="/contribute/">HOW TO HELP <span class="arrow">→</span></a>
     </div>
   </div>
 </section>
