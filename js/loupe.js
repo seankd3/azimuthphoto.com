@@ -42,18 +42,18 @@ export function initLoupe() {
   function render() {
     const p = PHOTOS[idx];
     img.src = `assets/photos/lg/${p.id}.jpg`;
-    els.title.textContent = `LOUPE — ${p.fn}`;
+    els.title.textContent = `LOUPE · ${p.fn}`;
     els.pos.textContent = `${idx + 1} / ${PHOTOS.length} · ELO ${p.elo}`;
     els.elo.textContent = p.elo;
     const rank = PHOTOS.filter((q) => q.elo > p.elo).length + 1;
     els["elo-sub"].textContent = `#${rank} of ${PHOTOS.length} in scope`;
     els.cmp.textContent = p.cmp;
     els.file.textContent = p.fn;
-    els.date.textContent = p.date || "—";
-    els.cam.textContent = p.cam || "—";
-    els.lens.textContent = p.lens || "—";
+    els.date.textContent = p.date || "unknown";
+    els.cam.textContent = p.cam || "unknown";
+    els.lens.textContent = p.lens || "unknown";
     const f = flags.get(p.id);
-    els.flag.textContent = f === "pick" ? "● PICK" : f === "reject" ? "✕ REJECT" : "—";
+    els.flag.textContent = f === "pick" ? "● PICK" : f === "reject" ? "✕ REJECT" : "none";
     els.flag.className = "mono " + (f === "pick" ? "flag-pick" : f === "reject" ? "flag-reject" : "");
     img.onload = drawHistogram;
     if (img.complete && img.naturalWidth) drawHistogram();

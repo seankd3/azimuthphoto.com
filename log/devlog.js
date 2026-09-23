@@ -1,5 +1,5 @@
 /* ============================================================================
-   AZIMUTH · FIELD LOG — interactions & teaching demos
+   AZIMUTH · FIELD LOG: interactions and demos
    All data here is real: commit counts per month, measured benchmarks, and the
    film-halation algorithm is a faithful port of web/features/develop/film.py.
    ============================================================================ */
@@ -136,7 +136,7 @@
   }
   $$(".elo-demo").forEach(initElo);
 
-  /* ---- HALATION canvas — faithful to film.py --------------------------- */
+  /* ---- HALATION canvas, ported from film.py ------------------------------ */
   // Bright scene light over threshold is blurred and bled back into the RED
   // layer (and a fraction into green): the CineStill 800T glow "emerges".
   function initHalation(root) {
@@ -316,7 +316,7 @@
         requestAnimationFrame(() => { el.style.transition = "transform 420ms cubic-bezier(.2,.7,.2,1)"; el.style.transform = ""; });
       });
       const live = Object.values(on).filter(Boolean).length;
-      $("#rrf-note", root).textContent = live === 3 ? "three lists" : live === 0 ? "no list — an empty answer, never a refusal" : `${live} list${live > 1 ? "s" : ""} · worse, but still an answer`;
+      $("#rrf-note", root).textContent = live === 3 ? "three lists" : live === 0 ? "no lists: no results" : `${live} list${live > 1 ? "s" : ""}: fewer results, but still results`;
     }
     $$(".dt[data-door]", root).forEach((b) => b.addEventListener("click", () => { on[b.dataset.door] = !on[b.dataset.door]; b.classList.toggle("on", on[b.dataset.door]); render(); }));
     render();
@@ -421,7 +421,7 @@
       }
       tick = 0;
       stats = { disk: 0, card: 0, wait: 0, first: [null, null, null, null] };
-      paint(); say("Pick an order and run the night.");
+      paint(); say("Choose an order and press Run.");
     }
     const keyed = {
       date: (p) => (p.date == null ? -Infinity : p.date),      // newest photograph; unknown dates sort last
@@ -476,21 +476,21 @@
         bar.querySelector("em").textContent = n;
       });
       $("#starve-clock", root).textContent = "tick " + tick + " / " + NIGHT;
-      $("#sv-disk", root).textContent = tick ? pct(stats.disk) : "—";
-      $("#sv-card", root).textContent = tick ? pct(stats.card) : "—";
-      $("#sv-wait", root).textContent = tick ? Math.round(100 * stats.wait / (tick * LANES)) + "%" : "—";
+      $("#sv-disk", root).textContent = tick ? pct(stats.disk) : "0%";
+      $("#sv-card", root).textContent = tick ? pct(stats.card) : "0%";
+      $("#sv-wait", root).textContent = tick ? Math.round(100 * stats.wait / (tick * LANES)) + "%" : "0%";
     }
     function say(text) { $("#starve-verdict", root).textContent = text; }
     function verdict() {
-      const idle = `The archive disk was busy ${pct(stats.disk)} of the night and the graphics card ${pct(stats.card)}.`;
+      const idle = `The archive disk was busy ${pct(stats.disk)} of the time and the graphics card ${pct(stats.card)}.`;
       const starved = [];
       stats.first.forEach((f, s) => {
         if (f == null) starved.push(`${KIND[s]} never started`);
         else if (f >= 20) starved.push(`${KIND[s]} waited ${f} of ${NIGHT} ticks`);
       });
-      if (!starved.length) { say(`Every kind of work moved from the first ticks. ${idle} Nothing waited except for its own hardware.`); return; }
+      if (!starved.length) { say(`Every kind of work started within the first few ticks. ${idle}`); return; }
       const list = starved.length === 1 ? starved[0] : starved.slice(0, -1).join(", ") + " and " + starved[starved.length - 1];
-      say(`Starved: ${list}. ${idle}`);
+      say(`Stopped: ${list}. ${idle}`);
     }
     function run() {
       reset();
@@ -520,8 +520,8 @@
     const bar = $(".nm-bar", root); if (!bar) return;
     [["twin", TWIN], ["diff", DIFF], ["wait", WAIT]].forEach(([k, n]) => { bar.querySelector("." + k).style.flex = String(n / ALL); });
     const RULES = {
-      name: ["links all 13,332", `Links every pair: the ${TWIN.toLocaleString()} true twins, but also ${DIFF.toLocaleString()} pairs of different photographs merged into one, and ${WAIT.toLocaleString()} guessed without a date. Mostly wrong.`],
-      moment: [`links ${TWIN.toLocaleString()}`, `Links the ${TWIN.toLocaleString()} true twins, keeps the ${DIFF.toLocaleString()} different photographs apart, and waits on the ${WAIT.toLocaleString()} until their dates are read. It separates every collision that was measured.`],
+      name: ["links all 13,332", `Links every pair: the ${TWIN.toLocaleString()} true twins, and also ${DIFF.toLocaleString()} pairs of different photos wrongly treated as one, and ${WAIT.toLocaleString()} linked without checking a date. Most of these links are wrong.`],
+      moment: [`links ${TWIN.toLocaleString()}`, `Links the ${TWIN.toLocaleString()} true twins, keeps the ${DIFF.toLocaleString()} different photos separate, and waits for the ${WAIT.toLocaleString()} until their dates are read. It separates every case that was measured.`],
     };
     $$(".dt[data-rule]", root).forEach((b) => b.addEventListener("click", () => {
       const rule = b.dataset.rule;
