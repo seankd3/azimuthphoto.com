@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Azimuth Photo · Contribute</title>
-<meta name="description" content="How to help build Azimuth Photo: bring your own library, file a finding the way the ledger does, add a journey, or take one of the open problems. Open source, AGPL, built in the open.">
+<title>Azimuth Photo: how to contribute</title>
+<meta name="description" content="How to contribute to Azimuth Photo: try it on your own photos, report a finding, add a journey script, or work on an open area. Open source, AGPL.">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../style.css">
 <style>
@@ -28,41 +28,41 @@
 <body>
 <main class="doc">
   <a class="back" href="/">← azimuthphoto.com</a>
-  <h1>If you want to help</h1>
-  <p class="lede">Azimuth is built by one photographer, in the open, against his own archive. It is looking for photographers who own theirs. You do not need to read the architecture to contribute — the project runs on a small set of files a stranger can read, and each of them is a way in.</p>
+  <h1>How to contribute</h1>
+  <p class="lede">Azimuth is built by one photographer, in the open, using his own archive. Contributions from other photographers who keep their own archives are welcome. You do not need to understand the architecture to help. The project is run from a few plain files, and each one is a way to contribute.</p>
 
-  <h2>Bring a library</h2>
-  <p>Point it at a folder of your own photographs and cull one shoot with the keyboard. Every surface is developed against one real 150,000-photo archive; a second real archive finds what one cannot — a camera it has not met, a folder layout it did not expect, a drive that goes away. Nothing you point it at is uploaded anywhere, and it never moves, renames or deletes an original.</p>
+  <h2>Try it on your own photos</h2>
+  <p>Point it at a folder of your own photos and cull one shoot with the keyboard. The app is developed against one real archive of 150,000 photos. A second archive finds problems the first one cannot: a camera it has not seen, a different folder layout, a drive that is unplugged. Nothing is uploaded, and the app never moves, renames or deletes an original file.</p>
   <pre>git clone https://github.com/seankd3/Azimuth-Photo.git
 cd Azimuth-Photo
 python -m venv web\.venv
 web\.venv\Scripts\python.exe -m pip install -r web\requirements-v2.txt
 npm ci
 .\scripts\start_azimuth_windows.ps1</pre>
-  <p>It asks where it should live, then for a folder of photographs, and the library fills while you watch. <a href="https://github.com/seankd3/Azimuth-Photo/blob/main/docs/INSTALL.md">INSTALL.md</a> covers the frozen build.</p>
+  <p>It asks where to store its catalog, then for a folder of photos, and the library fills in as it scans. <a href="https://github.com/seankd3/Azimuth-Photo/blob/main/docs/INSTALL.md">INSTALL.md</a> covers the packaged build.</p>
 
-  <h2>File a finding, not a bug</h2>
-  <p><a href="https://github.com/seankd3/Azimuth-Photo/blob/main/Findings.md"><code>Findings.md</code></a> is the ledger every audit writes into, and a row closes only in the commit that does the work — more than 950 entries since 9 September, and this is how they got fixed. A finding has four fields:</p>
-  <div class="row"><b>User impact</b><span>What it did to you, in product words. “The window opened after twenty seconds of reindexing.” Not “P3 is slow.”</span></div>
-  <div class="row"><b>Evidence</b><span>Where: the file and line, checked at the current <code>main</code>. A screenshot is evidence too.</span></div>
-  <div class="row"><b>The fix</b><span>The concrete change, as specifically as you can say it. “Run the repairs behind the first paint” is a fix; “make it faster” is a wish.</span></div>
-  <div class="row"><b>How much it matters</b><span>Its rank within its surface. Be honest — a ledger where everything is urgent has no information in it.</span></div>
-  <p>Open an issue with those four things and it becomes a row. If you can, say what surface it belongs to (grid, loupe, rank, sidebar, search, people, import) so it lands in the right round.</p>
+  <h2>Report a finding</h2>
+  <p><a href="https://github.com/seankd3/Azimuth-Photo/blob/main/Findings.md"><code>Findings.md</code></a> is the list every audit adds to. An entry is closed only in the commit that fixes it. There have been more than 950 entries since 9 September. A finding has four parts:</p>
+  <div class="row"><b>User impact</b><span>What the problem did, described from the user's side. For example: "The window opened after twenty seconds of reindexing." Not "P3 is slow."</span></div>
+  <div class="row"><b>Evidence</b><span>Where it is: the file and line, checked on the current <code>main</code> branch. A screenshot also counts.</span></div>
+  <div class="row"><b>The fix</b><span>The specific change, as exactly as you can describe it. "Run the repairs after the window appears" is a fix. "Make it faster" is not.</span></div>
+  <div class="row"><b>How much it matters</b><span>How it ranks against other problems in the same area. If everything is marked urgent, the ranking is useless.</span></div>
+  <p>Open an issue with those four parts and it becomes an entry. If you can, say which area it belongs to (grid, loupe, rank, sidebar, search, people, import).</p>
 
-  <h2>Add a journey</h2>
-  <p><a href="https://github.com/seankd3/Azimuth-Photo/tree/main/scripts/journeys"><code>scripts/journeys/</code></a> holds one small script per thing a photographer actually does — cull by keyboard, look closer, introduce someone, find a frame from memory, judge a burst, make an album. Each runs through the off-screen rig to a screenshot, and the gallery is read side by side with the last round's. If a real task you do is not covered, a ten-line journey for it is a contribution, and it will be run on every round after.</p>
+  <h2>Add a journey script</h2>
+  <p><a href="https://github.com/seankd3/Azimuth-Photo/tree/main/scripts/journeys"><code>scripts/journeys/</code></a> has one small script for each task a photographer does: cull with the keyboard, zoom in, name a person, find a photo from memory, judge a burst, make an album. Each one runs the app off screen and saves a screenshot, which is compared with the previous round. If a task you do is not covered, a short script for it is a useful contribution, and it will run in every later round.</p>
 
-  <h2>What is open</h2>
+  <h2>Open areas</h2>
   <ul class="open">
-    <li><b>Editing.</b> By the owner's choice, editing lives in Lightroom, and Azimuth reads and writes Lightroom's own settings. The editor that was started is parked on a measured gap to Adobe's render (0.0445 ΔL against a 0.035 bar). Its colour mathematics lives in <code>web/pixels/</code> as pure functions over arrays, if someone wants to close that gap.</li>
-    <li><b>The taste program.</b> Experiments E1 and E3–E5 in <a href="https://github.com/seankd3/Azimuth-Photo/blob/main/docs/taste-and-culling-research.md"><code>docs/taste-and-culling-research.md</code></a> are written and not yet run. The head is linear and stays linear; the facets are stored facts. Someone who likes fitting small models on real judgements would enjoy this.</li>
-    <li><b>A phone.</b> Deleted with V1, to return as new work against the V2 vocabulary once the desktop is finished. The bridge is one object with typed verbs; a client is a second surface on it.</li>
-    <li><b>Sharing.</b> Four overlapping V1 systems for handing someone a photograph were deleted. There is no design yet, which is the interesting part.</li>
-    <li><b>Other platforms.</b> The app is one Python process and one bundled document; today the native shell is proven on Windows only.</li>
+    <li><b>Editing.</b> I chose to do editing in Lightroom, and Azimuth reads and writes Lightroom's settings. The editor that was started is paused because its output differs from Adobe's by 0.0445 in lightness, against a limit of 0.035. Its colour code is in <code>web/pixels/</code> as plain functions on arrays, if someone wants to work on it.</li>
+    <li><b>Ranking by taste.</b> Experiments E1 and E3 to E5 in <a href="https://github.com/seankd3/Azimuth-Photo/blob/main/docs/taste-and-culling-research.md"><code>docs/taste-and-culling-research.md</code></a> are written but not yet run. They fit small models to real choices between photos.</li>
+    <li><b>A phone app.</b> The old phone app was deleted with version 1. A new one would be built on the version 2 interface after the desktop app is finished. The desktop app talks to Python through one bridge object, so a phone app would be a second client for it.</li>
+    <li><b>Sharing.</b> Version 1 had four overlapping ways to share a photo, and all four were deleted. There is no design for sharing yet.</li>
+    <li><b>Other platforms.</b> The app is one Python program and one bundled HTML document. The native window has only been tested on Windows.</li>
   </ul>
 
-  <h2>How the work runs</h2>
-  <p>The loop is written down in the <a href="/log/#loop">Field Log</a>: the asks in <code>Vision.md</code> verbatim, the findings in the ledger, a second model refuting every diff, gates that count couplings, journeys that prove behaviour, and nothing done until it ran. Pull requests are read the same way — the diff is refuted before it is praised, and a change that deletes what it replaces is the shape that gets in. The code is AGPL-3.0.</p>
+  <h2>How the work is done</h2>
+  <p>The process is described in the <a href="/log/#loop">Field Log</a>: requests are recorded word for word in <code>Vision.md</code>, problems go into the findings list, a second model tries to break every change, automated checks count things that should not grow, journey scripts test real tasks, and nothing counts as done until it has been run. Pull requests are reviewed the same way. Changes that remove the code they replace are preferred. The code is licensed under AGPL-3.0.</p>
 
   <div class="actions">
     <a class="btn btn-primary" href="https://github.com/seankd3/Azimuth-Photo">THE REPOSITORY</a>

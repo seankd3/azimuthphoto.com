@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Azimuth Photo — Your own photo cloud, with Lightroom Classic instincts</title>
-<meta name="description" content="Azimuth Photo is a fast, self-hosted photo library. Browse terabytes at lightning speed, rank your best work with Elo, search semantically — all on your own hardware. Open source, free.">
+<title>Azimuth Photo: a photo library that runs on your own computer</title>
+<meta name="description" content="Azimuth Photo is an open-source photo library that runs on your own computer. Browse, cull, rank and search a large archive without uploading it anywhere.">
 <meta property="og:title" content="Azimuth Photo">
-<meta property="og:description" content="Your own photo cloud — with Lightroom Classic instincts. Self-hosted, blazing fast, open source.">
+<meta property="og:description" content="An open-source photo library that runs on your own computer, with ranking, search and culling.">
 <meta property="og:image" content="https://azimuthphoto.com/assets/photos/lg/4303.jpg">
 <meta property="og:url" content="https://azimuthphoto.com">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
@@ -51,14 +51,14 @@
 <header class="hero" id="top">
   <div class="compass" aria-hidden="true"></div>
   <div class="hero-inner">
-    <p class="kicker mono reveal"><span class="tick"></span>SELF-HOSTED PHOTO SYSTEM&nbsp;&nbsp;·&nbsp;&nbsp;OPEN SOURCE&nbsp;&nbsp;·&nbsp;&nbsp;AZ 000.0°–359.9°</p>
-    <h1 class="reveal d1">Your own photo cloud.<br><span class="dim">Lightroom Classic instincts.</span></h1>
-    <p class="lede reveal d2">Browse terabytes of photographs at lightning speed from your own computer, NAS, or server. Cull, rank, search, and develop tens of thousands of images — without uploading a single byte to anyone else's cloud.</p>
+    <p class="kicker mono reveal"><span class="tick"></span>SELF-HOSTED PHOTO LIBRARY&nbsp;&nbsp;·&nbsp;&nbsp;OPEN SOURCE</p>
+    <h1 class="reveal d1">A photo library that runs on your own computer.<br><span class="dim">Organized like Lightroom Classic.</span></h1>
+    <p class="lede reveal d2">Browse, cull, rank and search a large photo archive on your own computer. Nothing is uploaded to anyone else's servers.</p>
     <div class="hero-actions reveal d3">
       <a class="btn btn-primary" href="https://github.com/seankd3/Azimuth-Photo" target="_blank" rel="noopener">GET AZIMUTH PHOTO</a>
       <a class="btn btn-ghost" href="#library">TRY IT BELOW <span class="arrow">↓</span></a>
     </div>
-    <p class="live-note mono reveal d3"><span class="pulse"></span>PANELS 01–04 ARE LIVE — REAL PHOTOS, REAL CATALOG DATA, REAL MATH. 05 IS THE DESKTOP APP ITSELF, CAPTURED, NOT MOCKED.</p>
+    <p class="live-note mono reveal d3"><span class="pulse"></span>SECTIONS 01 TO 04 ARE LIVE DEMOS WITH REAL PHOTOS AND REAL CATALOG DATA. SECTION 05 SHOWS SCREENSHOTS OF THE DESKTOP APP.</p>
   </div>
 </header>
 
@@ -67,15 +67,12 @@
 <!-- ——— 01 · LIBRARY (interactive grid) ——— -->
 <section class="feature" id="library">
   <div class="section-inner">
-    <p class="kicker mono reveal"><span class="tick"></span>01 — THE LIBRARY</p>
-    <h2 class="reveal d1">50,000 photos feel like fifty.<br><span class="dim">Here are 36 real ones — filter them.</span></h2>
-    <p class="section-lede reveal d2">This is the author's <em>Selected Landscapes</em> collection, straight from the live catalog — real files, real EXIF, real Elo. Filters compose, counts answer instantly, and every frame opens in the loupe below.</p>
+    <p class="kicker mono reveal"><span class="tick"></span>01 · THE LIBRARY</p>
+    <h2 class="reveal d1">Fast browsing, even with a large archive.<br><span class="dim">Here are 36 real photos. Try the filters.</span></h2>
+    <p class="section-lede reveal d2">These are from my <em>Selected Landscapes</em> collection, exported from the live catalog with their real file data, EXIF and Elo ratings. Filters can be combined, the counts update immediately, and every photo opens in the loupe below.</p>
   </div>
   <div class="widget reveal d2">
-    <div class="widget-bar mono">
-      <span class="wb-title">LIBRARY — SELECTED LANDSCAPES</span>
-      <span class="wb-meta" id="grid-count"></span>
-    </div>
+    <div class="widget-bar mono"><span class="wb-title">LIBRARY · SELECTED LANDSCAPES</span> <span class="wb-meta" id="grid-count"></span></div>
     <div class="widget-toolbar" id="grid-filters"></div>
     <div class="lib-grid" id="lib-grid"></div>
     <div class="widget-foot mono"><span>SOURCE: LIVE CATALOG EXPORT · photoarchive.db → collection_id 2</span><span>CLICK ANY FRAME → LOUPE</span></div>
@@ -87,9 +84,9 @@
 <!-- ——— 02 · LOUPE (interactive) ——— -->
 <section class="feature" id="loupe">
   <div class="section-inner">
-    <p class="kicker mono reveal"><span class="tick"></span>02 — THE LOUPE</p>
-    <h2 class="reveal d1">A canvas, not a modal.<br><span class="dim">Keyboard-first. Try the keys.</span></h2>
-    <p class="section-lede reveal d2">Metadata, Elo ranking, and a histogram computed live from the pixels stay beside the image. Use <span class="key">←</span> <span class="key">→</span> to move, <span class="key">P</span> pick / <span class="key">X</span> reject / <span class="key">U</span> clear, and <span class="key">L</span> for lights-out — when it's just you and the photograph.</p>
+    <p class="kicker mono reveal"><span class="tick"></span>02 · THE LOUPE</p>
+    <h2 class="reveal d1">One photo at full size, next to its details.<br><span class="dim">It works from the keyboard. Try the keys.</span></h2>
+    <p class="section-lede reveal d2">Metadata, ranking and a histogram calculated from the pixels are shown next to the image. Use <span class="key">←</span> <span class="key">→</span> to move, <span class="key">P</span> to pick, <span class="key">X</span> to reject, <span class="key">U</span> to clear, and <span class="key">L</span> to dim everything except the photo.</p>
   </div>
   <div class="widget loupe-widget reveal d2" id="loupe-widget" tabindex="0">
     <div class="widget-bar mono">
@@ -109,7 +106,7 @@
           <h4 class="mono">RANKING</h4>
           <div class="lp-elo"><span class="mono" id="loupe-elo"></span><span class="lp-elo-sub" id="loupe-elo-sub"></span></div>
           <div class="lp-row"><span>Comparisons</span><span class="mono" id="loupe-cmp"></span></div>
-          <div class="lp-row"><span>Flag</span><span class="mono" id="loupe-flag">—</span></div>
+          <div class="lp-row"><span>Flag</span><span class="mono" id="loupe-flag">none</span></div>
         </div>
         <div class="lp-block">
           <h4 class="mono">METADATA</h4>
@@ -133,18 +130,15 @@
 <!-- ——— 03 · REFINE (interactive Elo) ——— -->
 <section class="feature" id="ranking">
   <div class="section-inner">
-    <p class="kicker mono reveal"><span class="tick"></span>03 — RANKING, NOT RATING</p>
-    <h2 class="reveal d1">Pick the best one.<br><span class="dim">That's it. That's the interface.</span></h2>
-    <p class="section-lede reveal d2">This is <strong>Refine</strong>, running the real Elo update right here in the page. Click your favorite — the winner takes rating from the frames it beat, a fresh contender steps in, and the standings shift live. In the app, every pick also propagates through visually similar photos.</p>
+    <p class="kicker mono reveal"><span class="tick"></span>03 · RANKING INSTEAD OF RATING</p>
+    <h2 class="reveal d1">Pick the best photo.<br><span class="dim">The ranking is built from your choices.</span></h2>
+    <p class="section-lede reveal d2">This is <strong>Refine</strong>, running the real Elo calculation in the page. Click the photo you like best. It takes rating points from the photos it beat, a new photo replaces it, and the standings update. In the app, each pick also moves photos that look similar.</p>
   </div>
   <div class="widget reveal d2">
-    <div class="widget-bar mono">
-      <span class="wb-title">REFINE — PICK THE BEST FRAME</span>
-      <span class="wb-meta" id="refine-stats"></span>
-    </div>
+    <div class="widget-bar mono"><span class="wb-title">REFINE · PICK THE BEST PHOTO</span> <span class="wb-meta" id="refine-stats"></span></div>
     <div class="refine-mosaic" id="refine-mosaic"></div>
     <div class="refine-board" id="refine-board">
-      <div class="widget-bar mono thin"><span class="wb-title">STANDINGS — TOP 8 OF THIS SESSION</span><span class="wb-meta">K = 24 · REAL ELO MATH</span></div>
+      <div class="widget-bar mono thin"><span class="wb-title">STANDINGS · TOP 8 IN THIS SESSION</span><span class="wb-meta">K = 24 · REAL ELO CALCULATION</span></div>
       <ol id="refine-list"></ol>
     </div>
   </div>
@@ -155,21 +149,18 @@
 <!-- ——— 04 · SEARCH (real engine results) ——— -->
 <section class="feature" id="search">
   <div class="section-inner">
-    <p class="kicker mono reveal"><span class="tick"></span>04 — SEARCH</p>
-    <h2 class="reveal d1">Three doors, fused.<br><span class="dim">These results came from the real ones.</span></h2>
-    <p class="section-lede reveal d2">The words, the sets you named, and the embedding space — fused by rank into one order and answered entirely on your own machine, whether or not a model is loaded. The results below were produced by the live archive's search against this collection; pick a query and watch the frames reorder.</p>
+    <p class="kicker mono reveal"><span class="tick"></span>04 · SEARCH</p>
+    <h2 class="reveal d1">Search by text, by album or label, and by meaning.<br><span class="dim">These results came from the real search.</span></h2>
+    <p class="section-lede reveal d2">Text matches, the albums and labels you made, and meaning-based search are combined into one ranked list. It all runs on your own computer, and text search works even when no model is loaded. The results below were produced by the real search on this collection. Pick a query to see them.</p>
   </div>
   <div class="widget reveal d2">
-    <div class="widget-bar mono">
-      <span class="wb-title">SEARCH — FUSED RESULTS</span>
-      <span class="wb-meta" id="search-meta"></span>
-    </div>
+    <div class="widget-bar mono"><span class="wb-title">SEARCH · COMBINED RESULTS</span> <span class="wb-meta" id="search-meta"></span></div>
     <div class="widget-toolbar search-toolbar">
       <span class="search-icon" aria-hidden="true">⌕</span>
       <div class="search-chips" id="search-chips"></div>
     </div>
     <div class="search-grid" id="search-grid"></div>
-    <div class="widget-foot mono"><span>RANKINGS CAPTURED FROM THE LIVE /api/search ENGINES — NOT STAGED</span><span id="search-src"></span></div>
+    <div class="widget-foot mono"><span>RESULTS RECORDED FROM THE REAL SEARCH, NOT MADE UP</span><span id="search-src"></span></div>
   </div>
 </section>
 
@@ -178,19 +169,19 @@
 <!-- ——— 05 · WHAT IT DOES (real captures of the desktop app) ——— -->
 <section class="feature" id="features">
   <div class="section-inner">
-    <p class="kicker mono reveal"><span class="tick"></span>05 — THE DESKTOP APP</p>
-    <h2 class="reveal d1">Every one of these is a real capture.<br><span class="dim">The 2.0 desktop app, on an isolated library, September 2026.</span></h2>
-    <p class="section-lede reveal d2">One Python process, one native window, no server. Here is what it does that other libraries don't.</p>
+    <p class="kicker mono reveal"><span class="tick"></span>05 · THE DESKTOP APP</p>
+    <h2 class="reveal d1">Screenshots of the desktop app.<br><span class="dim">Version 2.0 on a separate test library, September 2026.</span></h2>
+    <p class="section-lede reveal d2">The desktop app is one Python program with one native window and no server. These are the features that most photo libraries do not have.</p>
   </div>
   <div class="section-inner fgrid reveal d2">
-    <a class="fcard" href="/log/#ch-face"><img src="log/assets/screens/17-rank.jpg" alt="The Rank stage: a round of nine photographs, the cursor on one" loading="lazy" style="object-position:62% 40%"><div class="ft"><b>Rank, not rate</b><span>A round is dealt whole, at equal area. Pick the best one; the click never waits. Stars are the ranking's face — each one halves the set.</span></div></a>
-    <a class="fcard" href="/log/#ch-ledger"><img src="log/assets/screens/15-cull.jpg" alt="The grid after a keyboard cull: a pick, a reject, a turned frame, a stacked burst and an Undo toast" loading="lazy" style="object-position:20% 30%"><div class="ft"><b>Cull with the keyboard, take anything back</b><span>P, X, R, S. Stack a burst with one key; a stack is a decision, never something done to you. One toast, always with Undo.</span></div></a>
-    <a class="fcard" href="/log/#ch-ledger"><img src="log/assets/screens/21-lights-out.jpg" alt="The loupe under Lights Out: only the photograph" loading="lazy" style="object-position:50% 45%"><div class="ft"><b>Lights Out</b><span>Press L and every piece of chrome dims to nothing. The loupe has no open animation, because a wait under 200 ms shows nothing at all.</span></div></a>
-    <a class="fcard" href="/log/#ch-face"><img src="log/assets/screens/20-command-line.jpg" alt="The search box with a leading > listing every command" loading="lazy" style="object-position:55% 8%"><div class="ft"><b>Three doors, and a command line</b><span>Search fuses the words, the sets you named and the embedding space by rank. A leading &gt; turns the same box into every verb on the screen.</span></div></a>
-    <a class="fcard" href="/log/#ch-earned"><img src="log/assets/screens/14-library-grid.jpg" alt="The library: justified rows in day chapters with a timeline rail" loading="lazy" style="object-position:40% 12%"><div class="ft"><b>Day chapters, one folder tree, every drive</b><span>Justified rows grouped by the day they were taken. Folders from every attached disk in one tree; unplug a drive and the photographs stay and say so.</span></div></a>
-    <a class="fcard" href="/log/#ch-earned"><img src="log/assets/screens/18-people-wall.jpg" alt="The People wall: a group of faces to be named" loading="lazy" style="object-position:0% 30%"><div class="ft"><b>Predicted, then earned</b><span>Faces are found on your own card; a person is a name you give a group of them. Labels are born by teaching: search <i>cat</i>, say no to the one dog, and the word is smarter everywhere.</span></div></a>
-    <div class="fcard text"><div class="ft"><b>Lives beside Lightroom</b><span>Your rating, colour label and keywords are written into the sidecar in Lightroom's own words, and Lightroom's edits are read back, so the two apps stop disagreeing. Editing stays in Lightroom.</span></div></div>
-    <div class="fcard text"><div class="ft"><b>Facts, never verdicts</b><span>Sharpness per frame, per face and per eye; eyes open, closed or can't tell, from 106 landmarks. Exposure, palette, grain. Stored as numbers you can filter by — nothing blends them into a score.</span></div></div>
+    <a class="fcard" href="/log/#ch-face"><img src="log/assets/screens/17-rank.jpg" alt="The Rank stage: a round of nine photographs, the cursor on one" loading="lazy" style="object-position:62% 40%"><div class="ft"><b>Ranking instead of rating</b><span>The app shows a set of photos and you pick the best one. Your picks produce the ranking, and each star level holds half as many photos as the one below it.</span></div></a>
+    <a class="fcard" href="/log/#ch-ledger"><img src="log/assets/screens/15-cull.jpg" alt="The grid after a keyboard cull: a pick, a reject, a turned frame, a stacked burst and an Undo toast" loading="lazy" style="object-position:20% 30%"><div class="ft"><b>Culling from the keyboard, with Undo</b><span>P picks, X rejects, R rotates, S stacks a burst. Nothing is stacked unless you ask. Every change can be undone.</span></div></a>
+    <a class="fcard" href="/log/#ch-ledger"><img src="log/assets/screens/21-lights-out.jpg" alt="The loupe under Lights Out: only the photograph" loading="lazy" style="object-position:50% 45%"><div class="ft"><b>Lights Out</b><span>Press L and everything except the photo fades. The loupe opens without animation, so there is no wait.</span></div></a>
+    <a class="fcard" href="/log/#ch-face"><img src="log/assets/screens/20-command-line.jpg" alt="The search box with a leading > listing every command" loading="lazy" style="object-position:55% 8%"><div class="ft"><b>Combined search and a command list</b><span>Search combines text, your albums and labels, and meaning. Typing &gt; at the start of the box lists every command on the screen.</span></div></a>
+    <a class="fcard" href="/log/#ch-earned"><img src="log/assets/screens/14-library-grid.jpg" alt="The library: justified rows in day chapters with a timeline rail" loading="lazy" style="object-position:40% 12%"><div class="ft"><b>Days, folders and drives</b><span>Photos are grouped by the day they were taken. Folders from every drive appear in one tree. If a drive is unplugged, its photos stay in the library and show that the drive is away.</span></div></a>
+    <a class="fcard" href="/log/#ch-earned"><img src="log/assets/screens/18-people-wall.jpg" alt="The People wall: a group of faces to be named" loading="lazy" style="object-position:0% 30%"><div class="ft"><b>People and labels</b><span>Faces are found on your own graphics card, and a person is a name you give to a group of faces. A label learns from you: search <i>cat</i>, mark the one dog as wrong, and the label improves everywhere it is used.</span></div></a>
+    <div class="fcard text"><div class="ft"><b>Works with Lightroom</b><span>Ratings, colour labels and keywords are written to sidecar files in Lightroom's format, and Lightroom's edits are read back. Editing is done in Lightroom.</span></div></div>
+    <div class="fcard text"><div class="ft"><b>Measurements, not scores</b><span>Sharpness for the whole photo, each face and each eye; whether eyes are open or closed; exposure, colour and grain. Each is stored as its own number that you can filter by. They are not combined into one score.</span></div></div>
   </div>
 </section>
 
@@ -199,26 +190,26 @@
 <!-- ——— WHY / positioning ——— -->
 <section class="why">
   <div class="section-inner">
-    <p class="kicker mono reveal"><span class="tick"></span>WHY IT EXISTS</p>
-    <h2 class="reveal d1">Google Photos owns your library.<br>Lightroom was never its home.<br><span class="dim">Take the best instincts of both.</span></h2>
+    <p class="kicker mono reveal"><span class="tick"></span>WHY I BUILT IT</p>
+    <h2 class="reveal d1">I wanted my archive on my own drives,<br>with good tools to browse and rank it.<br><span class="dim">So it takes ideas from both Google Photos and Lightroom.</span></h2>
     <div class="cols reveal d2">
       <div class="col">
         <h3 class="mono">FROM GOOGLE PHOTOS</h3>
-        <p>An instant timeline you can fall into. Semantic search — “sunset over water” just works. Nothing to file, nothing to tag.</p>
+        <p>A timeline to scroll through, and search by meaning: "sunset over water" finds sunsets over water. No filing or tagging needed.</p>
       </div>
       <div class="col">
         <h3 class="mono">FROM LIGHTROOM CLASSIC</h3>
-        <p>A real folder tree. Pick / reject culling, stacks, a keyboard-first loupe, filters that compose, and density you can feel.</p>
+        <p>A real folder tree, pick and reject, stacks, a keyboard-driven loupe, filters that combine, and a dense layout.</p>
       </div>
       <div class="col col-accent">
         <h3 class="mono">FROM NEITHER</h3>
-        <p><strong>Elo photo ranking.</strong> Quick this-or-that picks teach the archive which photos are your best — you just tried it above.</p>
+        <p><strong>Elo ranking.</strong> Quick choices between photos show which ones are your best. You tried it above.</p>
       </div>
     </div>
     <div class="stats-row reveal d3">
-      <div class="stat"><span class="num mono">47,781</span><span class="lbl">photos in the author's own working archive</span></div>
-      <div class="stat"><span class="num mono">0 BYTES</span><span class="lbl">uploaded to anyone else's cloud</span></div>
-      <div class="stat"><span class="num mono">$0</span><span class="lbl">forever — open source, self-hosted, yours</span></div>
+      <div class="stat"><span class="num mono">150,000</span><span class="lbl">photos in my own archive, the library it is built with</span></div>
+      <div class="stat"><span class="num mono">0 BYTES</span><span class="lbl">uploaded to anyone else's servers</span></div>
+      <div class="stat"><span class="num mono">$0</span><span class="lbl">open source and self-hosted</span></div>
     </div>
   </div>
 </section>
@@ -228,13 +219,13 @@
 <!-- ——— THE STORY / FIELD LOG tie-in ——— -->
 <section class="why story" id="story">
   <div class="section-inner">
-    <p class="kicker mono reveal"><span class="tick"></span>BUILT IN THE OPEN</p>
-    <h2 class="reveal d1">It began as a weekend toy that asked<br><span class="dim">“which photo is better?”</span></h2>
-    <p class="section-lede reveal d2">Three years and <strong>2,587 commits</strong> later, that toy is a darkroom with a <strong>physically-modeled film emulation engine</strong> — and then, at 182,688 lines, it was <strong>gutted back down to a core you can hold in your head</strong>, and the product rebuilt on it: five tables, one process, and a findings ledger where <strong>a row closes only in the commit that does the work</strong>. The whole history is a Factorio-style development log: every idea, trade-off, benchmark and near-disaster, with live demos you can play with and screenshots captured by running the actual software at each point in time.</p>
+    <p class="kicker mono reveal"><span class="tick"></span>THE DEVELOPMENT LOG</p>
+    <h2 class="reveal d1">It started as a small script that asked<br><span class="dim">"which photo is better?"</span></h2>
+    <p class="section-lede reveal d2">Three years and <strong>3,046 commits</strong> later, the project has been through a large app with a RAW editor and a film emulation engine, a cut from 182,688 lines down to a small core, and a rebuild on that core. The Field Log describes the whole history in order, with interactive demos and screenshots taken by running each version of the software.</p>
     <div class="stats-row reveal d3">
-      <div class="stat"><span class="num mono">2,587</span><span class="lbl">commits, from a 228-line script to a darkroom and back</span></div>
-      <div class="stat"><span class="num mono">0.06<span class="dim2">%</span></span><span class="lbl">of the catalog was irreplaceable — the rest was deleted</span></div>
-      <div class="stat"><span class="num mono">509</span><span class="lbl">findings closed since 9 Sep — each with its commit, number or screenshot</span></div>
+      <div class="stat"><span class="num mono">3,046</span><span class="lbl">commits since the first 228-line script</span></div>
+      <div class="stat"><span class="num mono">0.06<span class="dim2">%</span></span><span class="lbl">of the catalog could not be recreated, so the rest was simplified</span></div>
+      <div class="stat"><span class="num mono">950+</span><span class="lbl">findings recorded and closed since 9 September</span></div>
     </div>
     <div class="hero-actions reveal d3" style="margin-top:34px">
       <a class="btn btn-primary" href="/log/">READ THE FIELD LOG <span class="arrow">→</span></a>
@@ -245,9 +236,9 @@
 <section class="cta">
   <div class="compass compass-cta" aria-hidden="true"></div>
   <div class="section-inner">
-    <p class="kicker mono reveal"><span class="tick"></span>FIND YOUR BEARING</p>
-    <h2 class="reveal d1">Your photos are your own.<br><span class="dim">The app ships empty and hungry.</span></h2>
-    <p class="lede reveal d2">Runs on your own hardware. Everything you just used was real: real frames, real catalog data, real math. Open source, AGPL, built in the open.</p>
+    <p class="kicker mono reveal"><span class="tick"></span>GET STARTED</p>
+    <h2 class="reveal d1">Your photos stay on your own drives.<br><span class="dim">The app starts with an empty library.</span></h2>
+    <p class="lede reveal d2">It runs on your own computer. The demos above use real photos, real catalog data and the real calculations. The code is open source under the AGPL.</p>
     <div class="hero-actions reveal d3">
       <a class="btn btn-primary" href="https://github.com/seankd3/Azimuth-Photo" target="_blank" rel="noopener">GET STARTED ON GITHUB</a>
       <a class="btn" href="/contribute/">HOW TO HELP <span class="arrow">→</span></a>
@@ -256,10 +247,7 @@
 </section>
 
 <footer class="footer">
-  <div class="section-inner footer-inner">
-    <span class="mono">AZIMUTH PHOTO — az·i·muth : the bearing to your best work.</span>
-    <span class="mono dim2">© 2026 · OPEN SOURCE · BUILT BY <a href="https://seankennethdoherty.com" style="color:inherit">SEAN KENNETH DOHERTY</a>, A PHOTOGRAPHER, FOR PHOTOGRAPHERS</span>
-  </div>
+  <div class="section-inner footer-inner"><span class="mono">AZIMUTH PHOTO · az·i·muth: a compass bearing</span> <span class="mono dim2">© 2026 · OPEN SOURCE · BY <a href="https://seankennethdoherty.com" style="color:inherit">SEAN KENNETH DOHERTY</a></span></div>
 </footer>
 
 <script type="module" src="js/main.js"></script>

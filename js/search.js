@@ -24,7 +24,7 @@ export function initSearch() {
         `<span class="cell-rank mono">${String(rank).padStart(2, "0")}</span>`;
       grid.appendChild(cell);
     });
-    meta.textContent = `“${q.toUpperCase()}” — ${hits.length} HITS IN SCOPE · ${s.ms}ms LIVE`;
+    meta.textContent = `“${q.toUpperCase()}”: ${hits.length} RESULTS · ${s.ms} ms`;
     src.textContent = `ENGINES: ${s.sources.join(" + ").toUpperCase()}`;
   }
 

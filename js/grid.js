@@ -75,7 +75,7 @@ export function initGrid({ onOpen }) {
     const elos = photos.map((p) => p.elo);
     count.textContent = photos.length
       ? `${photos.length} FRAMES · ELO ${Math.min(...elos)}–${Math.max(...elos)} · ${ms}ms`
-      : "0 FRAMES — FILTERS TOO NARROW";
+      : "NO PHOTOS MATCH THESE FILTERS";
   }
 
   render();
