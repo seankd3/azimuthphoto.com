@@ -503,3 +503,62 @@ a.d:hover { background: var(--panel-2); text-decoration: none; }
 .ledger-demo .lkey{display:flex;gap:18px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-top:8px}
 .ledger-demo .lkey i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
 .ledger-demo .lkey .s{background:var(--amber)}.ledger-demo .lkey .m{background:#4c9bff}.ledger-demo .lkey .r{background:#d0662f}.ledger-demo .lkey .o{background:var(--ink-4)}
+
+/* ---- The route ---------------------------------------------------------- */
+.route-demo .rt { width: 100%; height: auto; display: block; }
+.rt .axis { stroke: var(--line-2); stroke-width: 1; }
+.rt .bar { fill: var(--panel-3); }
+.rt .bar.hot { fill: color-mix(in srgb, var(--amber) 45%, var(--panel-3)); }
+.rt .cnt { font-family: var(--mono); font-size: 10.5px; fill: var(--ink-4); text-anchor: middle; }
+.rt .mlab { font-family: var(--mono); font-size: 11px; fill: var(--ink-3); text-anchor: middle; }
+.rt circle { stroke: var(--ground-2); stroke-width: 2; cursor: pointer; transition: r .15s ease; }
+.rt a:hover circle, .rt a:focus-visible circle { r: 9; }
+.rt a:focus-visible { outline: none; }
+.rt .a1 { fill: var(--ink-2); } .rt .a2 { fill: var(--film); } .rt .a3 { fill: var(--amber); } .rt .a4 { fill: var(--green); }
+.rt-key { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 12px; font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+.rt-key i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 7px; vertical-align: -1px; }
+.rt-key .a1 { background: var(--ink-2); } .rt-key .a2 { background: var(--film); } .rt-key .a3 { background: var(--amber); } .rt-key .a4 { background: var(--green); }
+
+/* ---- Act IV · the starvation model ------------------------------------- */
+.sv-orders { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+.sv-orders .dt { font-family: var(--mono); font-size: 11.5px; letter-spacing: .02em; padding: 7px 11px; border-radius: 7px; border: 1px solid var(--line-2); background: transparent; color: var(--ink-2); cursor: pointer; width: auto; text-align: center; }
+.sv-orders .dt:hover { color: var(--ink); border-color: var(--ink-4); }
+.sv-orders .dt.on { color: var(--ground); background: var(--amber); border-color: var(--amber); }
+.sv-orders .dt.on::before { content: none; }
+.sv-orders .dt.run { margin-left: auto; color: var(--accent); border-color: color-mix(in srgb, var(--accent) 55%, transparent); }
+.sv-orders .dt.run:disabled { opacity: .45; cursor: default; }
+.sv-body { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 26px; align-items: start; }
+@media (max-width: 760px) { .sv-body { grid-template-columns: 1fr; } .sv-orders .dt.run { margin-left: 0; } }
+.sv-grid { display: grid; grid-template-columns: repeat(24, 1fr); gap: 3px; }
+.sv-grid i { aspect-ratio: 1; border-radius: 2px; background: var(--panel-3); transition: background .12s linear; }
+.sv-grid i.s1 { background: var(--violet); }
+.sv-grid i.s2 { background: #4c9bff; }
+.sv-grid i.s3 { background: var(--amber); }
+.sv-grid i.s4 { background: var(--green); }
+.sv-bar { display: grid; grid-template-columns: 84px 1fr 38px; gap: 10px; align-items: center; margin-bottom: 10px; font-family: var(--mono); font-size: 11.5px; color: var(--ink-2); }
+.sv-bar i { height: 10px; border-radius: 5px; background: var(--panel-3); overflow: hidden; }
+.sv-bar b { display: block; height: 100%; width: 0; border-radius: 5px; transition: width .12s linear; }
+.sv-bar[data-k="1"] b { background: var(--violet); }
+.sv-bar[data-k="2"] b { background: #4c9bff; }
+.sv-bar[data-k="3"] b { background: var(--amber); }
+.sv-bar[data-k="4"] b { background: var(--green); }
+.sv-bar em { font-style: normal; text-align: right; color: var(--ink); font-variant-numeric: tabular-nums; }
+.sv-meters { display: grid; gap: 7px; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); }
+.sv-meters div { display: flex; justify-content: space-between; gap: 12px; font-family: var(--mono); font-size: 11.5px; color: var(--ink-3); }
+.sv-meters strong { color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+.sv-verdict { margin: 20px 0 0; font-size: 15.5px; line-height: 1.55; color: var(--ink); min-height: 3.1em; max-width: 70ch; }
+.demo .db .dnote { margin-top: 12px; }
+
+/* ---- Act IV · same name, same photograph? ------------------------------ */
+.nm-bar { display: flex; gap: 3px; height: 26px; border-radius: 7px; overflow: hidden; margin: 4px 0 12px; }
+.nm-bar i { display: block; min-width: 6px; height: 100%; transition: opacity .25s ease, box-shadow .25s ease; }
+.nm-bar .twin, .nm-key .twin { background: var(--green); }
+.nm-bar .diff, .nm-key .diff { background: var(--film); }
+.nm-bar .wait, .nm-key .wait { background: var(--ink-4); }
+.names-demo[data-rule="moment"] .nm-bar .diff, .names-demo[data-rule="moment"] .nm-bar .wait { opacity: .22; }
+.names-demo[data-rule="name"] .nm-bar .diff { box-shadow: inset 0 0 0 2px rgba(255,255,255,.55); }
+.nm-key { display: flex; flex-wrap: wrap; gap: 8px 22px; font-family: var(--mono); font-size: 11.5px; color: var(--ink-3); }
+.nm-key b { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 7px; vertical-align: -1px; }
+
+/* ---- Act III demos inside the house frame ------------------------------- */
+.rrf-demo .dt.on::before { content: "● "; color: var(--green); }

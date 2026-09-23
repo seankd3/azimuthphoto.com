@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Azimuth · Field Log — what building a photo app with AI taught me</title>
-<meta name="description" content="What I learned building a photo app mostly by directing AI: 2,587 commits, a codebase that grew to 182,688 lines, and the month I deleted 42% of it and it got faster. The pitfalls, the practices that worked, and the principles of writing code that stays small.">
+<meta name="description" content="What I learned building a photo app mostly by directing AI: 3,046 commits, a codebase that grew to 182,688 lines, and the month I deleted 42% of it and it got faster. The pitfalls, the practices that worked, and the principles of writing code that stays small.">
 <meta property="og:title" content="Azimuth Photo — Field Log">
-<meta property="og:description" content="I let AI write 182,688 lines, then deleted 42% of them and it got faster. Ten lessons from three years of AI-driven development, with the receipts.">
+<meta property="og:description" content="A photo app built by directing AI, and every wrong turn it took: 3,046 commits in four acts, with interactive models of the real bugs.">
 <meta property="og:url" content="https://azimuthphoto.com/log/">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,16 +27,16 @@
 <!-- ============================================================ HERO -->
 <header class="hero" id="top">
   <div class="grid-bg"></div>
-  <div class="kicker">A field log · <b>2023 → 2026</b> · 2,587 commits · one photo app · by <a href="https://seankennethdoherty.com" style="color:inherit">Sean Kenneth Doherty</a></div>
-  <h1>I let AI write <span class="accent">182,688 lines</span>. Then I deleted <span class="film">42% of them</span> — and it got faster.</h1>
-  <p class="lede">I built <b>Azimuth Photo</b> mostly by directing AI: a self-hosted photo library with a physically-modeled film engine. This is what that taught me, written down honestly, including the parts I got wrong and had to undo. The app is the evidence. The <b>lessons are what I actually want you to take away</b>.</p>
+  <div class="kicker">A field log · <b>2023 → 2026</b> · 3,046 commits · one photo app · by <a href="https://seankennethdoherty.com" style="color:inherit">Sean Kenneth Doherty</a></div>
+  <h1>A photo app built by directing AI — and <span class="film">every wrong turn</span> it took, measured.</h1>
+  <p class="lede"><b>Azimuth Photo</b> is a desktop library for one photographer's 150,000-frame archive, built mostly by directing AI models. It went wrong in useful ways: a codebase that grew to 182,688 lines and was cut back to a core you can hold in your head, a queue that starved itself three nights running, an archive drive that had never actually been attached. Each chapter is one of those turns — what happened, what was tried, and what the measurement said. The interactive panels run the real algorithms.</p>
 
   <div class="statgrid">
-    <div class="cell"><div class="v">1,133</div><div class="k">commits in one month, by an AI fleet</div></div>
-    <div class="cell"><div class="v">24<small>%</small></div><div class="k">of commits were repair-shaped</div></div>
-    <div class="cell"><div class="v">41</div><div class="k">database tables built, never used</div></div>
+    <div class="cell"><div class="v">1,491</div><div class="k">commits in July 2026, the peak month</div></div>
+    <div class="cell"><div class="v">84<small>→</small>5</div><div class="k">tables in the catalog, after the gutting</div></div>
     <div class="cell"><div class="v">0.06<small>%</small></div><div class="k">of the catalog was irreplaceable</div></div>
-    <div class="cell"><div class="v">180<small>→</small>0.22<small>ms</small></div><div class="k">grid, after deleting 81 indexes</div></div>
+    <div class="cell"><div class="v">3</div><div class="k">sort orders in two days, each one starved the queue</div></div>
+    <div class="cell"><div class="v">35<small>MB/s</small></div><div class="k">the archive disk: the floor under everything</div></div>
   </div>
 
   <div class="scrolldown">SCROLL TO BEGIN <span class="arrow">↓</span></div>
@@ -47,7 +47,7 @@
   <nav class="rail" aria-label="Chapters">
     <h4>FIELD LOG</h4>
     <ol>
-      <li><a href="#doctrine"><span class="n">◆</span><span>The Lessons</span></a></li>
+      <li><a href="#route"><span class="n">◆</span><span>The Route</span></a></li>
       <li><a href="#ch-genesis"><span class="n">00</span><span>The Toy</span></a></li>
       <li><a href="#ch-web"><span class="n">01</span><span>The Web Rebirth</span></a></li>
       <li><a href="#ch-mind"><span class="n">02</span><span>The Mind Awakens</span></a></li>
@@ -69,14 +69,22 @@
       <li><a href="#ch-steering"><span class="n">15</span><span>Steering the Model</span></a></li>
       <li class="railact"><a href="#act3"><span class="n">III</span><span>The Product</span></a></li>
       <li><a href="#ch-process"><span class="n">16</span><span>One Process</span></a></li>
-      <li><a href="#ch-face"><span class="n">17</span><span>The Ranking's Face</span></a></li>
-      <li><a href="#ch-earned"><span class="n">18</span><span>Predicted, Then Earned</span></a></li>
-      <li><a href="#ch-dialect"><span class="n">19</span><span>Lightroom's Dialect</span></a></li>
+      <li><a href="#ch-face"><span class="n">17</span><span>Stars You Never Set</span></a></li>
+      <li><a href="#ch-earned"><span class="n">18</span><span>Half a Design</span></a></li>
+      <li><a href="#ch-dialect"><span class="n">19</span><span>Back to Lightroom</span></a></li>
       <li><a href="#ch-leaves"><span class="n">20</span><span>V1 Leaves</span></a></li>
-      <li><a href="#ch-ledger"><span class="n">21</span><span>The Findings Ledger</span></a></li>
+      <li><a href="#ch-ledger"><span class="n">21</span><span>The Receipt</span></a></li>
+      <li class="railact"><a href="#act4"><span class="n">IV</span><span>The Archive</span></a></li>
+      <li><a href="#ch-move"><span class="n">22</span><span>Moving House</span></a></li>
+      <li><a href="#ch-archive"><span class="n">23</span><span>The Missing Archive</span></a></li>
+      <li><a href="#ch-starve"><span class="n">24</span><span>Three Starvations</span></a></li>
+      <li><a href="#ch-nothing"><span class="n">25</span><span>The Busiest Day</span></a></li>
+      <li><a href="#ch-instrument"><span class="n">26</span><span>The Live App</span></a></li>
+      <li><a href="#ch-names"><span class="n">27</span><span>The Same Name</span></a></li>
       <li><a href="#loop"><span class="n">◆</span><span>How I Work Now</span></a></li>
       <li><a href="#method"><span class="n">◆</span><span>How It Was Made</span></a></li>
-      <li><a href="#ch-final"><span class="n">22</span><span>What It Cost</span></a></li>
+      <li><a href="#doctrine"><span class="n">◆</span><span>What It Taught</span></a></li>
+      <li><a href="#ch-final"><span class="n">28</span><span>What It Cost</span></a></li>
     </ol>
     <div class="spark">
       <h4 style="margin-bottom:8px">COMMIT DENSITY</h4>
@@ -89,82 +97,22 @@
   <main class="content">
 
   <!-- ─────────────────────────────────────────────── THE DOCTRINE -->
-  <section class="chapter" id="doctrine">
+  <section class="chapter" id="route">
     <div class="head rv">
-      <div class="eyebrow">Read this first <span class="sep">/</span> <span class="muted">the whole log in 60 seconds</span></div>
-      <h2>Ten things this project taught me</h2>
-      <p class="dek">All of them cost something: a bug, an outage, a bad deletion, or a month of work I had to undo. The chapter behind each one is the receipt.</p>
+      <div class="eyebrow">The route <span class="sep">/</span> <span class="muted">four acts, three years</span></div>
+      <h2>Where this log goes</h2>
+      <p class="dek">Each bar is a month of commits and each dot is a chapter. Hover a dot for its title; click to jump there. The twists cluster where the commits do.</p>
     </div>
-
-    <div class="doctrine rv">
-      <div class="dgrid">
-        <a class="d" href="#ch-fleet">
-          <span class="k">On building with AI</span>
-          <h4>Writing code got cheap. Deciding what should exist didn't.</h4>
-          <p>My bottleneck used to be how fast I could type. Now it's whether I can tell what shouldn't be built at all. Nobody working a lane ever stops to ask if the ticket should exist.</p>
-          <span class="paid">cost: <b>1,133 commits in one month</b>, and 41 database tables nothing ever wrote to</span>
-        </a>
-        <a class="d" href="#ch-fleet">
-          <span class="k">On review</span>
-          <h4>Whoever wrote it can't be the one to bless it.</h4>
-          <p>Point a different model at the change and tell it to prove the thing is broken. Asking for a review gets you praise. Asking for a refutation gets you bugs.</p>
-          <span class="paid">cost: <b>five real regressions</b> that shipped past a normal review</span>
-        </a>
-        <a class="d" href="#ch-rules">
-          <span class="k">On knowing things</span>
-          <h4>Run it. Reading the code will lie to you.</h4>
-          <p>Every real bug in the rewrite turned up by running the app. None came from reading. An empty grid sitting behind a <code>200</code>. A livelock. A missing table that would have broken every first install.</p>
-          <span class="paid">cost: half a day chasing a broken drawer that turned out to be my own probe</span>
-        </a>
-        <a class="d" href="#ch-rules">
-          <span class="k">On elegance</span>
-          <h4>Delete the question, not the answer.</h4>
-          <p>Nearly every big cut started the same way. I'd notice that nothing was asking the question a subsystem existed to answer. It had usually been dead for months and nobody had buried it.</p>
-          <span class="paid">cost: 9,160 lines of thumbnail machinery that became one loop</span>
-        </a>
-        <a class="d" href="#ch-core">
-          <span class="k">On big files</span>
-          <h4>Find the coupling, not the file.</h4>
-          <p>Huge files are usually propped up by two or three small connections to the rest of the app. Cut those and the file falls over by itself. Go after the file first and you break things.</p>
-          <span class="paid">cost: 1,661 lines kept alive by a single 8-line function</span>
-        </a>
-        <a class="d" href="#ch-core">
-          <span class="k">On data</span>
-          <h4>Anything you store is something that can disagree with the truth.</h4>
-          <p>Work out which part of your data you genuinely cannot recompute. It's usually far smaller than you think. Derive the rest, and you stop paying to keep it all in agreement.</p>
-          <span class="paid">cost: years of reconciliation bugs guarding <b>0.06%</b> worth of real data</span>
-        </a>
-        <a class="d" href="#ch-rules">
-          <span class="k">On safety checks</span>
-          <h4>A guard usually means the operation is shaped wrong.</h4>
-          <p>When a fix needs a new check bolted on, there's often a version of the operation that needs no check at all. Write that one instead. Rules in comments rot; a <code>ValueError</code> doesn't.</p>
-          <span class="paid">cost: an <code>rm -rf</code> whose only safety was a marker file</span>
-        </a>
-        <a class="d" href="#ch-gutting">
-          <span class="k">On being wrong</span>
-          <h4>Log your mistakes where other people can read them.</h4>
-          <p>AI is confidently wrong a lot. So am I. If the record only contains wins it stops being useful, so the reverts and the retracted claims go in beside everything else.</p>
-          <span class="paid">cost: three deletions I had to undo, and 285 tests I nearly threw away</span>
-        </a>
-        <a class="d" href="#ch-final">
-          <span class="k">On metrics</span>
-          <h4>Don't optimise a number you can game.</h4>
-          <p>Line count shows whether the design is working. Chase it directly and you just get denser, worse code. I never set a target for it, and that turned out to be the right call.</p>
-          <span class="paid">cost: nothing, which is the point</span>
-        </a>
-        <a class="d" href="#ch-ledger">
-          <span class="k">On polish</span>
-          <h4>A row closes only in the commit that does the work.</h4>
-          <p>Deleting is loud. Polish is quiet, and quiet is where a model's report and its result drift apart. A ledger that refuses to close a finding without the commit, the number or the screenshot is the only thing that kept 531 small fixes honest.</p>
-          <span class="paid">cost: <b>102 refutation rows</b> — regressions a second model found in three days of "done"</span>
-        </a>
+    <div class="demo route-demo rv" id="route-demo">
+      <div class="dh"><span class="badge">Map</span><span class="title">commits per month · 28 chapters</span><span class="hint">click a dot</span></div>
+      <div class="db">
+        <svg class="rt" role="img" aria-label="Commits per month, with the chapters of this log placed on them"></svg>
+        <div class="rt-key"><span><i class="a1"></i>Act I · building up</span><span><i class="a2"></i>Act II · the gutting</span><span><i class="a3"></i>Act III · the product</span><span><i class="a4"></i>Act IV · the archive</span></div>
+        <p class="dnote">The lessons from all four acts are collected at the end, under <a href="#doctrine">What it taught</a>.</p>
       </div>
     </div>
-
-    <div class="note rv">What follows is the long version. Three years, an archive of 150,000 photographs, and software that grew, overgrew, and got cut back down. The screenshots are the real app at each point in its history, and the numbers come from the commits that shipped them.</div>
   </section>
 
-  <!-- ─────────────────────────────────────────────── CH0 GENESIS -->
   <section class="chapter" id="ch-genesis">
     <div class="head rv">
       <div class="eyebrow">Chapter 00 <span class="sep">/</span> Aug 2023 – Aug 2024 <span class="sep">/</span> <span class="muted">f60ab3c…4586172 · 12 commits</span></div>
@@ -585,12 +533,12 @@ amount = hal[<span class="tok-str">"amount"</span>] * halation_scale
   <!-- ─────────────────────────────────────────────── CH9 FLEET -->
   <section class="chapter" id="ch-fleet">
     <div class="head rv">
-      <div class="eyebrow">Chapter 09 <span class="sep">/</span> July 15–20, 2026 <span class="sep">/</span> <span class="muted">1,133 commits · the mega-sprint</span></div>
+      <div class="eyebrow">Chapter 09 <span class="sep">/</span> July 15–20, 2026 <span class="sep">/</span> <span class="muted">771 commits in six days · the mega-sprint</span></div>
       <h2>The fleet</h2>
       <p class="dek">The most surprising thing in the git graph: for the final push, the app was built out by a <b>fleet of AI models</b>, each owning a lane, checking each other's work.</p>
     </div>
     <div class="prose rv">
-      <p class="lead">July 2026 has 1,133 commits — 72% of the entire project. Read them and a structure emerges: a <strong>session-lane charter</strong>, an explicit org model of "CEO / CTO / managers / subagents," and hundreds of merges from named branches — <code>qfix-workers</code>, <code>ux2-perf</code>, <code>errhonesty</code>, <code>dt-gfilter</code>. This is a human designer directing a fleet of frontier models, each taking a lane, with <strong>cross-model review</strong> as a hard rule: whoever wrote it cannot be the one to bless it.</p>
+      <p class="lead">The first twenty days of July have 1,226 commits, three in every four of the whole project up to then. Read them and a structure emerges: a <strong>session-lane charter</strong>, an explicit org model of "CEO / CTO / managers / subagents," and hundreds of merges from named branches — <code>qfix-workers</code>, <code>ux2-perf</code>, <code>errhonesty</code>, <code>dt-gfilter</code>. This is a human designer directing a fleet of frontier models, each taking a lane, with <strong>cross-model review</strong> as a hard rule: whoever wrote it cannot be the one to bless it.</p>
     </div>
 
     <div class="fleet rv">
@@ -1065,7 +1013,7 @@ sweep(drive)       check what's on a drive</pre>
 
   <!-- ═════════════════════════════════════════════ ACT III ═══════════ -->
   <section class="actbreak rv" id="act3">
-    <div class="n">Act III · August–September 2026</div>
+    <div class="n">Act III · 18 August – 12 September 2026</div>
     <h2>The product</h2>
     <p>“No bandaids, no stop gaps, no adapters … v1 was the rough draft, v2 is the product.”</p>
     <div class="eyebrow" style="justify-content:center;margin-top:16px"><span class="muted">— the standing rule for every surface, 19 August</span></div>
@@ -1076,51 +1024,28 @@ sweep(drive)       check what's on a drive</pre>
     <div class="head rv">
       <div class="eyebrow">Chapter 16 <span class="sep">/</span> Aug 18–19, 2026 <span class="sep">/</span> <span class="muted">80 commits in two days</span></div>
       <h2>One process, not a server</h2>
-      <p class="dek">Act II ended with a core and no product on it. Two days later there was a window, and the thing that had always been a web server underneath was <b>one Python process opening one native window on one bundled document</b>.</p>
+      <p class="dek">For two years the app ran on a web server. When the surfaces were rebuilt on the new core, it turned out <b>nothing outside the laptop had ever talked to that server</b>. So it went.</p>
     </div>
 
     <div class="prose rv">
-      <p class="lead">The core was small enough to hold in my head. The surfaces on top of it were still 2024's shape: routes, a port, an auth layer nobody outside the laptop could reach, session machinery for a session that was always me. So on August 18 the surfaces went the way the tables had. Thirty-four commits in one day, and every one of them deleted the machinery it replaced in the same commit — that was the rule, and it held.</p>
-      <p>What came out the other end is a desktop application. <code>pywebview</code> puts a WebView2 window around a single HTML file, the window talks to Python through one bridge object, and the UI is plain ES modules in five layers — <code>kit ← net ← store ← lens ← shell</code> — bundled once by esbuild. No HTTP. No port. No attack surface to harden, because nothing outward can reach it.</p>
-      <p>The discipline that made it possible to delete this much this fast was a second ledger. <code>REWRITE_LEDGER.md</code> lists every code file in the tree, and <strong>every file starts as Legacy</strong>. It leaves that state only through an exact entry: Designing, Rebuilt, Proven, or Removed. There is no “adopted” and no “mostly migrated”. New code that calls old machinery is still Legacy as a product area. A gate script fails while any file is unregistered, so a file cannot quietly survive by being forgotten.</p>
+      <p class="lead">Act II left a small core with nothing on top of it. The obvious next step was to rebuild the old screens on it, and the old screens came with routes, a port, a login layer and session handling. All of that was for visitors, and there were none. Every request came from the same laptop the server ran on.</p>
+      <p>So on 18 August the server went the same way the unused tables had: 34 commits in one day, each one deleting what it replaced. What is left is one Python process that opens one native window on one HTML document. The page talks to Python through a single bridge object. There is no HTTP, no port, and nothing to secure, because nothing outside can reach it.</p>
+      <p>Deleting that much that fast needed a way to know what was finished. That became a second ledger, <code>REWRITE_LEDGER.md</code>. It lists every code file, and <strong>every file starts as “Legacy”</strong>. A file stops being Legacy only when an entry says it was rebuilt and proven. A check fails while any file is missing from the list, so no old file could survive just because everyone forgot about it.</p>
     </div>
 
     <figure class="plate wide rv">
       <div class="bar"><span class="lights"><i></i><i></i><i></i></span><span class="t">Azimuth Photo 2.0 · the library</span><span class="hash">the real app, off-screen, 12 Sep 2026</span></div>
-      <div class="img"><img src="assets/screens/14-library-grid.jpg" alt="The V2 library: justified rows of photographs grouped into day chapters, a folder tree and album shelf on the left, a timeline rail on the right" loading="lazy"></div>
-      <figcaption>Justified rows, day chapters, one folder tree over every drive, a timeline rail. Every pixel from a real catalog on an isolated home — the rig is in <a href="#method">How It Was Made</a>.</figcaption>
+      <div class="img"><img src="assets/screens/14-library-grid.jpg" alt="The library: justified rows of photographs grouped into day chapters, a folder tree on the left, a timeline rail on the right" loading="lazy"></div>
+      <figcaption>Rows grouped by the day they were taken, one folder tree across every drive, a timeline down the right. A real catalog on an isolated home; the rig is in <a href="#method">How It Was Made</a>.</figcaption>
     </figure>
 
     <div class="prose rv">
-      <p>With the process collapsed, the shapes underneath it got simpler in a way that read like a list of things I'd been wrong about:</p>
-    </div>
-
-    <div class="rules rv">
-      <div class="r"><span class="n"></span><div>
-        <h4>A tile is a file the window reads.</h4>
-        <p>Two renditions per photograph — a grid tile kept forever and a screen-sized loupe tile — made once from one decode, written as files, and read by the window as files. The old tile store had routes, a cache table, an eviction worker and a versioned URL. Now it has a filename. <span class="hash">220ad680</span></p>
-      </div></div>
-      <div class="r"><span class="n"></span><div>
-        <h4>The worker runs in lanes and wakes when something is owed.</h4>
-        <p>Owed was already a query. So the worker stopped polling: it sleeps until a sweep, an import or a decision says something new is owed, and each kind of work gets its own lane so a rank pass never queues behind a minute's walk of the archive. <span class="hash">591b4138</span></p>
-      </div></div>
-      <div class="r"><span class="n"></span><div>
-        <h4>The library has one home, chosen once.</h4>
-        <p>Catalog and previews live in a folder you pick on first run, like a Lightroom catalog. The archive drives are just drives — plug one in, the folder tree shows it; unplug it, the photographs stay and say they're away. <span class="hash">dfd75ad4</span></p>
-      </div></div>
-      <div class="r"><span class="n"></span><div>
-        <h4>Follow the folders.</h4>
-        <p>A rename on disk is not a reconciliation problem. The sweep sees the new tail, the copy row moves, and nothing else in the app knew the old name. <span class="hash">d977daa8</span></p>
-      </div></div>
-      <div class="r"><span class="n"></span><div>
-        <h4>Bring photographs in by one rule, verified.</h4>
-        <p>Import from a card or a folder is seen before it enters, filed by one taxonomy, hashed on the way through and verified in one read. Film scans land by the roll. The V1 import and synchronize machinery — 6,798 lines across 21 files — left in the same wave. <span class="hash">f86ab56e · 2a30a712</span></p>
-      </div></div>
+      <p>Two smaller surprises came out of the same week. The thumbnail store had its own routes, a cache table, an eviction worker and versioned URLs. With no server, <strong>a thumbnail became a file the window reads</strong>, and all of that came down to a file name. And the background worker, which used to check for work on a timer, now sleeps until a sweep, an import or a decision creates some. Since “what is owed” was already a query, there was nothing to poll for.</p>
     </div>
 
     <div class="callout rv">
-      <div class="t">◈ the rule that kept it honest</div>
-      <p>Three days before this act opened, watching a fix go in that versioned a tile URL to make the grid right, the owner asked one question: <b>“now make sure this fix is elegant and not just a bandaid.”</b> The URL fix worked everywhere I had edited and nowhere else — the same fact spelled in three places. It came out, and the address became the photograph's own hash. That question became the standing rule at the top of this act, and it was asked of every surface after.</p>
+      <div class="t">◈ the question that became the rule</div>
+      <p>Three days before this act, a fix went in that put a version number on thumbnail URLs so the grid would refresh. It worked on the screens I had edited and nowhere else, because the same fact was written in three places. The owner asked one question: <b>“now make sure this fix is elegant and not just a bandaid.”</b> The version number came out, and a thumbnail's address became the photograph's own hash. That question became the rule at the top of this act.</p>
     </div>
   </section>
 
@@ -1128,32 +1053,44 @@ sweep(drive)       check what's on a drive</pre>
   <section class="chapter" id="ch-face">
     <div class="head rv">
       <div class="eyebrow">Chapter 17 <span class="sep">/</span> Aug 19–21, 2026 <span class="sep">/</span> <span class="muted">the oldest idea, on the new core</span></div>
-      <h2>Stars are the ranking's face</h2>
-      <p class="dek">The 2023 idea — you can't rate a photograph, but you can always pick between two — came back first, because everything else stands on it. Then search, then the sets you name. Then the 88,000 judgements from three years came home.</p>
+      <h2>Stars you never set</h2>
+      <p class="dek">The 2023 idea came back first: you can't honestly rate a photograph, but you can always pick between two. Then stars, the thing every other app makes you set by hand, turned into something <b>you never set at all</b>.</p>
     </div>
 
     <div class="prose rv">
-      <p class="lead">Refine on the core is two pure functions and a round. A round is dealt whole, every set in it drawn at equal area so nothing wins for being bigger, and <em>Best</em> is simply the order those rounds produce. There is no Elo table any more. A comparison is a decision in the log, and the ranking is derived from the log plus the embedding space, which is what lets 310 judged photographs reach 8,617 of their neighbours.</p>
-      <p>Stars stopped being a thing you set. <strong>Stars are the ranking's face:</strong> each additional star halves the set, so five stars is the top 3% of what you've judged, and one is the top half. A star is earned in the world — against everything — or in the shoot, against the frames beside it, and the info panel says which. The stars, turns and comparison pairs from V1 carried over verbatim under their new identities — the full-byte hash instead of a 32-hex partial — and the keywords became sets the named door already reads. The V1 catalog was opened read-only and never written.</p>
+      <p class="lead">Rank deals a round of photographs and asks which is best. Each round is dealt whole, and every group in it is drawn at equal size, so nothing wins by being bigger. <em>Best</em> is simply the order the rounds produce. There is no score table any more: a comparison is a decision in the log, and the ranking is worked out from the log and from how similar the photographs look. That second part is why <strong>310 judged photographs could place 8,617 others</strong>.</p>
+      <p>Then stars. Instead of a thing you set, <strong>a star is where a photograph falls in the ranking</strong>. Each extra star halves the set: one star is the top half of what you've judged, five stars the top 3%. A star can be earned against the whole library or within its own shoot, and the info panel says which. Three years of old judgements carried over under the new identities, read from the old catalog without writing a byte to it.</p>
     </div>
 
     <div class="plate-duo">
       <figure class="plate rv">
         <div class="bar"><span class="lights"><i></i><i></i><i></i></span><span class="t">Rank</span><span class="hash">this one, or that one</span></div>
-        <div class="img"><img src="assets/screens/17-rank.jpg" alt="The Rank stage: a round of photographs to pick the best from, with the cursor on one" loading="lazy"></div>
-        <figcaption>A round. The cursor outranks the mouse; the click never waits.</figcaption>
+        <div class="img"><img src="assets/screens/17-rank.jpg" alt="The Rank stage: a round of nine photographs, the cursor on one" loading="lazy"></div>
+        <figcaption>A round. The keyboard cursor beats the mouse, and a click never waits.</figcaption>
       </figure>
       <figure class="plate rv">
-        <div class="bar"><span class="lights"><i></i><i></i><i></i></span><span class="t">Search</span><span class="hash">the box answers before it is asked</span></div>
-        <div class="img"><img src="assets/screens/19-search-drop.jpg" alt="The search drop: typed letters narrowing cards for years, cameras, folders and people" loading="lazy"></div>
-        <figcaption>Focus the box and it offers the library's own shape as cards; type and they narrow while the meaning search runs underneath.</figcaption>
+        <div class="bar"><span class="lights"><i></i><i></i><i></i></span><span class="t">Search</span><span class="hash">answers before it is asked</span></div>
+        <div class="img"><img src="assets/screens/19-search-drop.jpg" alt="The search box offering folders and shapes as the letters narrow" loading="lazy"></div>
+        <figcaption>Focus the box and it offers the library's own shape: years, cameras, folders. Typing narrows the offers while the meaning search runs underneath.</figcaption>
       </figure>
     </div>
 
     <div class="prose rv">
-      <p>Search became <strong>one ranked fusion over three doors</strong>: the words (filenames, folders, cameras, dates), the sets you named (an album and a label are one door), and the embedding space. The space is just a cache kind the worker grows from the tiles it already made, so vectors reach Best and search within seconds of a tile existing, and the typing path never waits on a model — cold but capable means words now and semantic on the next keystroke. A search with no hits says so. One photograph is one result.</p>
+      <p>Search had a problem that looks small and isn't. A photograph can be found three ways: by its words (file name, folder, camera, date), by a set you named (an album or a label), or by meaning, through the embedding space. Each way produces a list with its own kind of score, and <strong>a file-name match and a similarity score are not the same unit</strong>. Any formula that adds them is wrong for some query. So the lists are combined by rank alone: each photograph gets <code>1/(60 + position)</code> from every list it appears in. Try it: switch a list off and the answer gets worse, but it never refuses.</p>
     </div>
 
+    <div class="demo rrf-demo rv" id="rrf-demo">
+      <div class="dh"><span class="badge">Live</span><span class="title">search.fuse — three lists, combined by rank</span><span class="hint" id="rrf-note">three lists</span></div>
+      <div class="db">
+      <div class="doors">
+        <div class="door" data-door="words"><button class="dt on" data-door="words">words</button><ol></ol></div>
+        <div class="door" data-door="named"><button class="dt on" data-door="named">named sets</button><ol></ol></div>
+        <div class="door" data-door="space"><button class="dt on" data-door="space">meaning</button><ol></ol></div>
+        <div class="door fused"><div class="dt static">fused</div><ol></ol></div>
+      </div>
+        <p class="dnote">Switch a list off and the answer gets worse instead of refusing. Notice that a photograph near the top of two lists beats one at the very top of a single list: ranks add up, and scores never had to be compared.</p>
+      </div>
+    </div>
     <div class="code rv">
       <div class="h"><span class="lang">python</span><span class="path">web/search.py</span><span class="why">three doors, fused by rank · e3943728</span></div>
 <pre><span class="tok-kw">def</span> <span class="tok-fn">fuse</span>(*lists, limit):
@@ -1175,19 +1112,8 @@ sweep(drive)       check what's on a drive</pre>
         _semantic(conn, space, query_vector, limit, scope),
         limit=limit)</pre>
     </div>
-
-    <div class="demo rrf-demo rv" id="rrf-demo">
-      <div class="dh"><span class="lab">reciprocal rank fusion · 1 / (60 + rank), summed across the doors a frame appears in</span><span class="tot" id="rrf-note">three doors</span></div>
-      <div class="doors">
-        <div class="door" data-door="words"><button class="dt on" data-door="words">words</button><ol></ol></div>
-        <div class="door" data-door="named"><button class="dt on" data-door="named">the sets you named</button><ol></ol></div>
-        <div class="door" data-door="space"><button class="dt on" data-door="space">the space</button><ol></ol></div>
-        <div class="door fused"><div class="dt static">fused</div><ol></ol></div>
-      </div>
-      <p class="dnote">Switch a door off and the answer degrades instead of refusing — that is the rule. Notice that a frame near the top of two doors beats a frame at the very top of one: ranks add, scores never had to be compared.</p>
-    </div>
     <div class="prose rv">
-      <p>Collections stopped being a feature. <strong>The view is one scope, and collections are verbs on it.</strong> An album is a set of hashes; a smart album is a saved query; a label is a set with a learned edge. They share one chip language with the filters, so “2024 · Canon R5 · starred · in <em>Iceland</em>” is one scope whether you typed it, saved it, or clicked into it from the shelf.</p>
+      <p>Collections stopped being a separate feature in the same week. What you are looking at is always one scope, and an album is just a saved set of photographs; a smart album is a saved search. They use the same filter chips, so “2024 · Canon R5 · starred · in Iceland” is the same scope whether you typed it, saved it or clicked it.</p>
     </div>
   </section>
 
@@ -1195,103 +1121,91 @@ sweep(drive)       check what's on a drive</pre>
   <section class="chapter" id="ch-earned">
     <div class="head rv">
       <div class="eyebrow">Chapter 18 <span class="sep">/</span> Aug 22, 2026 <span class="sep">/</span> <span class="muted">organizing · one law</span></div>
-      <h2>Predicted, then earned</h2>
-      <p class="dek">One day, one design, and the owner's rulings that cut it in half before it shipped. The whole of organizing is a sentence: <b>photographs wear facts; you correct the facts and they learn; albums keep what you gather.</b></p>
+      <h2>Half a design, cut by an afternoon of use</h2>
+      <p class="dek">A way to organize a library was designed in a morning from eleven other apps' mistakes. <b>The owner cut it in half by using it for an afternoon</b>, and what was left was better.</p>
     </div>
 
     <div class="prose rv">
-      <p class="lead">The morning began with a research brief across eleven photo apps — what Google Photos, Apple Photos, Lightroom, Capture One, Photo Mechanic, Excire, Peakto, PhotoPrism, Immich, Mylio and ACDSee each got right and wrong about keeping a library organized. Within the day there was a draft with clusters proposing themselves from the embedding space, a proposals shelf, a seventy-term auto-tagging palette and a Keep verb. It worked. Then the owner used it against the real library and simplified it in four sentences.</p>
+      <p class="lead">The morning started with a study of how Google Photos, Apple Photos, Lightroom, Capture One, Photo Mechanic, Excire, Peakto, PhotoPrism, Immich, Mylio and ACDSee organize a library, and what each gets wrong. By the evening there was a working draft: groups of similar photographs proposed themselves from the embedding space, a shelf held the proposals, a palette of seventy auto-tags labelled everything, and a Keep button accepted suggestions. Then the owner used it on his real library and sent back a page of rulings. One sentence did most of the work:</p>
     </div>
 
     <div class="pull rv">
-      <p>Search cat, ninety cats and one dog — hit no on the dog and the keyword is smarter everywhere.</p>
-      <div class="who">— the ruling that made labels a primitive, and deleted the proposals shelf</div>
+      <p>So lets say I search cat and theres 90 cats and 1 dog, I should be able to hit no on the dog and next time that keyword is used anywhere it will be smarter.</p>
+      <div class="who">— the owner, 22 August</div>
     </div>
 
     <div class="prose rv">
-      <p>Everything that <em>pushed</em> came out: the clustering suggestions, the palette, the shelf, the verb. What stayed is one formula, and it is the same formula for a label and a smart album: <code>(derived answer ∪ pinned-in) ∖ said-no</code>. A label's derived answer is a learned concept — a seed word vector and a small head fit on your teachings. An album's is its saved query. The pins and the denials are the same membership rows the sets primitive had always stored. <strong>Vocabulary is born by teaching:</strong> a searched word is transient until the first ✓ or ✗ lands on its results; that correction creates the label, and the Labels list is exactly the words you have taught.</p>
-      <p>The law underneath is the one the ranking already ran on. <strong>Every machine-made fact is a prediction and wears the tilde</strong> — <code>Nightscapes ~74</code>, a person's membership, a session boundary. <strong>Every answer of yours is a decision</strong> — append-only, with provenance — and turns the prediction into an earned fact. Removing a photograph from a smart album <em>is</em> a denial. Naming a person is what a person is.</p>
+      <p>Everything that <em>pushed</em> suggestions at you came out: the proposals, the shelf, the palette, the Keep button. What stayed is one idea. <strong>A label is a word you teach.</strong> You search for it, you say no to the wrong results, and from then on it learns. A label and a smart album turned out to be the same thing with different starting points, so they share one formula: what the machine predicts, plus what you added by hand, minus what you rejected.</p>
+      <p>That gave the whole app a law it already half-followed. <strong>Anything the machine works out is a prediction</strong>, and it is shown with a tilde: <code>Nightscapes ~74</code>, a face that might be someone, a guess at where one shoot ends. <strong>Anything you say is a decision</strong>, kept forever in the log, and it turns the prediction into a fact. The ranking had worked this way since Chapter 17. Now organizing did too.</p>
     </div>
 
     <figure class="plate wide rv">
       <div class="bar"><span class="lights"><i></i><i></i><i></i></span><span class="t">People · the wall</span><span class="hash">a person is a name you give a group of faces</span></div>
-      <div class="img"><img src="assets/screens/18-people-wall.jpg" alt="The face wall: groups of face crops laid out to be named, with the cursor on one group" loading="lazy"></div>
-      <figcaption>The wall is a stage to meet everyone. A person's faces are their most typical large ones; a name that joins two groups says so; a split person heals by two introductions. The faces here are CC0 stock portraits, on purpose.</figcaption>
+      <div class="img"><img src="assets/screens/18-people-wall.jpg" alt="The People wall: three groups of faces waiting to be named" loading="lazy"></div>
+      <figcaption>Faces are found on the laptop's own graphics card, and a person is just a name you give to a group of them. The faces here are public-domain stock portraits, on purpose.</figcaption>
     </figure>
 
     <div class="prose rv">
-      <p>People got the same treatment. Faces are a cache kind made on the laptop's own card. <strong>A person is a name the owner gives a group of faces</strong> — nothing more is stored. The crop is the mark: no second picture, no avatar table. Time got its two surfaces the same day, day chapters in the grid and session cards in the search drop, because identity and time are facts, not suggestions, and facts get to stay.</p>
-      <p>Also that day, for the record: the app started wearing the website's palette and compass, so this page and the software it describes finally look like one thing. The loupe moved inside the workspace and the chrome learned to fold. Neither was on the plan. Both came from using it.</p>
+      <p>People followed the same law. The app finds faces and groups them; it never decides who anyone is. <strong>A person is a name you give to a group of faces</strong>, and nothing else is stored about them. The same day, the app took on this website's colours and compass, so the software and the page describing it finally looked like one thing. Neither change was planned. Both came from using it.</p>
     </div>
   </section>
 
   <!-- ─────────────────────────────────────────────── CH19 LIGHTROOM'S DIALECT -->
   <section class="chapter" id="ch-dialect">
     <div class="head rv">
-      <div class="eyebrow">Chapter 19 <span class="sep">/</span> Aug 23–29, 2026 <span class="sep">/</span> <span class="muted">the other half of the app</span></div>
-      <h2>Lightroom's dialect as the native one</h2>
-      <p class="dek">Develop was rebuilt by counting first. Then it was measured against the bar, and the number said not yet. Then the owner parked it — with receipts — and a week of smaller, harder truths shipped around it.</p>
+      <div class="eyebrow">Chapter 19 <span class="sep">/</span> Aug 23 – Sep 19, 2026 <span class="sep">/</span> <span class="muted">the darkroom that wasn't</span></div>
+      <h2>The darkroom goes back to Lightroom</h2>
+      <p class="dek">The plan was an editor as good as Lightroom's. First a count of the owner's real edits, then a measurement against Adobe, then his own verdict. <b>Editing went back to Lightroom</b>, and the app got better for it.</p>
     </div>
 
     <div class="prose rv">
-      <p class="lead">The directive was “nearly 1:1 to Lightroom Classic, ideally loading and editing its non-destructive edits too.” Before designing anything, I counted what 1:1 would actually mean by reading every <code>.xmp</code> sidecar Lightroom had ever written into the real library:</p>
+      <p class="lead">The request was an editor “nearly 1:1 with Lightroom Classic”, able to open Lightroom's own edits. Before designing anything, I counted what that would really mean by reading every edit file Lightroom had ever saved in the real library:</p>
     </div>
 
     <div class="spec rv">
       <div class="s">
-        <div class="t">The census · D:\Pictures · 2026-08-23</div>
-<pre>580   sidecars Lightroom has written
-569   carry only a crop
- 11   carry full develop settings
-       every one PV 15.4, HDR edit mode,
-       "Camera Landscape" profile,
-       the whole slider surface
-  0   masks. none. no local adjustments,
-       no heal, no clone, in any file</pre>
+        <div class="t">The census · the working drive · 23 Aug</div>
+<pre>580   edit files Lightroom had written
+569   hold only a crop
+ 11   hold full develop settings
+  0   masks. no local adjustments,
+      no healing, no cloning,
+      in any file</pre>
       </div>
       <div class="s">
         <div class="t">What that decided</div>
-<pre>crop ships first — it is the most-used
-  edit in this library by 50x
-an edit is a decision naming crs.* keys,
-  so import/export is transcription
-a render is a cached answer to
-  (bytes, settings), never a table
-masks park, with the receipt above —
-  the market's scariest surface is
-  absent from this editing life</pre>
+<pre>the crop ships first — it is the
+  most-used edit here, by 50x
+an edit is stored in Lightroom's
+  own setting names, so reading
+  and writing them is copying
+masks wait — the hardest part of
+  any editor is missing from this
+  photographer's real editing</pre>
       </div>
     </div>
 
     <div class="prose rv">
-      <p>So the crop became a decision and the rendition its recipe. The editing workspace landed: sliders are decisions, looks are proxies, and the sidecar carries every answer element for element, the LRTimelapse discipline. Then the acceptance harness ran the tone phase against Adobe's own renders and reported <strong>0.0445 ΔL against a 0.035 bar</strong>. Not a pass. The number went in the doc with the commit that measured it, and a week later the owner parked Develop until it could be done “with elegancy, grace and beautiful simplicity” — his words, and his seven Lightroom screenshots as the spec to build against. It stays parked here too. A darkroom you can't trust is worse than none.</p>
-      <p>What shipped instead that week was the kind of thing that only surfaces from a photographer using the software on a real archive:</p>
+      <p>The crop shipped, and then a full panel of sliders. Then the acceptance test compared its renders with Adobe's on forty real DNGs: <strong>0.0445 average difference in lightness, against a 0.035 bar</strong>. Not good enough, and the number went into the design document with the commit that measured it. A few days later the owner looked at the panel, found it well short of Lightroom, and parked it. On 19 September he confirmed it: editing stays in Lightroom, and Azimuth is for browsing, searching, ranking, people and import.</p>
+      <p>That sounds like a loss. It was the opposite. The week around it produced the features a photographer notices because they are about <em>the files</em>, not the pixels:</p>
     </div>
 
     <div class="rules rv">
       <div class="r"><span class="n"></span><div>
-        <h4>A TIFF is a pointer graph, and a DNG is its own sidecar.</h4>
-        <p>Reading the file, not Lightroom's catalog, is the only way to be right about a scan; the DNG carries its edits inside itself and an empty receipt is a rule, not a bug. <span class="hash">321d01d7</span></p>
+        <h4>A stack is a burst at one rhythm.</h4>
+        <p>Not a similarity threshold. A burst is a burst because the camera fired at a steady beat, and it stays one burst through a change of focus or exposure. <span class="hash">f6340ef6</span></p>
       </div></div>
       <div class="r"><span class="n"></span><div>
-        <h4>A stack is a run of frames at one cadence.</h4>
-        <p>Not a similarity threshold. A burst is a burst because the camera fired at one rhythm; the stack keeps its beat through a change of focus or exposure. <span class="hash">f6340ef6 · 86fdd0be</span></p>
+        <h4>The camera knows when; the phone knows where.</h4>
+        <p>Give it the phone's GPS track and every photograph taken inside it gets a place. The one catch is clocks: GPS speaks UTC and the camera speaks local time. <span class="hash">758ca1b8</span></p>
       </div></div>
       <div class="r"><span class="n"></span><div>
-        <h4>The camera knows when, the phone knows where.</h4>
-        <p>Give it the phone's GPX track and every frame inside its span gets a place — a decision with provenance, never a rewrite of the file. The one honest wrinkle is clocks: GPX speaks UTC and a camera speaks local. <span class="hash">758ca1b8</span></p>
+        <h4>What the embedding throws away.</h4>
+        <p>A meaning vector can't tell you a frame is two stops under. So palette, tone, grain and where the sharpness sits are measured from the thumbnail and kept as separate numbers you can filter by. <span class="hash">8855c2f7</span></p>
       </div></div>
       <div class="r"><span class="n"></span><div>
-        <h4>The photographic facts the embedding throws away.</h4>
-        <p>Palette, tonality, grain, where the sharpness sits — milliseconds of arithmetic over the tile the library already keeps, stored as separate numbers so every consumer weights them itself, plus one derived word, <em>Look</em>: colour, B&amp;W or sepia. The word exists because “black and white” is vocabulary, not a blend. <span class="hash">8855c2f7</span></p>
-      </div></div>
-      <div class="r"><span class="n"></span><div>
-        <h4>The sidecar carries the verdicts Lightroom reads.</h4>
-        <p>Rating, the green label, <code>dc:subject</code>: a keep here is a keep there, written back so the two apps stop disagreeing. <span class="hash">bbc9d99b</span></p>
-      </div></div>
-      <div class="r"><span class="n"></span><div>
-        <h4>An export is the photograph, rendered.</h4>
-        <p>Same pipeline as the tile and the loupe, at the size you asked; the dialog has the Lightroom essentials and nothing else. <span class="hash">470412bb · ae57b1d2</span></p>
+        <h4>Lightroom reads the verdicts back.</h4>
+        <p>Rating, a colour label and keywords are written into the sidecar in Lightroom's own words, so a keep in one app is a keep in the other. <span class="hash">bbc9d99b</span></p>
       </div></div>
     </div>
   </section>
@@ -1301,23 +1215,22 @@ masks park, with the receipt above —
     <div class="head rv">
       <div class="eyebrow">Chapter 20 <span class="sep">/</span> Sep 8, 2026 <span class="sep">/</span> <span class="muted">8254ba03</span></div>
       <h2>V1 leaves the tree</h2>
-      <p class="dek">The commit is one line: <b>“The V1 application leaves the tree.”</b> Act II ended promising the old UI would stay because it was the good part. It didn't, and it wasn't.</p>
+      <p class="dek">The commit is one line: <b>“The V1 application leaves the tree.”</b> Act II had promised the old interface would stay because it was the good part. It didn't, and it wasn't.</p>
     </div>
 
     <div class="prose rv">
-      <p class="lead">What's left is small enough to describe completely. <strong>Five tables.</strong> 16,286 lines of Python: the tables in <code>model/</code>, the pure <code>photo/</code> and <code>pixels/</code> underneath, and twenty-one surface files at the top of <code>web/</code>, one each. A UI of 7,835 lines of plain modules and 1,246 of CSS, bundled into the one document the window opens. 5,316 lines of tests, every one under ten seconds. The Android client left the next day. The sandbox worktree the rewrite had lived in for three weeks was removed, and the app now runs from the checkout it's developed in.</p>
-      <p>Act II said the 39,000-line UI was staying. I believed it. What actually happened is that every surface, when it was rebuilt on the core, turned out to need a fifth of the code it had — because the old UI was mostly translating between representations the core no longer has. The lesson from Chapter 13 applied to the front end too, and I hadn't expected it to.</p>
+      <p class="lead">On 12 September the whole product was small enough to describe in a sentence per part. <strong>Five tables.</strong> 16,286 lines of Python. An interface of 7,835 lines of plain JavaScript and 1,246 of CSS, bundled into the one document the window opens. The Android client left the next day.</p>
+      <p>Act II said the 39,000-line interface was staying, and I believed it. What happened instead: every screen, rebuilt on the core, needed about a fifth of its old code. Most of the old interface had been translating between shapes of data that the new core simply doesn't have. Chapter 13's lesson applied to the front end too, and I hadn't expected it to.</p>
     </div>
 
     <div class="bench rv">
-      <div class="chip"><span class="lab">Product Python</span><span class="ba"><span class="after">16,286 lines</span></span><span class="cm">21 surfaces · one file each</span></div>
-      <div class="chip"><span class="lab">The UI</span><span class="ba"><span class="before">~39,000</span><span class="arw">→</span><span class="after">7,835</span></span><span class="cm">kit · net · store · lens · shell</span></div>
-      <div class="chip"><span class="lab">Tables</span><span class="ba"><span class="before">84</span><span class="arw">→</span><span class="after">5</span></span><span class="cm">images · drives · copies · decisions · cache</span></div>
-      <div class="chip"><span class="lab">Repair-shaped commits</span><span class="ba"><span class="before">≈ ⅓</span><span class="arw">→</span><span class="after">4%</span></span><span class="cm">July → August, 558 commits</span></div>
+      <div class="chip"><span class="lab">The interface</span><span class="ba"><span class="before">~39,000</span><span class="arw">→</span><span class="after">7,835</span></span><span class="cm">lines of JavaScript</span></div>
+      <div class="chip"><span class="lab">Tables</span><span class="ba"><span class="before">84</span><span class="arw">→</span><span class="after">5</span></span><span class="cm">photos · drives · copies · decisions · cache</span></div>
+      <div class="chip"><span class="lab">Repair-shaped commits</span><span class="ba"><span class="before">≈ ⅓</span><span class="arw">→</span><span class="after">4%</span></span><span class="cm">July → August</span></div>
     </div>
 
     <div class="prose rv">
-      <p>Deleting V1 was only safe because of what shipped the same day: <strong>proofs that never touch the screen.</strong> The desktop document is one file talking to Python through one bridge, so a page that supplies a fake bridge runs the whole UI in any browser tab — 124 photographs over 27 days with one four-frame stack, enough for every grid, chapter, timeline and selection behaviour, with tiles deliberately absent so it proves shape and never pixels. Pixels come from the other rig: the real app, opened on an isolated home <em>off the left edge of the screen</em> and photographed through <code>PrintWindow</code>.</p>
+      <p>Deleting V1 was safe only because of what shipped that same day: <strong>tests that open the real app where nobody can see it</strong>. The window is created 2,400 pixels to the left of every screen, where it still renders, and is photographed with a Windows call that captures a window wherever it is. A small script clicks and types in it first, so the picture shows the app after a real sequence of keys.</p>
     </div>
 
     <div class="code rv">
@@ -1333,117 +1246,295 @@ masks park, with the receipt above —
 <span class="tok-com"># the capture follows the last.</span>
 user32.PrintWindow(hwnd, hdc, <span class="tok-num">2</span>)   <span class="tok-com"># PW_RENDERFULLCONTENT: WebView2 included</span></pre>
     </div>
-
     <div class="prose rv">
-      <p>On top of that sit <em>journeys</em>: one small script per thing a photographer actually does — cull by keyboard, look closer, introduce someone, find one frame from memory, judge a burst, make an album — each run through the rig to a screenshot. The gallery is read side by side with the last round's by a reviewer. Nothing diffs pixels. A journey is added when a real task isn't covered, never in advance. Every Act III screenshot on this page came out of that rig this week.</p>
+      <p>Each of those scripts is a <em>journey</em>, one per thing a photographer actually does: cull with the keyboard, look closer, name someone, find a photo from memory, judge a burst, make an album. The screenshots from every round are read next to the last round's by a person. Every Act III screenshot on this page came out of that rig.</p>
     </div>
   </section>
 
   <!-- ─────────────────────────────────────────────── CH21 THE FINDINGS LEDGER -->
   <section class="chapter" id="ch-ledger">
     <div class="head rv">
-      <div class="eyebrow">Chapter 21 <span class="sep">/</span> Sep 9–12, 2026 <span class="sep">/</span> <span class="muted">555 rows in three days</span></div>
-      <h2>The findings ledger</h2>
-      <p class="dek">With nothing left to delete, the work changed shape. The owner asked for a second ledger — the twin of the one that holds his asks — and a process where <b>a row closes only in the commit that does the work</b>. Then: “keep going, run another audit and fix everything it finds.”</p>
+      <div class="eyebrow">Chapter 21 <span class="sep">/</span> Sep 9–12, 2026 <span class="sep">/</span> <span class="muted">555 findings in four days</span></div>
+      <h2>A finding closes only with a receipt</h2>
+      <p class="dek">With nothing left to delete, the work became polish. Polish is quiet, and quiet work is where a model's report and its result drift apart. <b>So every fix had to close in the commit that made it</b>.</p>
     </div>
 
     <div class="prose rv">
-      <p class="lead">A finding enters <code>docs/FINDINGS.md</code> with four things: the user impact in product words, the evidence — file and line, verified at HEAD — the concrete fix, and its rank within its surface. It leaves in one of two ways, and only in the same commit that does the work: <em>shipped</em>, or <em>rejected</em> with the reason in the row. The commit that shipped a row is the one whose subject starts with its number, so the ledger never carries a hash it can't know yet. Rows are never deleted and never renumbered. When it runs dry, a new audit against HEAD refills it. There is only ever one round in flight.</p>
-      <p>Three days later: <strong>555 rows. 531 shipped, 6 rejected with a reason, 7 “measured” — checked, and the numbers said no — and 11 open.</strong> 102 of those rows are refutations: a second model reading the day's diff with instructions to prove it broken, which is the Chapter 09 lesson made into a schedule. It found the fold tabs living outside the shell they styled, a ring on the mark that had been invisible for a day, a queued pick that outlived its round, a search memo keyed on the wrong clock. None of those came from a normal review.</p>
+      <p class="lead">The owner asked for a findings ledger. Each entry says what the problem did to a person, where it is in the code, the fix, and how much it matters. An entry closes in one of two ways, and only in the commit that does the work: <em>shipped</em>, or <em>rejected</em> with the reason written down. When the ledger runs dry, a new audit refills it.</p>
+      <p>Four days later it held 555 entries. The ones worth your attention are the refutations: <strong>102 entries came from a second model reading each day's changes with orders to prove them broken</strong>. It found a focused button swallowing Enter on every screen, marking a day that quietly pinned pages in memory, a queued pick that outlived its round. A normal review had called all of them done.</p>
     </div>
 
     <div class="demo ledger-demo rv" id="ledger-demo">
-      <div class="dh"><span class="lab">docs/FINDINGS.md · every row, counted from the file · 12 Sep 2026</span><span class="tot">555 rows</span></div>
-      <svg class="lbars" viewBox="0 0 720 280" role="img" aria-label="Findings by kind of round, stacked by status"></svg>
-      <div class="lkey"><span><i class="s"></i>shipped 531</span><span><i class="m"></i>measured — the numbers said no 7</span><span><i class="r"></i>rejected, with a reason 6</span><span><i class="o"></i>open 11</span></div>
-      <p class="dnote">Hover a bar for its rows. A refutation is a second model reading the day's diff with orders to prove it broken; those rows are the ones a normal review would have called done.</p>
+      <div class="dh"><span class="badge">Data</span><span class="title">The findings ledger, 9–12 Sep, by kind of round</span><span class="hint">555 findings · hover a bar</span></div>
+      <div class="db">
+        <svg class="lbars" viewBox="0 0 720 280" role="img" aria-label="Findings by kind of round, stacked by status"></svg>
+        <div class="lkey"><span><i class="s"></i>shipped 531</span><span><i class="m"></i>measured — the numbers said no 7</span><span><i class="r"></i>rejected, with a reason 6</span><span><i class="o"></i>open 11</span></div>
+        <p class="dnote">Counted from the ledger file on 12 September. A refutation is a second model reading the day's changes with orders to prove them broken; those are the findings a normal review had already called done.</p>
+      </div>
     </div>
     <div class="ledger rv">
       <div class="row"><div class="no">P3</div><div><div class="h">The window opened after 11–20 seconds of reindexing <span class="hash">c3b5db54</span></div><p>Metadata 16 s, stacks 4 s at 150,000 rows, all before first paint. Now the repairs run behind the paint on the sweep lane through one changed-rows writer, and a rebuild that changes nothing writes nothing.</p></div></div>
-      <div class="row"><div class="no">F44</div><div><div class="h">The mark's ring had been invisible since the appearance pass <span class="hash">8446f74b</span></div><p>Rings were drawn on the cell and painted <em>under</em> its image. One day of every marked frame looking unmarked, caught by the refutation, fixed by an inset shadow on <code>::after</code>.</p></div></div>
+      <div class="row"><div class="no">F44</div><div><div class="h">The mark's ring had been invisible since the appearance pass <span class="hash">8446f74b</span></div><p>Rings were drawn on the cell and painted <em>under</em> its image. One day of every marked frame looking unmarked, caught by the next audit, fixed by an inset shadow on <code>::after</code>.</p></div></div>
       <div class="row"><div class="no">K1</div><div><div class="h">A stack is a decision <span class="hash">6e0a5f8c</span></div><p>The owner's own ask, mid-round: nothing is stacked unasked. <b>S</b> on marked frames makes one, <b>S</b> on a lone frame stacks the cadence run around it, <b>Shift+S</b> unstacks, all with Undo. The cadence law is what S proposes, not what the library does to you.</p></div></div>
       <div class="row"><div class="no">N5</div><div><div class="h">Nothing shows for a wait under 200 ms <span class="hash">edb11139</span></div><p>From the craft study of Notion, Linear, Superhuman, Raycast and Lightroom: a spinner inside a loop is a confession. The loupe has no open animation. A toast waits under the hand. A single flag's way back waits silently on Ctrl+Z.</p></div></div>
       <div class="row"><div class="no">HK3</div><div><div class="h">An edited photograph's loupe is a preview, and says so <span class="hash">a57d2192</span></div><p>Found by the sixth-round persona audit: with Develop parked, showing an edit at loupe size without the pipeline behind it is a lie. Now it is labelled as the preview it is.</p></div></div>
       <div class="row"><div class="no">RK1</div><div><div class="h">Learn dealt the floor <span class="hash">193c7466</span></div><p>From the owner's own sitting: ties broke toward the lowest rated, so the learning mode kept showing him the worst of the library. Ties now go to the highest rated, and the finding rounds halve the sitting once twice the seats are judged.</p></div></div>
     </div>
-
     <div class="plate-duo">
       <figure class="plate rv">
         <div class="bar"><span class="lights"><i></i><i></i><i></i></span><span class="t">Cull by keyboard alone</span><span class="hash">P · X · R · S · Ctrl+Z</span></div>
-        <div class="img"><img src="assets/screens/15-cull.jpg" alt="The grid after a keyboard cull: a picked frame, a rejected frame, a turned frame, a burst stacked with a band and a toast offering Undo" loading="lazy"></div>
-        <figcaption>The <code>cull</code> journey: mark, pick, reject, turn, stack a burst, and the one toast that offers the way back.</figcaption>
+        <div class="img"><img src="assets/screens/15-cull.jpg" alt="The grid after a keyboard cull: picks, a reject, a stacked burst and an Undo toast" loading="lazy"></div>
+        <figcaption>Pick, reject, turn, stack a burst, and one message that always offers the way back.</figcaption>
       </figure>
       <figure class="plate rv">
-        <div class="bar"><span class="lights"><i></i><i></i><i></i></span><span class="t">Look closer</span><span class="hash">E · Z · L · G</span></div>
-        <div class="img"><img src="assets/screens/21-lights-out.jpg" alt="The loupe under Lights Out: the chrome dimmed to nothing, a full-frame landscape, the key hints along the bottom" loading="lazy"></div>
-        <figcaption>The <code>loupe</code> journey, then <b>L</b>: Lights Out dims every piece of chrome and leaves the photograph. No open animation, because a wait under 200 ms shows nothing.</figcaption>
+        <div class="bar"><span class="lights"><i></i><i></i><i></i></span><span class="t">Lights Out</span><span class="hash">E · Z · L · G</span></div>
+        <div class="img"><img src="assets/screens/21-lights-out.jpg" alt="The loupe under Lights Out: every control dimmed, one landscape" loading="lazy"></div>
+        <figcaption>Open a photograph with E, press L, and everything but the photograph fades. There is no opening animation: a wait under 200 ms should show nothing at all.</figcaption>
       </figure>
-    </div>
-
-    <div class="prose rv">
-      <p>The performance rows were measured on a fresh 150,000-row catalog with <code>scripts/bench.py</code>, so each one ships with its number and the next round compares instead of rediscovering:</p>
-    </div>
-
-    <div class="bench rv">
-      <div class="chip"><span class="lab">Owed scan, per worker step</span><span class="ba"><span class="before">1.7 s</span><span class="arw">→</span><span class="after">0.6 ms</span></span><span class="cm">P4 · the predicate the index already carried</span></div>
-      <div class="chip"><span class="lab">Deep page, Best sort</span><span class="ba"><span class="before">889 ms</span><span class="arw">→</span><span class="after">20 ms</span></span><span class="cm">P6 · stack_of on the browse indexes</span></div>
-      <div class="chip"><span class="lab">A Rank round's count</span><span class="ba"><span class="before">1.7 s</span><span class="arw">→</span><span class="after">62 ms</span></span><span class="cm">P7 · COUNT(*) on the index</span></div>
-      <div class="chip"><span class="lab">Folder scope, one page</span><span class="ba"><span class="before">1,094 ms</span><span class="arw">→</span><span class="after">9 ms</span></span><span class="cm">P12 · a folder is a range on the tail index</span></div>
-      <div class="chip"><span class="lab">A rerank's write lock</span><span class="ba"><span class="before">24 s</span><span class="arw">→</span><span class="after">slices</span></span><span class="cm">P2 · only rows whose value changed</span></div>
-      <div class="chip"><span class="lab">The space, 20k vectors</span><span class="ba"><span class="before">194 MB</span><span class="arw">→</span><span class="after">93 MB</span></span><span class="cm">BC11 · allocated once, filled from the cursor</span></div>
-    </div>
-
-    <div class="prose rv">
-      <p>The last thing the ledger opened was the one I'd deleted in August for being hand-weighted: a culling signal. It came back as <strong>facts, never a verdict</strong>. A frame carries a sharpness map (p50, p75, p90), a subject-to-frame ratio, and per face a Zhu–Milanfar sharpness and per eye its own — plus eyes open, closed or <em>cannot tell</em>, read from the 106 face landmarks the faces pass already computes. The wire carries two numbers. Nothing blends them. The research brief that decided this is in the repo, and its first line is the whole argument: <em>the head is linear and stays linear</em>; every measured gain came from fitting the rounds directly and appending facts a fit can weight, not from a smarter encoder. Blinks show as a small mark. A verdict would have been machinery.</p>
     </div>
 
     <figure class="plate wide rv">
-      <div class="bar"><span class="lights"><i></i><i></i><i></i></span><span class="t">The command line</span><span class="hash">a leading &gt; in the search box</span></div>
-      <div class="img"><img src="assets/screens/20-command-line.jpg" alt="The search box with a leading greater-than sign, listing every verb on the screen by its tooltip" loading="lazy"></div>
-      <figcaption>Every <code>data-action</code> on the screen has a tooltip entry, so the same table that draws the tooltips is the command line. One key table; K9.</figcaption>
+      <div class="bar"><span class="lights"><i></i><i></i><i></i></span><span class="t">The command line</span><span class="hash">type &gt; in the search box</span></div>
+      <div class="img"><img src="assets/screens/20-command-line.jpg" alt="The search box starting with a greater-than sign, listing every command on the screen" loading="lazy"></div>
+      <figcaption>Every button on the screen already had a tooltip entry, so the list of tooltips became the command list. One table, two uses.</figcaption>
     </figure>
 
     <div class="lesson rv">
-      <div class="t">What the ledger taught, that the rewrite hadn't</div>
-      <p>Deleting is loud. Polish is quiet, and quiet work is where an assistant's reports and its results drift apart, because nobody can feel the difference between “fixed” and “fixed on the one screen I looked at.”</p>
-      <p>Tying every row to the commit that closes it, and every claim to a number from the bench or a screenshot from the rig, was the only thing that kept 531 small changes honest. The process is not clever. It is a ledger that refuses to let a row close without a receipt.</p>
+      <div class="t">What the ledger taught</div>
+      <p>Deleting is loud: you can see the files go. Polish is quiet, and nobody can feel the difference between “fixed” and “fixed on the one screen I checked.”</p>
+      <p>Tying every entry to the commit that closed it, and every claim to a number or a screenshot, was the only thing that kept hundreds of small changes honest. It is not clever. It is a list that refuses to close without a receipt.</p>
     </div>
   </section>
+
+  <!-- ═════════════════════════════════════════════ ACT IV ═══════════ -->
+  <section class="actbreak rv" id="act4">
+    <div class="n">Act IV · 12 – 23 September 2026</div>
+    <h2>The archive</h2>
+    <p>“the UI is always paramount, and must be as snappy as possible, the thing I hate about LRC the most is how slow and laggy it is all the time.”</p>
+    <div class="eyebrow" style="justify-content:center;margin-top:16px"><span class="muted">— the owner, 22 September</span></div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────── CH22 MOVING HOUSE -->
+  <section class="chapter" id="ch-move">
+    <div class="head rv">
+      <div class="eyebrow">Chapter 22 <span class="sep">/</span> Sep 12, 2026 <span class="sep">/</span> <span class="muted">a9ce8a85 · 65 commits in one day</span></div>
+      <h2>Moving house</h2>
+      <p class="dek">The GitHub account the project lived on was flagged. <b>The code moved in one commit, and the history moved in beside it</b>. The same day, the way the work was done changed too.</p>
+    </div>
+
+    <div class="prose rv">
+      <p class="lead">On 12 September the old account stopped being usable. The code went to <a href="https://github.com/seankd3/Azimuth-Photo">a new repository</a> as a single files-only commit, 254 files. The 2,632 commits of history before it went up beside it as a branch called <code>legacy-main</code>, so every commit hash quoted in this log still opens on GitHub. The project's full count is <strong>3,046 commits</strong>.</p>
+      <p>That evening the work moved into cloud sessions. Each task ran in its own session, pushed its own branch and opened a pull request, and a check ran every pull request on Linux as well as Windows. More than thirty pull requests were merged that evening. To make that possible, the development library became public-domain photographs that build anywhere, with a large tier of 6,105 real frames. And the audit rounds got a division of labour: <strong>a cheaper model to scout, a stronger model to refute and to fix</strong>.</p>
+      <p>One small addition from that night matters later: a <em>friction meter</em>. The app writes down what every action cost while the owner uses it, and he can press a “wince” key when something annoys him. From then on, the owner's own afternoons were measurements.</p>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────── CH23 THE ARCHIVE THAT WAS NEVER THERE -->
+  <section class="chapter" id="ch-archive">
+    <div class="head rv">
+      <div class="eyebrow">Chapter 23 <span class="sep">/</span> Sep 14–15, 2026 <span class="sep">/</span> <span class="muted">147,888 copies · 3.2 TB</span></div>
+      <h2>The archive that was never there</h2>
+      <p class="dek">For weeks, a family of bugs said the archive was missing: no thumbnails on a trip, whole years absent. <b>They had one cause. The archive had never been attached.</b></p>
+    </div>
+
+    <div class="prose rv">
+      <p class="lead">The catalog the app actually opened held one drive: the laptop's working drive, about 7,600 photographs. The archive, 3.2 TB on a USB disk, was only in an older catalog that nothing opened any more. Every “the archive is missing” report was that one fact, seen from different screens.</p>
+      <p>Attaching it took a minute through the app's own drive form. The sweep found <strong>147,888 photographs</strong>. Then came the bill. In the new design a photograph's identity is a hash of its complete bytes, and the old catalog's hashes were a different kind that could not be carried over. Paying for identity meant reading all 3.2 TB off the USB disk.</p>
+      <p>So the next day was spent finding out how fast that disk really is. Every way of reading it came out the same:</p>
+    </div>
+
+    <div class="race rv" id="floor-race">
+      <div class="row"><div class="rl">The worker's own walk<span class="cm">4 lanes</span></div><div class="bars"><div class="lane a"><div class="bar after" data-w="100"></div><span class="tag">35.5 MB/s</span></div></div></div>
+      <div class="row"><div class="rl">In path order<span class="cm">sorted by folder</span></div><div class="bars"><div class="lane a"><div class="bar after" data-w="99.7"></div><span class="tag">35.4 MB/s</span></div></div></div>
+      <div class="row"><div class="rl">A quarter-folder per lane<span class="cm">no two lanes collide</span></div><div class="bars"><div class="lane a"><div class="bar after" data-w="98"></div><span class="tag">34.8 MB/s</span></div></div></div>
+      <div class="row"><div class="rl">One lane alone<span class="cm">nothing else running</span></div><div class="bars"><div class="lane"><div class="bar before" data-w="81"></div><span class="tag">28.8 MB/s</span></div></div></div>
+      <div class="row"><div class="rl">One reader at a time<span class="cm">built, measured, reverted</span></div><div class="bars"><div class="lane"><div class="bar before" data-w="72"></div><span class="tag">25.7 MB/s</span></div></div></div>
+    </div>
+
+    <div class="prose rv">
+      <p><strong>The disk is the floor: about 35 MB/s, however you read it.</strong> The one idea that sounded clever, letting only one lane read the archive at a time so the disk head wouldn't jump around, was built, measured slower, and reverted within the hour (<span class="hash">0acbdf98</span> → <span class="hash">173a5f31</span>). The backup program reading the same disk cut the speed about fivefold, and pausing it is the owner's call, not the app's.</p>
+      <p>The measurement also changed what counted as expensive. At 35 MB/s the archive's identity debt was about 25 hours. And every launch walked the archive's 1.5 million files before doing anything useful: <strong>57 minutes per launch</strong>. The costly act during a backfill was not any feature. It was restarting the app.</p>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────── CH24 THREE STARVATIONS -->
+  <section class="chapter" id="ch-starve">
+    <div class="head rv">
+      <div class="eyebrow">Chapter 24 <span class="sep">/</span> Sep 15–16, 2026 <span class="sep">/</span> <span class="muted">3502ceff · 1f873092 · bd527252</span></div>
+      <h2>Three sort orders, three starvations</h2>
+      <p class="dek">The backfill stopped three times in two days. Each time the cause was the order the work was taken in, and each fix was a better order. <b>The final fix was to stop letting one order decide.</b></p>
+    </div>
+
+    <div class="prose rv">
+      <p class="lead">Since Act II, background work is a query: each of four lanes asks what is owed and takes the top item. Every photograph goes through the same steps in order: <strong>identify</strong> it (hash its bytes), <strong>read</strong> it (camera, lens, date), make its <strong>thumbnail</strong>, make its <strong>vector</strong> for search. With 111,414 photographs owing work, the order of that list decides everything.</p>
+      <p><strong>Order one: newest photograph first.</strong> Nothing was identified for five minutes while thumbnails kept being made. A photograph's date is only known <em>after</em> it has been read, so every unread photograph sorted below every dated photograph that owed anything at all. The key was downstream of the work it was ordering. Fix: an unknown date sorts first.</p>
+      <p><strong>Order two: unknown date first.</strong> Now reading raced ahead and everything after it stopped: 19,191 photographs behind on vectors and faces, so a growing part of the library could not be searched by meaning. Fix: sort by the file's own time, which every photograph has from the start and which never changes.</p>
+      <p><strong>Order three: newest file first.</strong> On this library every photograph already identified had a newer file than every one still waiting, so the identified ones always came first, and <strong>identity did nothing all night</strong> while the vector backlog drained and the archive disk sat half idle.</p>
+      <p>Run the three orders yourself. This is a model of the real queue, small enough to watch:</p>
+    </div>
+
+    <div class="demo starve-demo rv" id="starve-demo">
+      <div class="dh"><span class="badge">Model</span><span class="title">the background queue — 240 photographs, 4 lanes, 1 archive disk, 1 graphics card</span><span class="hint" id="starve-clock">tick 0</span></div>
+      <div class="db">
+        <div class="sv-orders" role="group" aria-label="Queue order">
+          <button class="dt on" data-order="date">1 · newest photograph</button>
+          <button class="dt" data-order="unknown">2 · unknown date first</button>
+          <button class="dt" data-order="file">3 · newest file</button>
+          <button class="dt" data-order="turns">4 · kinds take turns</button>
+          <button class="dt run" id="starve-run">▶ Run the night</button>
+        </div>
+        <div class="sv-body">
+          <div class="sv-grid" aria-hidden="true"></div>
+          <div class="sv-side">
+            <div class="sv-bar" data-k="1"><span>identified</span><i><b></b></i><em>0</em></div>
+            <div class="sv-bar" data-k="2"><span>read</span><i><b></b></i><em>0</em></div>
+            <div class="sv-bar" data-k="3"><span>thumbnail</span><i><b></b></i><em>0</em></div>
+            <div class="sv-bar" data-k="4"><span>vector</span><i><b></b></i><em>0</em></div>
+            <div class="sv-meters"><div><span>archive disk busy</span><strong id="sv-disk">—</strong></div><div><span>graphics card busy</span><strong id="sv-card">—</strong></div><div><span>lanes waiting</span><strong id="sv-wait">—</strong></div></div>
+          </div>
+        </div>
+        <p class="sv-verdict" id="starve-verdict" aria-live="polite">Pick an order and run the night.</p>
+        <p class="dnote">A model, not a replay: every job takes one tick. The first 96 squares are the working drive, already read and owing only a vector. The other 144 are the archive, unidentified. A lane holds the top item of its list; if that item needs the disk or the card and it is busy, the lane waits.</p>
+      </div>
+    </div>
+
+    <div class="prose rv">
+      <p>The fix that held was not a fourth, smarter order. <strong>Each kind of work keeps its own newest-first list, and the lanes take the kinds in turn</strong> (<span class="hash">bd527252</span>). No single order can let one kind run alone, whatever the keys say, and the disk and the card each stay busy with their own kind of work.</p>
+      <p>The same two nights had two more lessons. On 15 September the laptop went to sleep at 21:46 in the middle of a step. The step failed and kept its database transaction open, and with it the write lock, so the other three lanes timed out once a minute until morning. The log file grew to 1.4 GB, and every read afterwards walked through it. A failed step now rolls back, and the log is trimmed at every checkpoint (<span class="hash">287dc362</span>, <span class="hash">a4293d75</span>). The next night the app crashed at 01:42 with a corrupted heap: four lanes had been running the search model and the face models at the same time. Loading the models was locked; running them wasn't. Now it is.</p>
+    </div>
+
+    <div class="callout rv">
+      <div class="t">◈ the lesson worth carrying</div>
+      <p>When a queue is “newest first”, check that the sort key exists <b>before</b> the work runs, not after. And when several kinds of work share one queue, don't let a single key decide between them. Three keys in two days each starved someone. The fix was never a better key.</p>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────── CH25 A DAY THAT LOOKED LIKE NOTHING -->
+  <section class="chapter" id="ch-nothing">
+    <div class="head rv">
+      <div class="eyebrow">Chapter 25 <span class="sep">/</span> Sep 19–20, 2026 <span class="sep">/</span> <span class="muted">181 commits in one day</span></div>
+      <h2>The busiest day, and it felt like nothing</h2>
+      <p class="dek">19 September had more commits than any day in the project. At the end of it the owner said it felt like getting nowhere. <b>He was right, and the reason is worth knowing.</b></p>
+    </div>
+
+    <div class="prose rv">
+      <p class="lead">Two review rounds had become the work. Findings were closed one by one, each correctly, each with its receipt: seventy-one numbered findings in one afternoon and evening. The commit log looked like a factory. The owner, using the app, saw a ranking mode that still lagged. Two messages that evening:</p>
+    </div>
+
+    <div class="pull rv">
+      <p>The rank mode is laggy, it HAS to be instant, on click.</p>
+      <div class="who">— the owner, 19 September</div>
+    </div>
+    <div class="pull rv">
+      <p>weve been working on this feature all day andseems like where are getting nowhere</p>
+      <div class="who">— the owner, the same evening</div>
+    </div>
+
+    <div class="prose rv">
+      <p>The work narrowed to the one thing he could feel. The slow part of a Guided ranking question turned out to be the pick re-reading who was in the library, which a pick never changes. Remembering that answer took <strong>a question from 1.37 s to 33 ms</strong> (<span class="hash">b0659bb6</span>). The ranking work was handed to a different model to finish, with one writer per feature. The same night the app got a changelog in its menu and a blue “Restart to update” button, and the next morning a real menu bar: File, Edit, Library, Photo, View, Help.</p>
+      <p>The restart button exists because of a fact measured that day: <strong>the owner's shortcut runs the source code directly</strong>. There is no install step, so every commit is what his next launch runs. A worker bug that spun the CPU sat in the code for 22 minutes that afternoon, and he happened to launch outside that window. After that, changes to the worker were run on a copy of his library before they were committed.</p>
+    </div>
+
+    <div class="lesson rv">
+      <div class="t">What the busiest day taught</div>
+      <p>A day of closing review findings reads to the person using the app as no progress at all, because none of it changes what they can do. Commit count measures activity, not progress.</p>
+      <p>Lead with what the owner can do now that he couldn't this morning. Keep the diff small. Make the first win something he'll notice at his next launch.</p>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────── CH26 THE LIVE APP AS THE INSTRUMENT -->
+  <section class="chapter" id="ch-instrument">
+    <div class="head rv">
+      <div class="eyebrow">Chapter 26 <span class="sep">/</span> Sep 22–23, 2026 <span class="sep">/</span> <span class="muted">the overnight pass</span></div>
+      <h2>The live app as the instrument</h2>
+      <p class="dek">“Ranking needs to feel instant” came with permission to use the real app as the lab, overnight. <b>The biggest waste it found was the app asking itself the same question four times.</b></p>
+    </div>
+
+    <div class="prose rv">
+      <p class="lead">The owner's words that night: <em>“keep working until its all perfected and we squeeze every last drop of performance out of the hardware.”</em> The tools were all read-only: the app's own records of what each action cost, a profiler sampling it without stopping it, and Windows' disk and CPU counters. Anything that needed a query or a render ran on a copy of the catalog.</p>
+      <p>The records showed the four lanes spending <strong>22 of every 57 lane-minutes asking what was owed</strong>: the same whole-library query, four times, once per lane. That became one shared list, asked once, each item taken by one lane (<span class="hash">ee8f4a21</span>). And one lock guarded every read of an original file, which meant the fast internal drive waited in line behind the slow USB one. The lock became the archive's alone (<span class="hash">14656f13</span>). Measured over the same fifteen-minute spans of the backfill:</p>
+    </div>
+
+    <div class="bench rv">
+      <div class="chip"><span class="lab">Photographs read / 15 min</span><span class="ba"><span class="before">24</span><span class="arw">→</span><span class="after">525</span></span><span class="cm">ee8f4a21 · one list of owed work</span></div>
+      <div class="chip"><span class="lab">Loupe renditions / 15 min</span><span class="ba"><span class="before">37</span><span class="arw">→</span><span class="after">85</span></span><span class="cm">14656f13 · the archive's own lock</span></div>
+      <div class="chip"><span class="lab">Lanes idle, waiting</span><span class="ba"><span class="before">14.2 min</span><span class="arw">→</span><span class="after">1.5 min</span></span><span class="cm">per fifteen minutes</span></div>
+      <div class="chip"><span class="lab">Walk of the archive's raws</span><span class="ba"><span class="before">214 s</span><span class="arw">→</span><span class="after">4.5 s</span></span><span class="cm">e58bb0de · 100,571 files, listing not opening</span></div>
+      <div class="chip"><span class="lab">Working-drive sweep at launch</span><span class="ba"><span class="before">42.9 s</span><span class="arw">→</span><span class="after">2.0 s</span></span><span class="cm">e58bb0de · the walk keeps what it read</span></div>
+      <div class="chip"><span class="lab">Archive sweep at launch</span><span class="ba"><span class="before">1,682 s</span><span class="arw">→</span><span class="after">676 s</span></span><span class="cm">the 07:09 launch, measured live</span></div>
+    </div>
+
+    <div class="prose rv">
+      <p>And then the floor again. During the night the USB disk was reading at 34.7 MB/s, 90% busy, while the internal drive sat 99% idle and the processor 13% loaded. The code had stopped being the limit. At 03:35 Windows Update restarted the laptop and took the app and the session with it. The morning launch picked up where the night had stopped, which, given Chapter 23, was the real test.</p>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────── CH27 THE SAME NAME, TWICE -->
+  <section class="chapter" id="ch-names">
+    <div class="head rv">
+      <div class="eyebrow">Chapter 27 <span class="sep">/</span> Sep 23, 2026 <span class="sep">/</span> <span class="muted">RF139 · RF141 · RF142</span></div>
+      <h2>The same name, twice</h2>
+      <p class="dek">Two drives disagreeing about one photograph, and a camera whose file counter went round the clock. <b>Knowing which file is which photograph turned out to be harder than hashing it.</b></p>
+    </div>
+
+    <div class="prose rv">
+      <p class="lead">The morning's first puzzle: 191 files existed on both drives, and 98 of them had different sizes. Lightroom had written metadata into the working copies, so the bytes differed. Each drive's sweep saw the other drive's version, re-read the whole file, decided it was a new photograph and carried every decision over to it. The next sweep carried them back. <strong>3,103 identity flips since 20 September, and 19.3 GB re-read on every round trip.</strong> The owner's ruling: <em>“newer file wins, and we can update the data of the old version.”</em> The backup now refreshes the older copy and moves the stale one into the drive's own trash (<span class="hash">74d96f1e</span>).</p>
+      <p>The second puzzle was the counter. Of 83,757 DNG files, 13,332 share a file name with a CR3 or CR2 raw. The obvious rule, “same name, same photograph”, is badly wrong: a camera numbers its files from 0001 to 9999 and then starts again, so <code>SKDA5202.CR3</code> from 2026 and <code>SKDA5202.dng</code> from 2024 are different photographs. The rule that works adds the capture second and the camera. Try both:</p>
+    </div>
+
+    <div class="demo names-demo rv" id="names-demo">
+      <div class="dh"><span class="badge">Data</span><span class="title">13,332 DNGs that share a name with a CR3 or CR2 · the live catalog, 23 Sep</span><span class="hint" id="names-note">choose a rule</span></div>
+      <div class="db">
+        <div class="sv-orders" role="group" aria-label="Linking rule">
+          <button class="dt" data-rule="name">link by name</button>
+          <button class="dt" data-rule="moment">name + capture second + camera</button>
+        </div>
+        <div class="nm-bar" aria-hidden="true"><i class="twin"></i><i class="diff"></i><i class="wait"></i></div>
+        <div class="nm-key"><span><b class="twin"></b>547 true twins · a conversion beside its original</span><span><b class="diff"></b>6,068 different photographs · the counter wrapped</span><span><b class="wait"></b>6,717 · no capture date read yet</span></div>
+        <p class="sv-verdict" id="names-verdict" aria-live="polite">Pick a rule to see what it would link.</p>
+      </div>
+    </div>
+
+    <div class="prose rv">
+      <p>And the last change before this edition: every launch ran a repair that asked the edit log about 36,000 photographs <em>one at a time</em>, with one database write each. The database driver opens a write transaction before every write, so the repair held the write lock for about half a minute on every launch, whether anything had changed or not. Now it reads the log once, writes only rows that differ, and <strong>opens no transaction at all when nothing drifted</strong> (<span class="hash">e1204429</span>).</p>
+    </div>
+  </section>
+
 
   <!-- ─────────────────────────────────────────────── INTERLUDE: THE LOOP -->
   <section class="interlude" id="loop">
     <div class="rv">
       <div class="lab">◆ How I work now</div>
       <h2>The loop, as it runs today</h2>
-      <p class="dek" style="color:var(--ink-2);max-width:44ch;margin-top:14px">Three years in, the workflow is six artifacts and one rule. Every one of them is in the repository, so you can run the same loop on your own archive.</p>
+      <p class="dek" style="color:var(--ink-2);max-width:44ch;margin-top:14px">Three years in, the workflow is a handful of plain files and one rule. All of it is in the repository, so you can run the same loop on your own project.</p>
     </div>
     <div class="rules rv">
       <div class="r"><span class="n"></span><div>
-        <h4>1 · The ask goes in the ledger, verbatim, before any work.</h4>
-        <p><code>MASTER_PLAN.md</code> §1 holds what I asked for in my own words, dated, one row per ask, never paraphrased into a ticket and never deleted when done. When two asks contradict, the work stops until I say which wins. A model cannot tell you the question was wrong; a ledger of questions at least lets you see it yourself.</p>
+        <h4>1 · The ask is written down, word for word, before any work.</h4>
+        <p><code>Vision.md</code> holds what I asked for in my own words, dated, one line per ask, never rewritten into a ticket and never deleted when done. When two asks contradict each other, the work stops until I say which one wins. A model can't tell you the question was wrong; a list of the questions at least lets you see it.</p>
       </div></div>
       <div class="r"><span class="n"></span><div>
         <h4>2 · Ask for the shape, not the code.</h4>
-        <p>“This should be expressible in what already exists — if it isn't, tell me which primitive is missing.” The answer to that question is a design; the answer to a task is a bolt-on. <em>A path is a drive plus a tail</em> and <em>a stack is a decision</em> both came back from it.</p>
+        <p>“This should be expressible in what already exists. If it isn't, tell me which piece is missing.” The answer to that is a design. The answer to a task is a bolt-on. <em>A path is a drive plus a tail</em> and <em>a stack is a decision</em> both came from that question.</p>
       </div></div>
       <div class="r"><span class="n"></span><div>
-        <h4>3 · One hand lands the shared shape, then the surfaces.</h4>
-        <p>Audits fan out to read-only agents. Fixes do not: parallel hands cannot converge on a shape none of them owns, so the primitive lands first, by one lane, and the surfaces follow. Every commit deletes the machinery it replaces.</p>
+        <h4>3 · Many models, one writer per feature.</h4>
+        <p>Each task runs in its own session with its own branch and pull request. A cheaper model scouts; a stronger one refutes and fixes. Audits fan out, but fixes don't: parallel hands can't agree on a shape none of them owns. When a feature stalls with one model, it moves to another, and there is still exactly one writer.</p>
       </div></div>
       <div class="r"><span class="n"></span><div>
-        <h4>4 · A second model refutes the diff.</h4>
-        <p>Not a review — a refutation: “assume this is broken and show me how.” 102 of the ledger's rows came from that pass in three days. Whoever wrote it never blesses it.</p>
+        <h4>4 · A second model tries to break every change.</h4>
+        <p>Not a review, a refutation: “assume this is broken and show me how.” 102 of the first 555 findings came from that pass. Whoever wrote the change never approves it.</p>
       </div></div>
       <div class="r"><span class="n"></span><div>
-        <h4>5 · The gates count what only grows when you write more code.</h4>
-        <p><code>scripts/gates/check.py</code>: imports pointing up the stack, tables made outside the schema, guides naming paths that are not there, names called that do not exist, a suite that cannot collect. Each number falls by measurement and rises only by hand, in its own commit, with a reason. Doctrine decays; a failing gate does not.</p>
+        <h4>5 · The owner's own afternoons are the measurement.</h4>
+        <p>The app writes down what every action cost while I use it, and a key marks the moments that annoy me. The next round starts from that file, not from a guess, and the live app is the instrument: profiled while it runs, never slowed to be measured.</p>
       </div></div>
       <div class="r"><span class="n"></span><div>
         <h4>6 · Nothing is done until it ran.</h4>
-        <p>A finding closes only in the commit that does the work, with the bench number or the screenshot from the off-screen rig. “Verified, all tests pass” is a claim, and claims get re-run. Every screenshot in this act is that rule applied to the log itself.</p>
+        <p>A finding closes only in the commit that does the work, with a number from the bench or a screenshot from the rig. “All tests pass” is a claim, and claims get re-run. Checks count what only grows when you write more code, so a regression shows up as a number going the wrong way.</p>
       </div></div>
     </div>
-    <p class="note rv">All six live in the repository as files a stranger can read: the plan, the findings, the gates, the journeys, the bench and the proof rig. The process is not clever. It is a set of receipts.</p>
+    <p class="note rv">The files, if you want to copy the loop: <code>Vision.md</code> for what was asked, <code>Findings.md</code> for what was found and what became of it, <code>WorkQueue.md</code> for who does what next, <code>AGENTS.md</code> for how agents work, and the checks and journeys under <code>scripts/</code>.</p>
   </section>
 
   <!-- ─────────────────────────────────────────────── INTERLUDE: METHOD -->
@@ -1468,15 +1559,103 @@ user32.PrintWindow(hwnd, hdc, <span class="tok-num">2</span>)   <span class="tok
     capture_routes(base, shots)                   <span class="tok-com"># Playwright, per era</span></pre>
     </div>
     <div class="prose rv">
-      <p><strong>Act III was shot differently, because the software is different.</strong> There is no server to boot and no browser to point at it. <code>scripts/native_proof.py</code> opens the real desktop app on an isolated home — a catalog of 67 photographs on this machine, 12 September 2026: 47 of the owner's own landscapes and street frames, plus ten CC0 portraits from Wikimedia Commons standing in for people — five of them saved as three near-identical frames, because a person only exists here as a <em>group</em> of faces — so that nobody's face appears on this page without having offered it — with its window placed at <code>x = −2400</code>, off the left edge of every screen, still rendered and captured through <code>PrintWindow</code>. Each shot runs one of the <em>journey</em> probes from the repository first, so what you see is the app after a real sequence of keys, not a posed state. Nothing was retouched, and the owner's own library was never opened.</p>
+      <p><strong>Act III was shot differently, because the software is different.</strong> There is no server to boot and no browser to point at it. <code>scripts/native_proof.py</code> opens the real desktop app on an isolated home — a catalog of 67 photographs on this machine, 12 September 2026: 47 of the owner's own landscapes and street frames, plus ten CC0 portraits from Wikimedia Commons standing in for people — five of them saved as three near-identical frames, because a person only exists here as a <em>group</em> of faces — so that nobody's face appears on this page without having offered it — with its window placed at <code>x = −2400</code>, off the left edge of every screen, still rendered and captured through <code>PrintWindow</code>. Each shot runs one of the <em>journey</em> probes from the repository first, so what you see is the app after a real sequence of keys, not a posed state. Nothing was retouched, and the owner's own library was never opened. <strong>Act IV has no new screenshots</strong>, because its subject is what happens behind the window. Its panels are small models built from the measurements in the ledger, and each one says so.</p>
     </div>
     <p class="note rv">The Act I and II rig — <code>harness.py</code>, per-era config, three pinned Python environments, and the boot-and-hold server used for the interactive Develop/Film shots — lives beside this page. It is, fittingly, its own tiny piece of software written to tell the story of another one.</p>
   </section>
 
+  <section class="chapter" id="doctrine">
+    <div class="head rv">
+      <div class="eyebrow">What it taught <span class="sep">/</span> <span class="muted">twelve lessons, each with its receipt</span></div>
+      <h2>Twelve things this project taught me</h2>
+      <p class="dek">Every one of them cost something: a bug, an outage, a bad deletion, a night of work that did nothing. The chapter behind each card is the receipt.</p>
+    </div>
+
+    <div class="doctrine rv">
+      <div class="dgrid">
+        <a class="d" href="#ch-fleet">
+          <span class="k">On building with AI</span>
+          <h4>Writing code got cheap. Deciding what should exist didn't.</h4>
+          <p>My bottleneck used to be how fast I could type. Now it's whether I can tell what shouldn't be built at all. Nobody working a lane ever stops to ask if the ticket should exist.</p>
+          <span class="paid">cost: <b>1,226 commits in twenty days</b>, and 41 database tables nothing ever wrote to</span>
+        </a>
+        <a class="d" href="#ch-fleet">
+          <span class="k">On review</span>
+          <h4>Whoever wrote it can't be the one to bless it.</h4>
+          <p>Point a different model at the change and tell it to prove the thing is broken. Asking for a review gets you praise. Asking for a refutation gets you bugs.</p>
+          <span class="paid">cost: <b>five real regressions</b> that shipped past a normal review</span>
+        </a>
+        <a class="d" href="#ch-rules">
+          <span class="k">On knowing things</span>
+          <h4>Run it. Reading the code will lie to you.</h4>
+          <p>Every real bug in the rewrite turned up by running the app. None came from reading. An empty grid sitting behind a <code>200</code>. A livelock. A missing table that would have broken every first install.</p>
+          <span class="paid">cost: half a day chasing a broken drawer that turned out to be my own probe</span>
+        </a>
+        <a class="d" href="#ch-rules">
+          <span class="k">On elegance</span>
+          <h4>Delete the question, not the answer.</h4>
+          <p>Nearly every big cut started the same way. I'd notice that nothing was asking the question a subsystem existed to answer. It had usually been dead for months and nobody had buried it.</p>
+          <span class="paid">cost: 9,160 lines of thumbnail machinery that became one loop</span>
+        </a>
+        <a class="d" href="#ch-core">
+          <span class="k">On big files</span>
+          <h4>Find the coupling, not the file.</h4>
+          <p>Huge files are usually propped up by two or three small connections to the rest of the app. Cut those and the file falls over by itself. Go after the file first and you break things.</p>
+          <span class="paid">cost: 1,661 lines kept alive by a single 8-line function</span>
+        </a>
+        <a class="d" href="#ch-core">
+          <span class="k">On data</span>
+          <h4>Anything you store is something that can disagree with the truth.</h4>
+          <p>Work out which part of your data you genuinely cannot recompute. It's usually far smaller than you think. Derive the rest, and you stop paying to keep it all in agreement.</p>
+          <span class="paid">cost: years of reconciliation bugs guarding <b>0.06%</b> worth of real data</span>
+        </a>
+        <a class="d" href="#ch-rules">
+          <span class="k">On safety checks</span>
+          <h4>A guard usually means the operation is shaped wrong.</h4>
+          <p>When a fix needs a new check bolted on, there's often a version of the operation that needs no check at all. Write that one instead. Rules in comments rot; a <code>ValueError</code> doesn't.</p>
+          <span class="paid">cost: an <code>rm -rf</code> whose only safety was a marker file</span>
+        </a>
+        <a class="d" href="#ch-gutting">
+          <span class="k">On being wrong</span>
+          <h4>Log your mistakes where other people can read them.</h4>
+          <p>AI is confidently wrong a lot. So am I. If the record only contains wins it stops being useful, so the reverts and the retracted claims go in beside everything else.</p>
+          <span class="paid">cost: three deletions I had to undo, and 285 tests I nearly threw away</span>
+        </a>
+        <a class="d" href="#ch-final">
+          <span class="k">On metrics</span>
+          <h4>Don't optimise a number you can game.</h4>
+          <p>Line count shows whether the design is working. Chase it directly and you just get denser, worse code. I never set a target for it, and that turned out to be the right call.</p>
+          <span class="paid">cost: nothing, which is the point</span>
+        </a>
+        <a class="d" href="#ch-ledger">
+          <span class="k">On polish</span>
+          <h4>A row closes only in the commit that does the work.</h4>
+          <p>Deleting is loud. Polish is quiet, and quiet is where a model's report and its result drift apart. A ledger that refuses to close a finding without the commit, the number or the screenshot is the only thing that kept 531 small fixes honest.</p>
+          <span class="paid">cost: <b>102 refutation rows</b> — regressions a second model found in three days of "done"</span>
+        </a>
+        <a class="d" href="#ch-starve">
+          <span class="k">On queues</span>
+          <h4>A sort key has to exist before the work runs.</h4>
+          <p>Three orders in two days each starved one kind of work, because each key was something the work itself produced, or favoured one kind over another. The fix that held had no clever key at all: each kind of work takes a turn.</p>
+          <span class="paid">cost: <b>two nights of backfill</b> that did nothing, with 111,414 photographs waiting</span>
+        </a>
+        <a class="d" href="#ch-nothing">
+          <span class="k">On progress</span>
+          <h4>Commit count measures activity, not progress.</h4>
+          <p>The busiest day of the project closed seventy-one findings and changed nothing the owner could feel. Lead with what he can do now that he couldn't this morning.</p>
+          <span class="paid">cost: <b>181 commits</b>, and “getting nowhere”</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="note rv">What follows is the long version. Three years, an archive of 150,000 photographs, and software that grew, overgrew, and got cut back down. The screenshots are the real app at each point in its history, and the numbers come from the commits that shipped them.</div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────── CH0 GENESIS -->
   <!-- ─────────────────────────────────────────────── CH10 FINAL -->
   <section class="chapter" id="ch-final">
     <div class="head rv">
-      <div class="eyebrow">Chapter 22 <span class="sep">/</span> the ledger</div>
+      <div class="eyebrow">Chapter 28 <span class="sep">/</span> the ledger</div>
       <h2>What it cost, what it taught</h2>
       <p class="dek">Written as I went, this would have been a list of things I added. Looking back, it's a shorter and more useful story than that.</p>
     </div>
@@ -1487,8 +1666,9 @@ user32.PrintWindow(hwnd, hdc, <span class="tok-num">2</span>)   <span class="tok
       <p><strong>Honesty turned out to be structural.</strong> A UI that won't fake a success toast. A backup that insists on byte proof before it calls a photo safe. A live preview that has to match its export to within 0.4 of 255. A deletion program that writes down the three deletions it got wrong. Same move every time: don't let the system, or the write-up, claim something it can't back.</p>
       <p><strong>Knowing what's irreplaceable is what makes you brave.</strong> Every scary moment in three years was the same fear in different clothes, which is losing a photograph I can't get back. Working out that 0.06% of the catalog was the part I couldn't rebuild is what made it safe to delete the rest without flinching.</p>
       <p><strong>The best code I wrote this year was code that stopped being necessary.</strong> Five subsystems didn't get fixed. They stopped having a reason to exist once a path was stored as a drive plus a tail. Every backlog and cursor collapsed into one anti-join. I don't know a refactoring pattern that beats noticing a question nobody asks any more, because it's the only move that makes a codebase smaller and more capable at once.</p>
-      <p><strong>A ledger is a better memory than a model.</strong> The last three days were 555 findings, and not one of them closed without the commit that did the work, the number from the bench, or the screenshot from the rig. That sounds bureaucratic. It's the opposite: it is the only process I found that lets a fleet fix hundreds of small things without any of them being quietly unfixed, because the receipt is the row.</p>
-      <p>When Act II was written, this paragraph said the old UI was staying because it was the good part. It wasn't, and on 8 September it left. What remains is five tables, twenty-two surface files, a UI a fifth the size of the one it replaced, and a findings ledger with 11 rows still open. Develop is parked on the owner's own seven Lightroom screenshots until it can be built without a bandaid. There is no phone and no sharing. Saying that out loud here is the same move as everything above it: don't let the write-up claim what the software can't back.</p>
+      <p><strong>A ledger is a better memory than a model.</strong> The findings ledger now holds more than 950 entries, and none closed without the commit that did the work, a number from the bench or a screenshot from the rig. That sounds like bureaucracy. It is the opposite: it is the only way I found to let a fleet fix hundreds of small things without any of them being quietly unfixed.</p>
+      <p><strong>Eventually the hardware is the limit, and then the question changes.</strong> Once the code was small, the slowest part of the whole system was a USB disk at 35 MB/s, and the most expensive thing anyone could do was restart the app. Past that point, speed stops being about code and becomes about what the hardware can do and how often you ask it.</p>
+      <p>Where it stands on 23 September: 3,046 commits, five tables, and a product that grew from 25,367 lines to about 32,250 in eleven days, for people, Guided ranking, a menu bar, a changelog and edit families. Whether that growth was elegance or drift is the next thing this log has to answer. Editing lives in Lightroom. There is no phone and no sharing yet. Saying so here is the same habit as everything above it: the write-up shouldn't claim what the software can't back.</p>
     </div>
 
     <div class="endcta rv">
@@ -1496,7 +1676,7 @@ user32.PrintWindow(hwnd, hdc, <span class="tok-num">2</span>)   <span class="tok
       <h3>Everything in this log is real — and it's yours to run.</h3>
       <p>Azimuth Photo is open source and runs on your own machine; your photographs never leave your hardware. It ships empty and hungry.</p>
       <div class="ec-actions">
-        <a class="ec-btn primary" href="https://github.com/Sean-Kenneth-Doherty/azimuth-photo">Get Azimuth Photo on GitHub →</a>
+        <a class="ec-btn primary" href="https://github.com/seankd3/Azimuth-Photo">Get Azimuth Photo on GitHub →</a>
         <a class="ec-btn" href="/">See the app</a>
         <a class="ec-btn" href="/contribute/">If you want to help</a>
       </div>
@@ -1504,9 +1684,9 @@ user32.PrintWindow(hwnd, hdc, <span class="tok-num">2</span>)   <span class="tok
 
     <div class="foot rv">
       <div class="big">From "which one is better?" to a darkroom that models the chemistry of film — then back down to a core you can hold in your head.</div>
-      <p>AZIMUTH · FIELD LOG — a development log built from the real git history of Azimuth Photo, written by <a href="https://seankennethdoherty.com" style="color:inherit"><b>Sean Kenneth Doherty</b></a>, a photographer who wanted his archive on his own disk, and the person whose name is on every commit. More of the photographs, and the rest of the work, at <a href="https://seankennethdoherty.com" style="color:inherit">seankennethdoherty.com</a>; the code at <a href="https://github.com/Sean-Kenneth-Doherty" style="color:inherit">github.com/Sean-Kenneth-Doherty</a>.<br><br>
+      <p>AZIMUTH · FIELD LOG — a development log built from the real git history of Azimuth Photo, written by <a href="https://seankennethdoherty.com" style="color:inherit"><b>Sean Kenneth Doherty</b></a>, a photographer who wanted his archive on his own disk, and the person whose name is on every commit. More of the photographs, and the rest of the work, at <a href="https://seankennethdoherty.com" style="color:inherit">seankennethdoherty.com</a>; the code at <a href="https://github.com/seankd3" style="color:inherit">github.com/seankd3</a>.<br><br>
       Every screenshot on this page was captured by <b>checking out the exact commit and running that era's software</b> against a fixed set of Sean's real photographs — the 2023 Tkinter app included, and the 2026 desktop app photographed off-screen on an isolated home. Every benchmark, line count and code excerpt is quoted or measured from the commit that shipped it.<br><br>
-      <b>Span</b> 2023-08-11 → 2026-09-11 · <b>Commits</b> 2,587 · <b>Peak month</b> 1,133 · <b>Peak size</b> 182,688 lines → <b>25,367</b> of product · <b>Tables</b> 84 → 5 · <b>Irreplaceable</b> 0.06% of rows · <b>Repair-shaped commits</b> under 5% since August · <b>Findings closed with a receipt</b> 531.</p>
+      <b>Span</b> 2023-08-11 → 2026-09-23 · <b>Commits</b> 3,046 · <b>Peak month</b> 1,491 · <b>Peak size</b> 182,688 lines · <b>Tables</b> 84 → 5 · <b>Irreplaceable</b> 0.06% of rows · <b>The floor</b> 35 MB/s · <b>Findings closed with a receipt</b> 950+.</p>
     </div>
   </section>
 
