@@ -13,7 +13,7 @@
   const COMMITS_BY_MONTH = [
     ["2023-08", 8], ["2023-09", 1], ["2023-10", 0], ["2024-08", 3],
     ["2026-02", 2], ["2026-04", 222], ["2026-05", 161], ["2026-06", 32],
-    ["2026-07", 1491], ["2026-08", 591], ["2026-09", 76],
+    ["2026-07", 1491], ["2026-08", 591], ["2026-09", 536],
   ];
 
   /* ---- scroll progress + top bearing ----------------------------------- */
@@ -316,7 +316,7 @@
         requestAnimationFrame(() => { el.style.transition = "transform 420ms cubic-bezier(.2,.7,.2,1)"; el.style.transform = ""; });
       });
       const live = Object.values(on).filter(Boolean).length;
-      $("#rrf-note", root).textContent = live === 3 ? "three doors" : live === 0 ? "no door — an empty answer, never a refusal" : `${live} door${live > 1 ? "s" : ""} · degraded, not refused`;
+      $("#rrf-note", root).textContent = live === 3 ? "three lists" : live === 0 ? "no list — an empty answer, never a refusal" : `${live} list${live > 1 ? "s" : ""} · worse, but still an answer`;
     }
     $$(".dt[data-door]", root).forEach((b) => b.addEventListener("click", () => { on[b.dataset.door] = !on[b.dataset.door]; b.classList.toggle("on", on[b.dataset.door]); render(); }));
     render();
@@ -345,4 +345,191 @@
     io.observe(root);
   }
   $$(".ledger-demo").forEach(initLedger);
+
+  /* ---- The route: commits per month, chapters placed on them ------------ */
+  // Month and act per chapter; the titles are read from the page itself so
+  // the map can never disagree with the chapter it points at.
+  const ROUTE = {
+    "ch-genesis": ["2023-08", 1], "ch-web": ["2026-02", 1], "ch-mind": ["2026-04", 1], "ch-speed": ["2026-04", 1],
+    "ch-modular": ["2026-05", 1], "ch-one": ["2026-06", 1], "ch-darkroom": ["2026-07", 1], "ch-field": ["2026-07", 1],
+    "ch-azimuth": ["2026-07", 1], "ch-fleet": ["2026-07", 1],
+    "ch-reckoning": ["2026-08", 2], "ch-gutting": ["2026-08", 2], "ch-core": ["2026-08", 2], "ch-rules": ["2026-08", 2],
+    "ch-elegance": ["2026-08", 2], "ch-steering": ["2026-08", 2],
+    "ch-process": ["2026-08", 3], "ch-face": ["2026-08", 3], "ch-earned": ["2026-08", 3], "ch-dialect": ["2026-08", 3],
+    "ch-leaves": ["2026-09", 3], "ch-ledger": ["2026-09", 3],
+    "ch-move": ["2026-09", 4], "ch-archive": ["2026-09", 4], "ch-starve": ["2026-09", 4], "ch-nothing": ["2026-09", 4],
+    "ch-instrument": ["2026-09", 4], "ch-names": ["2026-09", 4],
+  };
+  const MONTH_NAMES = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  function initRoute(root) {
+    const svg = $("svg", root); if (!svg) return;
+    const months = COMMITS_BY_MONTH.filter((m) => m[1] > 0);
+    const W = 900, colW = W / months.length, BAR = 120, AXIS = 150, ROW = 19, DOT0 = 176;
+    const max = Math.max(...months.map((m) => m[1]));
+    const byMonth = {};
+    Object.entries(ROUTE).forEach(([id, [month, act]]) => { (byMonth[month] = byMonth[month] || []).push([id, act]); });
+    const rows = Math.max(...Object.values(byMonth).map((l) => Math.ceil(l.length / 2)));
+    const H = DOT0 + rows * ROW + 6;
+    svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+    const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;");
+    let html = `<line class="axis" x1="0" x2="${W}" y1="${AXIS}" y2="${AXIS}"/>`;
+    months.forEach(([month, count], i) => {
+      const x = i * colW, h = Math.max(3, Math.sqrt(count) / Math.sqrt(max) * BAR);
+      const [yy, mm] = month.split("-");
+      html += `<rect class="bar${count > 400 ? " hot" : ""}" x="${x + colW * 0.2}" y="${AXIS - h}" width="${colW * 0.6}" height="${h}" rx="3"><title>${count.toLocaleString()} commits in ${MONTH_NAMES[+mm - 1]} ${yy}</title></rect>`;
+      html += `<text class="cnt" x="${x + colW / 2}" y="${AXIS - h - 6}">${count.toLocaleString()}</text>`;
+      html += `<text class="mlab" x="${x + colW / 2}" y="${AXIS + 16}">${MONTH_NAMES[+mm - 1]} '${yy.slice(2)}</text>`;
+      (byMonth[month] || []).forEach(([id, act], j) => {
+        const section = document.getElementById(id);
+        const h2 = section && $(".head h2", section);
+        const eyebrow = section && $(".head .eyebrow", section);
+        const label = (eyebrow ? eyebrow.firstChild.textContent.trim() + " · " : "") + (h2 ? h2.textContent.trim() : id);
+        const per = byMonth[month].length === 1 ? 1 : 2;
+        const cx = x + colW / 2 + (per === 1 ? 0 : (j % 2 ? 10 : -10));
+        const cy = DOT0 + Math.floor(j / per) * ROW;
+        html += `<a href="#${id}" aria-label="${esc(label)}"><circle class="a${act}" cx="${cx}" cy="${cy}" r="6"><title>${esc(label)}</title></circle></a>`;
+      });
+    });
+    svg.innerHTML = html;
+  }
+  $$(".route-demo").forEach(initRoute);
+
+  /* ---- Act IV · three sort orders, three starvations ------------------ */
+  // A model of work.py's queue, not a replay: four lanes, one archive disk
+  // (identity), one graphics card (vectors), reading and thumbnails on the
+  // processor. A lane holds the head of its list; if the head needs a device
+  // that is busy this tick, the lane waits -- which is what the real lanes did.
+  function initStarve(root) {
+    const grid = $(".sv-grid", root); if (!grid) return;
+    const N = 240, WORK = 96, LANES = 4, NIGHT = 150;
+    const KIND = ["identity", "reading", "thumbnails", "vectors"];
+    const DEVICE = ["disk", "cpu", "cpu", "card"];      // what stage s needs to move to s+1
+    const cells = [];
+    for (let i = 0; i < N; i++) { const c = document.createElement("i"); grid.appendChild(c); cells.push(c); }
+    let photos, tick, stats, order = "date", timer = null;
+
+    function rng(seed) { let s = seed >>> 0; return () => ((s = (Math.imul(s, 1664525) + 1013904223) >>> 0) / 4294967296); }
+    function reset() {
+      const r = rng(20260915);
+      photos = [];
+      for (let i = 0; i < N; i++) {
+        const working = i < WORK;
+        // The working drive: newer files, already read (so dated), owing a vector.
+        // The archive: older files, nothing known yet; its date appears only once read.
+        photos.push({ stage: working ? 3 : 0, file: working ? 1000 + r() * 400 : r() * 900,
+                      date: working ? 1000 + r() * 400 : null, laterDate: r() * 1400 });
+      }
+      tick = 0;
+      stats = { disk: 0, card: 0, wait: 0, first: [null, null, null, null] };
+      paint(); say("Pick an order and run the night.");
+    }
+    const keyed = {
+      date: (p) => (p.date == null ? -Infinity : p.date),      // newest photograph; unknown dates sort last
+      unknown: (p) => (p.date == null ? Infinity : p.date),    // unknown dates first
+      file: (p) => p.file,                                     // newest file
+    };
+    function heads() {
+      const owed = photos.filter((p) => p.stage < 4);
+      if (order !== "turns") {
+        const key = keyed[order];
+        return owed.sort((a, b) => key(b) - key(a)).slice(0, LANES);
+      }
+      // Each kind newest-first; lane k starts its turn at kind (tick + k).
+      const byKind = [0, 1, 2, 3].map((s) => owed.filter((p) => p.stage === s).sort((a, b) => b.file - a.file));
+      const taken = [], used = { disk: false, card: false };
+      for (let k = 0; k < LANES; k++) {
+        for (let step = 0; step < 4; step++) {
+          const s = (tick + k + step) % 4, list = byKind[s];
+          const dev = DEVICE[s];
+          if (!list.length || (dev !== "cpu" && used[dev])) continue;
+          if (dev !== "cpu") used[dev] = true;
+          taken.push(list.shift());
+          break;
+        }
+      }
+      return taken;
+    }
+    function step() {
+      const busy = { disk: false, card: false };
+      const lanes = heads();
+      let ran = 0;
+      lanes.forEach((p) => {
+        const dev = DEVICE[p.stage];
+        if (dev !== "cpu" && busy[dev]) { stats.wait++; return; }
+        if (dev !== "cpu") busy[dev] = true;
+        if (stats.first[p.stage] == null) stats.first[p.stage] = tick;
+        p.stage++; ran++;
+        if (p.stage === 2 && p.date == null) p.date = p.laterDate;   // reading is what learns the date
+      });
+      stats.wait += LANES - lanes.length;
+      if (busy.disk) stats.disk++;
+      if (busy.card) stats.card++;
+      tick++;
+      return ran;
+    }
+    const pct = (n) => (tick ? Math.round(100 * n / tick) : 0) + "%";
+    function paint() {
+      photos.forEach((p, i) => { cells[i].className = "s" + p.stage + (i < WORK ? " w" : ""); });
+      $$(".sv-bar", root).forEach((bar) => {
+        const k = +bar.dataset.k, n = photos.filter((p) => p.stage >= k).length;
+        bar.querySelector("b").style.width = (100 * n / N).toFixed(1) + "%";
+        bar.querySelector("em").textContent = n;
+      });
+      $("#starve-clock", root).textContent = "tick " + tick + " / " + NIGHT;
+      $("#sv-disk", root).textContent = tick ? pct(stats.disk) : "—";
+      $("#sv-card", root).textContent = tick ? pct(stats.card) : "—";
+      $("#sv-wait", root).textContent = tick ? Math.round(100 * stats.wait / (tick * LANES)) + "%" : "—";
+    }
+    function say(text) { $("#starve-verdict", root).textContent = text; }
+    function verdict() {
+      const idle = `The archive disk was busy ${pct(stats.disk)} of the night and the graphics card ${pct(stats.card)}.`;
+      const starved = [];
+      stats.first.forEach((f, s) => {
+        if (f == null) starved.push(`${KIND[s]} never started`);
+        else if (f >= 20) starved.push(`${KIND[s]} waited ${f} of ${NIGHT} ticks`);
+      });
+      if (!starved.length) { say(`Every kind of work moved from the first ticks. ${idle} Nothing waited except for its own hardware.`); return; }
+      const list = starved.length === 1 ? starved[0] : starved.slice(0, -1).join(", ") + " and " + starved[starved.length - 1];
+      say(`Starved: ${list}. ${idle}`);
+    }
+    function run() {
+      reset();
+      const btn = $("#starve-run", root);
+      if (reduced) { while (tick < NIGHT) step(); paint(); verdict(); return; }
+      btn.disabled = true;
+      timer = setInterval(() => {
+        step(); step(); paint();
+        if (tick >= NIGHT) { clearInterval(timer); timer = null; btn.disabled = false; verdict(); }
+      }, 60);
+    }
+    $$(".dt[data-order]", root).forEach((b) => b.addEventListener("click", () => {
+      if (timer) { clearInterval(timer); timer = null; $("#starve-run", root).disabled = false; }
+      order = b.dataset.order;
+      $$(".dt[data-order]", root).forEach((x) => x.classList.toggle("on", x === b));
+      run();
+    }));
+    $("#starve-run", root).addEventListener("click", run);
+    reset();
+  }
+  $$(".starve-demo").forEach(initStarve);
+
+  /* ---- Act IV · same name, same photograph? ---------------------------- */
+  // The three counts are RF141's, measured read-only on the live catalog.
+  function initNames(root) {
+    const TWIN = 547, DIFF = 6068, WAIT = 6717, ALL = TWIN + DIFF + WAIT;
+    const bar = $(".nm-bar", root); if (!bar) return;
+    [["twin", TWIN], ["diff", DIFF], ["wait", WAIT]].forEach(([k, n]) => { bar.querySelector("." + k).style.flex = String(n / ALL); });
+    const RULES = {
+      name: ["links all 13,332", `Links every pair: the ${TWIN.toLocaleString()} true twins, but also ${DIFF.toLocaleString()} pairs of different photographs merged into one, and ${WAIT.toLocaleString()} guessed without a date. Mostly wrong.`],
+      moment: [`links ${TWIN.toLocaleString()}`, `Links the ${TWIN.toLocaleString()} true twins, keeps the ${DIFF.toLocaleString()} different photographs apart, and waits on the ${WAIT.toLocaleString()} until their dates are read. It separates every collision that was measured.`],
+    };
+    $$(".dt[data-rule]", root).forEach((b) => b.addEventListener("click", () => {
+      const rule = b.dataset.rule;
+      root.dataset.rule = rule;
+      $$(".dt[data-rule]", root).forEach((x) => x.classList.toggle("on", x === b));
+      $("#names-note", root).textContent = RULES[rule][0];
+      $("#names-verdict", root).textContent = RULES[rule][1];
+    }));
+  }
+  $$(".names-demo").forEach(initNames);
 })();
